@@ -1,0 +1,407 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+
+body{
+
+    min-height:100vh;
+    background:#050816;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+
+}
+
+
+/* Fondo animado */
+
+.background{
+
+    position:absolute;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+
+}
+
+
+.background::before{
+
+    content:"";
+    position:absolute;
+
+    width:500px;
+    height:500px;
+
+    background:rgba(0,170,255,0.15);
+
+    filter:blur(120px);
+
+    top:-150px;
+    left:-100px;
+
+    animation:move 8s infinite alternate;
+
+}
+
+
+.background::after{
+
+    content:"";
+    position:absolute;
+
+    width:400px;
+    height:400px;
+
+    background:rgba(120,80,255,0.18);
+
+    filter:blur(120px);
+
+    bottom:-100px;
+    right:-100px;
+
+    animation:move2 10s infinite alternate;
+
+}
+
+
+@keyframes move{
+
+    from{
+        transform:translate(0,0);
+    }
+
+    to{
+        transform:translate(120px,80px);
+    }
+
+}
+
+
+@keyframes move2{
+
+    from{
+        transform:translate(0,0);
+    }
+
+    to{
+        transform:translate(-100px,-80px);
+    }
+
+}
+
+
+
+/* Archivos flotantes */
+
+
+.floating-file{
+
+    position:absolute;
+
+    font-size:35px;
+
+    opacity:.4;
+
+    animation:float 8s infinite ease-in-out;
+
+}
+
+
+.file1{
+
+    top:20%;
+    left:15%;
+
+}
+
+
+.file2{
+
+    top:70%;
+    left:25%;
+
+    animation-delay:2s;
+
+}
+
+
+.file3{
+
+    top:25%;
+    right:20%;
+
+    animation-delay:4s;
+
+}
+
+
+.file4{
+
+    bottom:15%;
+    right:15%;
+
+    animation-delay:6s;
+
+}
+
+
+
+@keyframes float{
+
+
+    0%{
+
+        transform:translateY(0px) rotate(0deg);
+
+    }
+
+
+    50%{
+
+        transform:translateY(-40px) rotate(20deg);
+
+    }
+
+
+    100%{
+
+        transform:translateY(0px) rotate(0deg);
+
+    }
+
+
+}
+
+
+
+/* Contenedor */
+
+
+.container{
+
+    position:relative;
+
+    z-index:2;
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+
+/* Caja */
+
+
+.card{
+
+
+    width:420px;
+
+    padding:45px;
+
+    background:rgba(255,255,255,0.08);
+
+    border:1px solid rgba(255,255,255,0.15);
+
+    backdrop-filter:blur(15px);
+
+    border-radius:25px;
+
+    box-shadow:
+    0 0 40px rgba(0,170,255,.25);
+
+
+    text-align:center;
+
+}
+
+
+
+/* Logo */
+
+
+.logo{
+
+    font-size:38px;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+
+}
+
+
+.logo span{
+
+    color:#00bfff;
+
+}
+
+
+
+/* Textos */
+
+
+h1{
+
+    font-size:28px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+p{
+
+    color:#b8c7d9;
+
+    font-size:15px;
+
+    margin-bottom:25px;
+
+}
+
+
+
+/* Inputs */
+
+
+.input-group{
+
+    margin-bottom:18px;
+
+}
+
+
+input{
+
+
+    width:100%;
+
+    padding:15px 18px;
+
+    border-radius:12px;
+
+    border:none;
+
+    outline:none;
+
+    background:rgba(255,255,255,.12);
+
+    color:white;
+
+    font-size:15px;
+
+
+}
+
+
+input::placeholder{
+
+    color:#b8c7d9;
+
+}
+
+
+
+
+/* Botón */
+
+
+button{
+
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    background:linear-gradient(
+        135deg,
+        #00bfff,
+        #0066ff
+    );
+
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+
+}
+
+
+
+button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 0 25px rgba(0,191,255,.6);
+
+}
+
+
+
+/* Mensaje */
+
+
+#mensaje{
+
+    margin-top:20px;
+
+    color:#ff8080;
+
+    font-size:14px;
+
+}
+
+
+
+
+/* Responsive celular */
+
+
+@media(max-width:500px){
+
+
+.card{
+
+    width:90%;
+
+    padding:35px 25px;
+
+}
+
+
+.logo{
+
+    font-size:32px;
+
+}
+
+
+}

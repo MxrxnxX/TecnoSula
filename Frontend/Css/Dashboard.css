@@ -1,0 +1,169 @@
+* {
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+    font-family:"Segoe UI", Arial, sans-serif;
+
+}
+
+
+
+body {
+
+    min-height:100vh;
+
+    background:#F7F1E8;
+
+}
+
+
+
+.navbar {
+
+    height:70px;
+
+    background:white;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 40px;
+
+    box-shadow:0 3px 15px rgba(0,0,0,0.08);
+
+}
+
+
+
+.navbar h1 {
+
+    color:#3B82F6;
+
+}
+
+
+
+.navbar button {
+
+    background:#3B82F6;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 20px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+
+
+.dashboard-container {
+
+    padding:40px;
+
+}
+
+
+
+.welcome-card {
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+
+}
+
+
+
+.welcome-card h2 {
+
+    color:#1E3A8A;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.welcome-card p {
+
+    color:#64748B;
+
+}
+
+
+
+.user-info {
+
+    margin-top:30px;
+
+    background:#E8F1FF;
+
+    padding:20px;
+
+    border-radius:15px;
+
+}
+
+
+
+.user-info h3 {
+
+    color:#334155;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.modules {
+
+    margin-top:30px;
+
+    display:flex;
+
+    gap:20px;
+
+}
+
+
+
+.module-card {
+
+    flex:1;
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+
+}
+
+
+
+.module-card h3 {
+
+    color:#7C3AED;
+
+    margin-bottom:10px;
+
+}

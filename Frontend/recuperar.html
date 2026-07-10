@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TecnoSula - Recuperar contraseña</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- FORMULARIO -->
+
+    <div class="login-area">
+
+        <div class="login-card">
+
+            <div class="brand">
+
+                <h1>TecnoSula</h1>
+
+                <span>Recuperación de contraseña</span>
+
+            </div>
+
+            <h2>¿Olvidaste tu contraseña?</h2>
+
+            <p class="description">
+                Escribe el correo electrónico asociado a tu cuenta y te enviaremos un enlace para restablecer tu contraseña.
+            </p>
+
+            <form id="recuperarForm">
+
+                <div class="input-group">
+
+                    <label for="correo">
+                        Correo electrónico
+                    </label>
+
+                    <input
+                        type="email"
+                        id="correo"
+                        placeholder="correo@ejemplo.com"
+                        required>
+
+                </div>
+
+                <button type="submit">
+
+                    Enviar enlace
+
+                </button>
+
+                <a href="index.html">
+
+                    Volver al inicio de sesión
+
+                </a>
+
+                <p id="mensaje" class="success-message"></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- PANEL DERECHO -->
+
+    <div class="info-area">
+
+        <div class="info-text">
+
+            <h2>
+
+                Recupera el acceso
+                <br>
+                de forma segura
+
+            </h2>
+
+            <p>
+
+                TecnoSula protege tu información. Si el correo ingresado está registrado, recibirás un enlace para crear una nueva contraseña.
+
+            </p>
+
+        </div>
+
+        <div class="tech-cards">
+
+            <div class="tech-card">
+
+                <i data-lucide="mail"></i>
+
+                <div>
+
+                    <h3>Correo seguro</h3>
+
+                    <span>Enlace de recuperación</span>
+
+                </div>
+
+            </div>
+
+            <div class="tech-card">
+
+                <i data-lucide="shield-check"></i>
+
+                <div>
+
+                    <h3>Protección</h3>
+
+                    <span>Tokens temporales y seguros</span>
+
+                </div>
+
+            </div>
+
+            <div class="tech-card">
+
+                <i data-lucide="lock-keyhole"></i>
+
+                <div>
+
+                    <h3>Nueva contraseña</h3>
+
+                    <span>Acceso restablecido en minutos</span>
+
+                </div>
+
+            </div>
+
+        </div>
+        
+
+    </div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+
+    const formulario = document.getElementById("recuperarForm");
+
+    const mensaje = document.getElementById("mensaje");
+
+
+
+    formulario.addEventListener("submit", async function(e){
+
+
+        e.preventDefault();
+
+
+
+        const correo = document.getElementById("correo").value;
+
+
+
+        try {
+
+
+            const respuesta = await fetch(
+                "http://localhost:5208/api/Auth/recuperar",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type": "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        correo: correo
+
+                    })
+
+                }
+            );
+
+
+
+            await respuesta.json();
+
+
+
+            mensaje.innerHTML =
+            "Se ha enviado la recuperación correctamente.<br>Revisa tu correo electrónico.";
+
+
+
+        } catch(error) {
+
+
+            mensaje.innerHTML =
+            "No se pudo conectar con el servidor.";
+
+
+
+            console.error(error);
+
+
+        }
+
+
+
+    });
+
+
+
+});
+
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+    lucide.createIcons();
+</script>
+
+<script src="js/recuperar.js"></script>
+
+<script>
+
+const API = "http://localhost:5208/api/Auth/recuperar";
+
+
+const formulario = document.getElementById("recuperarForm");
+
+const mensaje = document.getElementById("mensaje");
+
+
+
+formulario.addEventListener("submit", async (e)=>{
+
+    e.preventDefault();
+
+
+    const correo = document.getElementById("correo").value;
+
+
+
+    try{
+
+
+        const respuesta = await fetch(API,{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                correo: correo
+
+            })
+
+        });
+
+
+
+        const data = await respuesta.json();
+
+
+
+        mensaje.textContent = data.mensaje;
+
+
+        if(respuesta.ok){
+
+            mensaje.style.color = "#00ff99";
+
+        }
+        else{
+
+            mensaje.style.color = "#ff8080";
+
+        }
+
+
+    }
+    catch(error){
+
+
+        mensaje.textContent =
+        "No se pudo conectar con el servidor";
+
+
+        mensaje.style.color = "#ff8080";
+
+
+        console.error(error);
+
+    }
+
+
+});
+
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva contraseña - TecnoSula</title>
+
+    <link rel="stylesheet" href="css/nueva-contrasena.css">
+</head>
+
+<body>
+
+    <div class="background">
+
+        <div class="floating-file file1">📄</div>
+        <div class="floating-file file2">💾</div>
+        <div class="floating-file file3">🔐</div>
+        <div class="floating-file file4">📊</div>
+
+    </div>
+
+
+    <main class="container">
+
+        <section class="card">
+
+            <div class="logo">
+                Tecno<span>Sula</span>
+            </div>
+
+
+            <h1>Nueva contraseña</h1>
+
+            <p>
+                Crea una nueva contraseña para recuperar el acceso a tu cuenta.
+            </p>
+
+
+            <form id="passwordForm">
+
+                <div class="input-group">
+                    <input 
+                    type="password" 
+                    id="password"
+                    placeholder="Nueva contraseña"
+                    required>
+                </div>
+
+
+                <div class="input-group">
+                    <input 
+                    type="password" 
+                    id="confirmPassword"
+                    placeholder="Confirmar contraseña"
+                    required>
+                </div>
+
+
+                <button type="submit">
+                    Cambiar contraseña
+                </button>
+
+
+                <p id="mensaje"></p>
+
+            </form>
+
+
+        </section>
+
+
+    </main>
+
+
+<script>
+
+const API = "http://localhost:5208/api/Auth/cambiar-password";
+
+
+const params = new URLSearchParams(window.location.search);
+
+const token = params.get("token");
+
+
+const form = document.getElementById("passwordForm");
+
+const mensaje = document.getElementById("mensaje");
+
+
+
+form.addEventListener("submit", async(e)=>{
+
+    e.preventDefault();
+
+
+    const password =
+    document.getElementById("password").value;
+
+
+    const confirmPassword =
+    document.getElementById("confirmPassword").value;
+
+
+
+    if(password !== confirmPassword){
+
+        mensaje.innerHTML =
+        "Las contraseñas no coinciden";
+
+        return;
+    }
+
+
+
+    try{
+
+
+        const response = await fetch(API,{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                token: token,
+
+                nuevaContrasena: password
+
+            })
+
+        });
+
+
+
+        const data = await response.json();
+
+
+
+        if(response.ok){
+
+            mensaje.innerHTML =
+            "Contraseña actualizada correctamente";
+
+            mensaje.style.color =
+            "#00ff99";
+
+
+            setTimeout(()=>{
+
+                window.location.href="index.html";
+
+            },3000);
+
+
+        }
+        else{
+
+            mensaje.innerHTML =
+            data.mensaje;
+
+        }
+
+
+    }
+    catch(error){
+
+        mensaje.innerHTML =
+        "Error al conectar con el servidor";
+
+    }
+
+
+});
+
+
+</script>
+
+
+</body>
+</html>
