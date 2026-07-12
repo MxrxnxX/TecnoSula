@@ -2,134 +2,939 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>TecnoSula - Dashboard</title>
+    <title>TecnoSula | Dashboard</title>
 
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link
+        rel="stylesheet"
+        href="Css/Dashboard.css"
+    >
 
+    <link
+        rel="stylesheet"
+        href="Css/notificaciones.css"
+    >
+
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-
 
 <body>
 
+    <div class="app">
 
-    <header class="navbar">
+        <!-- ==================================================
+             BARRA LATERAL
+        =================================================== -->
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
 
-        <h1>TecnoSula</h1>
+            <div class="sidebar-header">
 
-        <button id="cerrarSesion">
-            Cerrar sesión
-        </button>
+                <a
+                    href="Dashboard.html"
+                    class="brand"
+                >
 
-    </header>
+                    <div class="brand-logo">
+                        <i data-lucide="orbit"></i>
+                    </div>
 
+                    <div class="brand-text">
+                        <strong>TecnoSula</strong>
+                        <span>Campaign System</span>
+                    </div>
 
+                </a>
 
-    <main class="dashboard-container">
-
-
-        <section class="welcome-card">
-
-            <h2>
-                Bienvenido a TecnoSula
-            </h2>
-
-
-            <p>
-                Plataforma de gestión inteligente de campañas de marketing.
-            </p>
-
-
-            <div class="user-info">
-
-                <h3>
-                    Información del usuario
-                </h3>
-
-
-                <p id="nombreUsuario">
-                    Cargando...
-                </p>
-
-
-                <p id="correoUsuario">
-                    Cargando...
-                </p>
-
-
-                <p id="rolUsuario">
-                    Cargando...
-                </p>
-
+                <button
+                    class="close-sidebar"
+                    id="closeSidebar"
+                    type="button"
+                    aria-label="Cerrar menú"
+                >
+                    <i data-lucide="x"></i>
+                </button>
 
             </div>
 
+            <div class="navigation-group">
 
-        </section>
+                <span class="navigation-label">
+                    Plataforma
+                </span>
 
+                <nav class="navigation">
 
+                    <a
+                        href="Dashboard.html"
+                        class="navigation-link active"
+                    >
 
-        <section class="modules">
+                        <div class="navigation-icon">
+                            <i data-lucide="layout-dashboard"></i>
+                        </div>
 
+                        <span>Inicio</span>
 
-            <div class="module-card campanas-card">
+                        <div class="active-line"></div>
+
+                    </a>
+
+                    <a
+                        href="campanas.html"
+                        class="navigation-link"
+                    >
+
+                        <div class="navigation-icon">
+                            <i data-lucide="radio-tower"></i>
+                        </div>
+
+                        <span>Campañas</span>
+
+                    </a>
+
+                    <a
+                        href="reportes.html"
+                        class="navigation-link"
+                    >
+
+                        <div class="navigation-icon">
+                            <i data-lucide="file-chart-column"></i>
+                        </div>
+
+                        <span>Reportes</span>
+
+                    </a>
+
+                    <a
+                        href="configuracion.html"
+                        class="navigation-link"
+                    >
+
+                        <div class="navigation-icon">
+                            <i data-lucide="settings"></i>
+                        </div>
+
+                        <span>Configuración</span>
+
+                    </a>
+
+                </nav>
+
+            </div>
+
+            <!-- PUBLICIDAD LATERAL -->
+            <article class="sidebar-advertisement">
+
+                <div class="advertisement-icon">
+                    <i data-lucide="sparkles"></i>
+                </div>
+
+                <span>TECNOLOGÍA QUE IMPULSA</span>
 
                 <h3>
-                    Campañas
+                    Trabaja con más claridad.
                 </h3>
 
-                <div id="listaCampanas">
-                    <p>Cargando campañas...</p>
+                <p>
+                    Centraliza tus campañas y transforma cada proceso
+                    en una experiencia más eficiente.
+                </p>
+
+                <div class="advertisement-decoration"></div>
+
+            </article>
+
+            <!-- PERFIL -->
+            <div class="sidebar-footer">
+
+                <div class="employee-profile">
+
+                    <div class="employee-avatar">
+
+                        <span id="employeeInitials">
+                            EM
+                        </span>
+
+                        <div class="online-point"></div>
+
+                    </div>
+
+                    <div class="employee-data">
+
+                        <strong id="employeeName">
+                            Empleado
+                        </strong>
+
+                        <span>
+                            Gestor de campañas
+                        </span>
+
+                    </div>
+
+                    <button
+                        class="logout-button"
+                        id="logoutButton"
+                        type="button"
+                        title="Cerrar sesión"
+                        aria-label="Cerrar sesión"
+                    >
+                        <i data-lucide="log-out"></i>
+                    </button>
+
                 </div>
 
             </div>
 
+        </aside>
 
+        <!-- FONDO OSCURO DEL SIDEBAR EN MÓVIL -->
+        <div
+            class="sidebar-overlay"
+            id="sidebarOverlay"
+        ></div>
 
-            <div class="module-card">
+        <!-- ==================================================
+             CONTENIDO PRINCIPAL
+        =================================================== -->
+        <main class="main-content">
 
-                <h3>
-                    Reportes
-                </h3>
+            <!-- FONDO DECORATIVO -->
+            <div class="background-effects">
 
-                <p>
-                    Visualiza métricas y resultados.
-                </p>
+                <div class="background-grid"></div>
 
-            </div>
-
-
-
-            <div class="module-card">
-
-                <h3>
-                    Configuración
-                </h3>
-
-                <p>
-                    Administra tu cuenta.
-                </p>
+                <div class="glow glow-one"></div>
+                <div class="glow glow-two"></div>
+                <div class="glow glow-three"></div>
 
             </div>
 
+            <!-- ==================================================
+                 TOPBAR
+            =================================================== -->
+            <header class="topbar">
 
-        </section>
+                <div class="topbar-left">
 
+                    <button
+                        class="menu-button"
+                        id="openSidebar"
+                        type="button"
+                        aria-label="Abrir menú"
+                    >
+                        <i data-lucide="menu"></i>
+                    </button>
 
-    </main>
+                    <div>
 
+                        <span>
+                            Centro de operaciones
+                        </span>
 
+                        <h1>
+                            Panel principal
+                        </h1>
 
-<script src="js/api.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/api.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/campanas.js"></script>
+                    </div>
 
+                </div>
+
+                <div class="topbar-actions">
+
+                    <!-- CAMPANA DE NOTIFICACIONES -->
+                   <div class="notifications-wrapper">
+
+    <button
+        class="topbar-icon-button notification-button"
+        id="notificationButton"
+        type="button"
+        title="Notificaciones"
+        aria-label="Abrir notificaciones"
+        aria-expanded="false"
+        aria-controls="notificationsPanel"
+    >
+        <i data-lucide="bell"></i>
+
+        <span
+            class="notification-point"
+            id="notificationPoint"
+            aria-hidden="true"
+        ></span>
+
+        <span
+            class="notification-count"
+            id="notificationCount"
+        >
+            3
+        </span>
+    </button>
+
+    <section
+        class="notifications-panel"
+        id="notificationsPanel"
+        aria-hidden="true"
+    >
+
+        <div class="notifications-panel-header">
+
+            <div>
+                <span class="notifications-eyebrow">
+                    Centro de alertas
+                </span>
+
+                <h2>Notificaciones</h2>
+            </div>
+
+            <button
+                class="close-notifications-button"
+                id="closeNotificationsButton"
+                type="button"
+                aria-label="Cerrar notificaciones"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
+        <div class="notifications-toolbar">
+
+            <div class="notifications-status">
+
+                <span class="notifications-status-point"></span>
+
+                <span id="unreadNotificationsText">
+                    3 notificaciones sin leer
+                </span>
+
+            </div>
+
+            <button
+                class="mark-read-button"
+                id="markNotificationsRead"
+                type="button"
+            >
+                <i data-lucide="check-check"></i>
+                Marcar leídas
+            </button>
+
+        </div>
+
+        <div
+            class="notifications-list"
+            id="notificationsList"
+        >
+
+            <article
+                class="notification-item unread"
+                data-notification-id="notification-1"
+            >
+
+                <div class="notification-item-icon urgent">
+                    <i data-lucide="calendar-clock"></i>
+                </div>
+
+                <div class="notification-item-content">
+
+                    <div class="notification-item-heading">
+
+                        <strong>
+                            Lanzamiento digital
+                        </strong>
+
+                        <span class="notification-time">
+                            Hace 10 min
+                        </span>
+
+                    </div>
+
+                    <p>
+                        La campaña finalizará dentro de tres días.
+                        Revisa las tareas pendientes.
+                    </p>
+
+                    <div class="notification-meta">
+
+                        <span class="notification-category">
+                            <i data-lucide="radio-tower"></i>
+                            Campaña
+                        </span>
+
+                        <button
+                            class="notification-action"
+                            type="button"
+                            data-campaign-link="campanas.html"
+                        >
+                            Revisar
+                            <i data-lucide="arrow-up-right"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <span class="unread-indicator"></span>
+
+            </article>
+
+            <article
+                class="notification-item unread"
+                data-notification-id="notification-2"
+            >
+
+                <div class="notification-item-icon warning">
+                    <i data-lucide="circle-pause"></i>
+                </div>
+
+                <div class="notification-item-content">
+
+                    <div class="notification-item-heading">
+
+                        <strong>
+                            Fidelización de clientes
+                        </strong>
+
+                        <span class="notification-time">
+                            Hace 2 horas
+                        </span>
+
+                    </div>
+
+                    <p>
+                        La campaña cambió al estado pausada
+                        y puede requerir seguimiento.
+                    </p>
+
+                    <div class="notification-meta">
+
+                        <span class="notification-category">
+                            <i data-lucide="activity"></i>
+                            Cambio de estado
+                        </span>
+
+                        <button
+                            class="notification-action"
+                            type="button"
+                            data-campaign-link="campanas.html"
+                        >
+                            Ver campaña
+                            <i data-lucide="arrow-up-right"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <span class="unread-indicator"></span>
+
+            </article>
+
+            <article
+                class="notification-item unread"
+                data-notification-id="notification-3"
+            >
+
+                <div class="notification-item-icon information">
+                    <i data-lucide="user-check"></i>
+                </div>
+
+                <div class="notification-item-content">
+
+                    <div class="notification-item-heading">
+
+                        <strong>
+                            Nueva campaña asignada
+                        </strong>
+
+                        <span class="notification-time">
+                            Ayer
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Has sido asignado como responsable
+                        de una nueva campaña.
+                    </p>
+
+                    <div class="notification-meta">
+
+                        <span class="notification-category">
+                            <i data-lucide="user-round"></i>
+                            Asignación
+                        </span>
+
+                        <button
+                            class="notification-action"
+                            type="button"
+                            data-campaign-link="campanas.html"
+                        >
+                            Consultar
+                            <i data-lucide="arrow-up-right"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <span class="unread-indicator"></span>
+
+            </article>
+
+        </div>
+
+        <div
+            class="notifications-empty"
+            id="notificationsEmpty"
+        >
+
+            <div class="notifications-empty-icon">
+                <i data-lucide="bell-ring"></i>
+            </div>
+
+            <h3>Todo está bajo control</h3>
+
+            <p>
+                No tienes notificaciones pendientes.
+            </p>
+
+        </div>
+
+        <div class="notifications-footer">
+
+            <span>
+                Las alertas se actualizarán automáticamente.
+            </span>
+
+            <button
+                id="clearNotificationsButton"
+                type="button"
+            >
+                Limpiar notificaciones
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+                    <a
+                        href="campanas.html"
+                        class="primary-button"
+                    >
+                        <i data-lucide="plus"></i>
+                        Nueva campaña
+                    </a>
+
+                </div>
+
+            </header>
+
+            <div
+                class="notifications-overlay"
+                id="notificationsOverlay"
+            ></div>
+
+            <!-- ==================================================
+                 CONTENIDO DE LA PÁGINA
+            =================================================== -->
+            <div class="page-content">
+
+                <!-- HERO PRINCIPAL -->
+                <section class="hero">
+
+                    <div class="hero-content">
+
+                        <div class="hero-badge">
+
+                            <i data-lucide="sparkles"></i>
+
+                            <span>
+                                Bienvenido a la nueva experiencia TecnoSula
+                            </span>
+
+                        </div>
+
+                        <h2>
+                            El centro inteligente para
+                            <span>gestionar tus campañas.</span>
+                        </h2>
+
+                        <p>
+                            Organiza, supervisa y administra cada campaña desde
+                            un entorno moderno creado para mantener a tu equipo
+                            conectado con las tareas que realmente importan.
+                        </p>
+
+                        <div class="hero-actions">
+
+                            <a
+                                href="campanas.html"
+                                class="primary-button hero-primary"
+                            >
+                                <i data-lucide="rocket"></i>
+                                Explorar campañas
+                            </a>
+
+                            <button
+                                class="secondary-button"
+                                id="learnMoreButton"
+                                type="button"
+                            >
+                                Conocer TecnoSula
+                                <i data-lucide="arrow-down"></i>
+                            </button>
+
+                        </div>
+
+                        <div class="hero-details">
+
+                            <div>
+                                <i data-lucide="shield-check"></i>
+                                <span>Acceso protegido</span>
+                            </div>
+
+                            <div>
+                                <i data-lucide="zap"></i>
+                                <span>Gestión eficiente</span>
+                            </div>
+
+                            <div>
+                                <i data-lucide="scan-line"></i>
+                                <span>Información organizada</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ESTADÍSTICA PRINCIPAL -->
+                    <div class="hero-visual">
+
+                        <div class="orbit orbit-one"></div>
+                        <div class="orbit orbit-two"></div>
+                        <div class="orbit orbit-three"></div>
+
+                        <div class="orbit-point orbit-point-one"></div>
+                        <div class="orbit-point orbit-point-two"></div>
+
+                        <article class="campaign-statistic">
+
+                            <div class="statistic-header">
+
+                                <div class="statistic-icon">
+                                    <i data-lucide="radio-tower"></i>
+                                </div>
+
+                                <div class="system-state">
+
+                                    <span></span>
+
+                                    Sistema activo
+
+                                </div>
+
+                            </div>
+
+                            <div class="statistic-content">
+
+                                <span class="statistic-label">
+                                    Campañas activas
+                                </span>
+
+                                <strong id="activeCampaigns">
+                                    0
+                                </strong>
+
+                                <p>
+                                    Campañas disponibles actualmente dentro
+                                    de la plataforma.
+                                </p>
+
+                            </div>
+
+                            <div class="statistic-footer">
+
+                                <div>
+
+                                    <span>
+                                        Estado operativo
+                                    </span>
+
+                                    <strong>
+                                        Disponible
+                                    </strong>
+
+                                </div>
+
+                                <div class="signal-bars">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                        <div class="floating-information floating-top">
+
+                            <div>
+                                <i data-lucide="shield-check"></i>
+                            </div>
+
+                            <span>
+
+                                <small>SEGURIDAD</small>
+
+                                <strong>
+                                    Acceso verificado
+                                </strong>
+
+                            </span>
+
+                        </div>
+
+                        <div class="floating-information floating-bottom">
+
+                            <div>
+                                <i data-lucide="activity"></i>
+                            </div>
+
+                            <span>
+
+                                <small>PLATAFORMA</small>
+
+                                <strong>
+                                    Operativa
+                                </strong>
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- ==================================================
+                     PUBLICIDAD DE TECNOSULA
+                =================================================== -->
+                <section
+                    class="platform-section"
+                    id="platformSection"
+                >
+
+                    <div class="section-heading">
+
+                        <div>
+
+                            <span>
+                                Construido para crecer contigo
+                            </span>
+
+                            <h2>
+                                Una experiencia diseñada para trabajar mejor
+                            </h2>
+
+                        </div>
+
+                        <p>
+                            TecnoSula combina organización, velocidad y claridad
+                            para que administrar campañas no sea un proceso complicado.
+                        </p>
+
+                    </div>
+
+                    <div class="platform-cards">
+
+                        <article class="platform-card">
+
+                            <div class="card-number">
+                                01
+                            </div>
+
+                            <div class="card-icon">
+                                <i data-lucide="workflow"></i>
+                            </div>
+
+                            <h3>
+                                Todo en un solo lugar
+                            </h3>
+
+                            <p>
+                                Consulta campañas, responsables, fechas y estados
+                                sin depender de múltiples archivos o sistemas.
+                            </p>
+
+                            <div class="card-footer">
+
+                                <span>
+                                    Flujo centralizado
+                                </span>
+
+                                <i data-lucide="arrow-up-right"></i>
+
+                            </div>
+
+                        </article>
+
+                        <article class="platform-card featured">
+
+                            <div class="featured-glow"></div>
+
+                            <div class="card-number">
+                                02
+                            </div>
+
+                            <div class="card-icon">
+                                <i data-lucide="gauge"></i>
+                            </div>
+
+                            <h3>
+                                Decisiones más rápidas
+                            </h3>
+
+                            <p>
+                                Encuentra rápidamente la información que necesita
+                                atención y mantén el control de la operación.
+                            </p>
+
+                            <div class="card-footer">
+
+                                <span>
+                                    Mayor productividad
+                                </span>
+
+                                <i data-lucide="arrow-up-right"></i>
+
+                            </div>
+
+                        </article>
+
+                        <article class="platform-card">
+
+                            <div class="card-number">
+                                03
+                            </div>
+
+                            <div class="card-icon">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+
+                            <h3>
+                                Entorno seguro
+                            </h3>
+
+                            <p>
+                                La autenticación y los permisos protegen el acceso
+                                a las funciones y datos de la plataforma.
+                            </p>
+
+                            <div class="card-footer">
+
+                                <span>
+                                    Información protegida
+                                </span>
+
+                                <i data-lucide="arrow-up-right"></i>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </section>
+
+                <!-- ==================================================
+                     LLAMADO A CAMPAÑAS
+                =================================================== -->
+                <section class="campaign-callout">
+
+                    <div class="callout-decoration">
+
+                        <div class="callout-orbit callout-orbit-one"></div>
+                        <div class="callout-orbit callout-orbit-two"></div>
+
+                        <div class="callout-icon">
+                            <i data-lucide="radio-tower"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="callout-content">
+
+                        <span>
+                            Tu centro de campañas está listo
+                        </span>
+
+                        <h2>
+                            Comienza a organizar tu operación.
+                        </h2>
+
+                        <p>
+                            Ingresa al módulo de campañas para consultar,
+                            registrar y administrar la información disponible.
+                        </p>
+
+                    </div>
+
+                    <a
+                        href="campanas.html"
+                        class="primary-button"
+                    >
+                        Ir a campañas
+                        <i data-lucide="arrow-right"></i>
+                    </a>
+
+                </section>
+
+                <!-- ==================================================
+                     FOOTER
+                =================================================== -->
+                <footer class="page-footer">
+
+                    <div class="footer-brand">
+
+                        <i data-lucide="orbit"></i>
+
+                        <strong>
+                            TecnoSula
+                        </strong>
+
+                        <span>
+                            Tecnología para una mejor gestión.
+                        </span>
+
+                    </div>
+
+                    <span>
+                        Campaign Management Platform
+                    </span>
+
+                </footer>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="JS/Dashboard.js?v=6"></script>
+    <script src="JS/notificaciones.js?v=6"></script>
 
 </body>
 

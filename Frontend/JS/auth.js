@@ -52,6 +52,17 @@ loginForm.addEventListener("submit", async function(event){
                 "token",
                 data.token
             );
+            const fullName = [
+    data.nombre || data.usuario?.nombre,
+    data.apellido || data.usuario?.apellido
+]
+    .filter(Boolean)
+    .join(" ");
+
+if (fullName) {
+    localStorage.setItem("nombre", fullName);
+}
+            
 
             // Guardamos el ID del usuario logueado
             localStorage.setItem(

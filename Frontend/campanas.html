@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TecnoSula | Gestión de campañas</title>
+
+    <!-- ESTILOS PRINCIPALES -->
+    <link
+        rel="stylesheet"
+        href="Css/campanas.css"
+    >
+
+    <!-- ESTILOS COMPARTIDOS DE NOTIFICACIONES -->
+    <link
+        rel="stylesheet"
+        href="Css/notificaciones.css"
+    >
+
+    <!-- ICONOS LUCIDE -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <div class="sidebar-header">
+
+                <a
+                    href="Dashboard.html"
+                    class="brand"
+                >
+
+                    <div class="brand-logo">
+                        <i data-lucide="orbit"></i>
+                    </div>
+
+                    <div class="brand-information">
+                        <strong>TecnoSula</strong>
+                        <span>Campaign System</span>
+                    </div>
+
+                </a>
+
+                <button
+                    class="close-sidebar"
+                    id="closeSidebar"
+                    type="button"
+                    aria-label="Cerrar menú"
+                >
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <!-- NAVEGACIÓN -->
+            <div class="navigation-section">
+
+                <span class="navigation-label">
+                    Plataforma
+                </span>
+
+                <nav class="navigation">
+
+                    <a
+                        href="Dashboard.html"
+                        class="navigation-link"
+                    >
+
+                        <div class="navigation-icon">
+                            <i data-lucide="layout-dashboard"></i>
+                        </div>
+
+                        <span>Inicio</span>
+
+                    </a>
+
+                    <a
+                        href="campanas.html"
+                        class="navigation-link active"
+                    >
+
+                        <div class="navigation-icon">
+                            <i data-lucide="radio-tower"></i>
+                        </div>
+
+                        <span>Campañas</span>
+
+                        <div class="active-indicator"></div>
+
+                    </a>
+
+                    <a
+                        href="reportes.html"
+                        class="navigation-link"
+                    >
+
+                        <div class="navigation-icon">
+                            <i data-lucide="file-chart-column"></i>
+                        </div>
+
+                        <span>Reportes</span>
+
+                    </a>
+
+                    <a
+                        href="configuracion.html"
+                        class="navigation-link"
+                    >
+
+                        <div class="navigation-icon">
+                            <i data-lucide="settings"></i>
+                        </div>
+
+                        <span>Configuración</span>
+
+                    </a>
+
+                </nav>
+
+            </div>
+
+            <!-- PUBLICIDAD LATERAL -->
+            <article class="sidebar-card">
+
+                <div class="sidebar-card-icon">
+                    <i data-lucide="sparkles"></i>
+                </div>
+
+                <span>CONTROL OPERATIVO</span>
+
+                <h3>
+                    Cada campaña bajo control.
+                </h3>
+
+                <p>
+                    Administra responsables, fechas y estados desde
+                    un único centro de operaciones.
+                </p>
+
+                <div class="sidebar-card-line"></div>
+
+            </article>
+
+            <!-- PERFIL -->
+            <div class="sidebar-footer">
+
+                <div class="employee-profile">
+
+                    <div class="employee-avatar">
+
+                        <span id="employeeInitials">
+                            EM
+                        </span>
+
+                        <div class="online-indicator"></div>
+
+                    </div>
+
+                    <div class="employee-information">
+
+                        <strong id="employeeName">
+                            Empleado
+                        </strong>
+
+                        <span>
+                            Gestor de campañas
+                        </span>
+
+                    </div>
+
+                    <button
+                        class="logout-button"
+                        id="logoutButton"
+                        type="button"
+                        title="Cerrar sesión"
+                        aria-label="Cerrar sesión"
+                    >
+                        <i data-lucide="log-out"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- OVERLAY SIDEBAR MÓVIL -->
+        <div
+            class="sidebar-overlay"
+            id="sidebarOverlay"
+        ></div>
+
+        <!-- =====================================================
+             CONTENIDO PRINCIPAL
+        ====================================================== -->
+        <main class="main-content">
+
+            <!-- FONDO DECORATIVO -->
+            <div class="background-effects">
+
+                <div class="background-grid"></div>
+
+                <div class="background-glow glow-one"></div>
+                <div class="background-glow glow-two"></div>
+
+            </div>
+
+            <!-- =================================================
+                 TOPBAR
+            ================================================== -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        class="menu-button"
+                        id="openSidebar"
+                        type="button"
+                        aria-label="Abrir menú"
+                    >
+                        <i data-lucide="menu"></i>
+                    </button>
+
+                    <div>
+
+                        <span>
+                            Centro de operaciones
+                        </span>
+
+                        <h1>
+                            Campañas
+                        </h1>
+
+                    </div>
+
+                </div>
+
+         <div class="topbar-actions">
+
+    <!-- CENTRO DE NOTIFICACIONES -->
+    <div class="notifications-wrapper">
+
+        <!-- BOTÓN DE CAMPANA -->
+        <button
+            class="topbar-icon-button notification-button"
+            id="notificationButton"
+            type="button"
+            title="Notificaciones"
+            aria-label="Abrir notificaciones"
+            aria-expanded="false"
+            aria-controls="notificationsPanel"
+        >
+            <i data-lucide="bell"></i>
+
+            <span
+                class="notification-point"
+                id="notificationPoint"
+                aria-hidden="true"
+            ></span>
+
+            <span
+                class="notification-count"
+                id="notificationCount"
+                aria-label="3 notificaciones sin leer"
+            >
+                3
+            </span>
+        </button>
+
+        <!-- PANEL DE NOTIFICACIONES -->
+        <section
+            class="notifications-panel"
+            id="notificationsPanel"
+            aria-hidden="true"
+            aria-label="Centro de notificaciones"
+        >
+
+            <!-- ENCABEZADO -->
+            <div class="notifications-panel-header">
+
+                <div>
+                    <span class="notifications-eyebrow">
+                        Centro de alertas
+                    </span>
+
+                    <h2>Notificaciones</h2>
+                </div>
+
+                <button
+                    class="close-notifications-button"
+                    id="closeNotificationsButton"
+                    type="button"
+                    aria-label="Cerrar notificaciones"
+                >
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <!-- BARRA DE ESTADO -->
+            <div class="notifications-toolbar">
+
+                <div class="notifications-status">
+
+                    <span
+                        class="notifications-status-point"
+                        aria-hidden="true"
+                    ></span>
+
+                    <span id="unreadNotificationsText">
+                        3 notificaciones sin leer
+                    </span>
+
+                </div>
+
+                <button
+                    class="mark-read-button"
+                    id="markNotificationsRead"
+                    type="button"
+                >
+                    <i data-lucide="check-check"></i>
+                    Marcar leídas
+                </button>
+
+            </div>
+
+            <!-- LISTA -->
+            <div
+                class="notifications-list"
+                id="notificationsList"
+            >
+
+                <!-- NOTIFICACIÓN 1 -->
+                <article
+                    class="notification-item unread"
+                    data-notification-id="notification-1"
+                >
+
+                    <div class="notification-item-icon urgent">
+                        <i data-lucide="calendar-clock"></i>
+                    </div>
+
+                    <div class="notification-item-content">
+
+                        <div class="notification-item-heading">
+
+                            <strong>
+                                Lanzamiento digital
+                            </strong>
+
+                            <span class="notification-time">
+                                Hace 10 min
+                            </span>
+
+                        </div>
+
+                        <p>
+                            La campaña finalizará dentro de tres días.
+                            Revisa las tareas pendientes.
+                        </p>
+
+                        <div class="notification-meta">
+
+                            <span class="notification-category">
+                                <i data-lucide="radio-tower"></i>
+                                Campaña
+                            </span>
+
+                            <button
+                                class="notification-action"
+                                type="button"
+                                data-campaign-link="campanas.html"
+                            >
+                                Revisar
+                                <i data-lucide="arrow-up-right"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <span
+                        class="unread-indicator"
+                        aria-hidden="true"
+                    ></span>
+
+                </article>
+
+                <!-- NOTIFICACIÓN 2 -->
+                <article
+                    class="notification-item unread"
+                    data-notification-id="notification-2"
+                >
+
+                    <div class="notification-item-icon warning">
+                        <i data-lucide="circle-pause"></i>
+                    </div>
+
+                    <div class="notification-item-content">
+
+                        <div class="notification-item-heading">
+
+                            <strong>
+                                Fidelización de clientes
+                            </strong>
+
+                            <span class="notification-time">
+                                Hace 2 horas
+                            </span>
+
+                        </div>
+
+                        <p>
+                            La campaña cambió al estado pausada
+                            y puede requerir seguimiento.
+                        </p>
+
+                        <div class="notification-meta">
+
+                            <span class="notification-category">
+                                <i data-lucide="activity"></i>
+                                Cambio de estado
+                            </span>
+
+                            <button
+                                class="notification-action"
+                                type="button"
+                                data-campaign-link="campanas.html"
+                            >
+                                Ver campaña
+                                <i data-lucide="arrow-up-right"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <span
+                        class="unread-indicator"
+                        aria-hidden="true"
+                    ></span>
+
+                </article>
+
+                <!-- NOTIFICACIÓN 3 -->
+                <article
+                    class="notification-item unread"
+                    data-notification-id="notification-3"
+                >
+
+                    <div class="notification-item-icon information">
+                        <i data-lucide="user-check"></i>
+                    </div>
+
+                    <div class="notification-item-content">
+
+                        <div class="notification-item-heading">
+
+                            <strong>
+                                Nueva campaña asignada
+                            </strong>
+
+                            <span class="notification-time">
+                                Ayer
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Has sido asignado como responsable
+                            de una nueva campaña.
+                        </p>
+
+                        <div class="notification-meta">
+
+                            <span class="notification-category">
+                                <i data-lucide="user-round"></i>
+                                Asignación
+                            </span>
+
+                            <button
+                                class="notification-action"
+                                type="button"
+                                data-campaign-link="campanas.html"
+                            >
+                                Consultar
+                                <i data-lucide="arrow-up-right"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <span
+                        class="unread-indicator"
+                        aria-hidden="true"
+                    ></span>
+
+                </article>
+
+            </div>
+
+            <!-- ESTADO VACÍO -->
+            <div
+                class="notifications-empty"
+                id="notificationsEmpty"
+            >
+
+                <div class="notifications-empty-icon">
+                    <i data-lucide="bell-ring"></i>
+                </div>
+
+                <h3>Todo está bajo control</h3>
+
+                <p>
+                    No tienes notificaciones pendientes.
+                </p>
+
+            </div>
+
+            <!-- PIE DEL PANEL -->
+            <div class="notifications-footer">
+
+                <span>
+                    Las alertas se actualizarán automáticamente.
+                </span>
+
+                <button
+                    id="clearNotificationsButton"
+                    type="button"
+                >
+                    Limpiar notificaciones
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- BOTÓN NUEVA CAMPAÑA -->
+    <button
+        class="primary-button"
+        id="openCreateModal"
+        type="button"
+    >
+        <i data-lucide="plus"></i>
+        Nueva campaña
+    </button>
+
+</div>
+
+            </header>
+
+            <!-- OVERLAY DE NOTIFICACIONES -->
+            <div
+                class="notifications-overlay"
+                id="notificationsOverlay"
+            ></div>
+
+            <!-- =================================================
+                 CONTENIDO
+            ================================================== -->
+            <div class="page-content">
+
+                <!-- PRESENTACIÓN -->
+                <section class="campaign-introduction">
+
+                    <div class="introduction-content">
+
+                        <div class="section-badge">
+
+                            <i data-lucide="activity"></i>
+
+                            Gestión operativa
+
+                        </div>
+
+                        <h2>
+                            Controla cada campaña desde
+                            <span>una sola vista.</span>
+                        </h2>
+
+                        <p>
+                            Consulta campañas, responsables, fechas, estados
+                            y progreso sin perder tiempo entre diferentes sistemas.
+                        </p>
+
+                    </div>
+
+                    <div class="introduction-visual">
+
+                        <div class="radar-ring radar-ring-one"></div>
+                        <div class="radar-ring radar-ring-two"></div>
+                        <div class="radar-ring radar-ring-three"></div>
+
+                        <div class="radar-center">
+                            <i data-lucide="radar"></i>
+                        </div>
+
+                        <div class="system-status">
+
+                            <span></span>
+
+                            Sistema operativo
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- ESTADÍSTICAS -->
+                <section class="statistics-grid">
+
+                    <article class="statistic-card">
+
+                        <div class="statistic-icon">
+                            <i data-lucide="layers-3"></i>
+                        </div>
+
+                        <div class="statistic-content">
+
+                            <span>
+                                Total de campañas
+                            </span>
+
+                            <strong id="totalCampaigns">
+                                0
+                            </strong>
+
+                            <small>
+                                Campañas registradas
+                            </small>
+
+                        </div>
+
+                        <div class="statistic-number">
+                            01
+                        </div>
+
+                    </article>
+
+                    <article class="statistic-card highlighted">
+
+                        <div class="statistic-icon">
+                            <i data-lucide="activity"></i>
+                        </div>
+
+                        <div class="statistic-content">
+
+                            <span>
+                                Campañas activas
+                            </span>
+
+                            <strong id="activeCampaigns">
+                                0
+                            </strong>
+
+                            <small>
+                                Actualmente en operación
+                            </small>
+
+                        </div>
+
+                        <div class="statistic-number">
+                            02
+                        </div>
+
+                    </article>
+
+                    <article class="statistic-card">
+
+                        <div class="statistic-icon">
+                            <i data-lucide="circle-pause"></i>
+                        </div>
+
+                        <div class="statistic-content">
+
+                            <span>
+                                Campañas pausadas
+                            </span>
+
+                            <strong id="pausedCampaigns">
+                                0
+                            </strong>
+
+                            <small>
+                                Requieren seguimiento
+                            </small>
+
+                        </div>
+
+                        <div class="statistic-number">
+                            03
+                        </div>
+
+                    </article>
+
+                </section>
+
+                <!-- =================================================
+                     PANEL DE CAMPAÑAS
+                ================================================== -->
+                <section class="campaign-panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-heading">
+
+                            <span>
+                                Administración
+                            </span>
+
+                            <h2>
+                                Campañas registradas
+                            </h2>
+
+                            <p>
+                                Busca, filtra y administra la información
+                                disponible dentro de la plataforma.
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="secondary-button mobile-create-button"
+                            id="secondaryCreateButton"
+                            type="button"
+                        >
+                            <i data-lucide="plus"></i>
+                            Registrar campaña
+                        </button>
+
+                    </div>
+
+                    <!-- =============================================
+                         BARRA DE BÚSQUEDA Y FILTROS
+                    ============================================== -->
+                    <div class="campaign-toolbar">
+
+                        <!-- BUSCADOR -->
+                        <div class="search-control">
+
+                            <i data-lucide="search"></i>
+
+                            <input
+                                type="search"
+                                id="campaignSearch"
+                                placeholder="Buscar por nombre o responsable..."
+                                autocomplete="off"
+                            >
+
+                            <kbd>
+                                Ctrl K
+                            </kbd>
+
+                        </div>
+
+                        <!-- =========================================
+                             FILTRO PERSONALIZADO
+                        ========================================== -->
+                        <div
+                            class="custom-status-filter"
+                            id="customStatusFilter"
+                        >
+
+                            <!-- SELECT OCULTO PARA CONSERVAR LA LÓGICA -->
+                            <select
+                                id="statusFilter"
+                                class="native-status-select"
+                                tabindex="-1"
+                                aria-hidden="true"
+                            >
+                                <option value="todos">
+                                    Todos los estados
+                                </option>
+
+                                <option value="activa">
+                                    Activa
+                                </option>
+
+                                <option value="pausada">
+                                    Pausada
+                                </option>
+
+                                <option value="finalizada">
+                                    Finalizada
+                                </option>
+                            </select>
+
+                            <!-- BOTÓN VISIBLE -->
+                            <button
+                                class="status-filter-trigger"
+                                id="statusFilterTrigger"
+                                type="button"
+                                aria-haspopup="listbox"
+                                aria-expanded="false"
+                            >
+
+                                <span class="status-filter-trigger-left">
+
+                                    <span class="status-filter-main-icon">
+                                        <i data-lucide="list-filter"></i>
+                                    </span>
+
+                                    <span class="status-filter-copy">
+
+                                        <small>
+                                            Filtrar campañas
+                                        </small>
+
+                                        <strong id="statusFilterLabel">
+                                            Todos los estados
+                                        </strong>
+
+                                    </span>
+
+                                </span>
+
+                                <i
+                                    data-lucide="chevron-down"
+                                    class="status-filter-chevron"
+                                ></i>
+
+                            </button>
+
+                            <!-- MENÚ PERSONALIZADO -->
+                            <div
+                                class="status-filter-menu"
+                                id="statusFilterMenu"
+                                role="listbox"
+                            >
+
+                                <div class="status-filter-menu-header">
+
+                                    <span>
+                                        Estado de campaña
+                                    </span>
+
+                                    <small>
+                                        Selecciona una opción
+                                    </small>
+
+                                </div>
+
+                                <!-- TODOS -->
+                                <button
+                                    class="status-filter-option active"
+                                    type="button"
+                                    data-value="todos"
+                                    data-label="Todos los estados"
+                                    role="option"
+                                    aria-selected="true"
+                                >
+
+                                    <span class="status-option-icon all-status-icon">
+                                        <i data-lucide="layers-3"></i>
+                                    </span>
+
+                                    <span class="status-option-copy">
+
+                                        <strong>
+                                            Todos los estados
+                                        </strong>
+
+                                        <small>
+                                            Mostrar todas las campañas
+                                        </small>
+
+                                    </span>
+
+                                    <span class="status-option-check">
+                                        <i data-lucide="check"></i>
+                                    </span>
+
+                                </button>
+
+                                <!-- ACTIVAS -->
+                                <button
+                                    class="status-filter-option"
+                                    type="button"
+                                    data-value="activa"
+                                    data-label="Activa"
+                                    role="option"
+                                    aria-selected="false"
+                                >
+
+                                    <span class="status-option-icon active-filter-icon">
+                                        <i data-lucide="activity"></i>
+                                    </span>
+
+                                    <span class="status-option-copy">
+
+                                        <strong>
+                                            Activas
+                                        </strong>
+
+                                        <small>
+                                            Campañas actualmente en operación
+                                        </small>
+
+                                    </span>
+
+                                    <span class="status-option-check">
+                                        <i data-lucide="check"></i>
+                                    </span>
+
+                                </button>
+
+                                <!-- PAUSADAS -->
+                                <button
+                                    class="status-filter-option"
+                                    type="button"
+                                    data-value="pausada"
+                                    data-label="Pausada"
+                                    role="option"
+                                    aria-selected="false"
+                                >
+
+                                    <span class="status-option-icon paused-filter-icon">
+                                        <i data-lucide="circle-pause"></i>
+                                    </span>
+
+                                    <span class="status-option-copy">
+
+                                        <strong>
+                                            Pausadas
+                                        </strong>
+
+                                        <small>
+                                            Campañas detenidas temporalmente
+                                        </small>
+
+                                    </span>
+
+                                    <span class="status-option-check">
+                                        <i data-lucide="check"></i>
+                                    </span>
+
+                                </button>
+
+                                <!-- FINALIZADAS -->
+                                <button
+                                    class="status-filter-option"
+                                    type="button"
+                                    data-value="finalizada"
+                                    data-label="Finalizada"
+                                    role="option"
+                                    aria-selected="false"
+                                >
+
+                                    <span class="status-option-icon finished-filter-icon">
+                                        <i data-lucide="circle-check-big"></i>
+                                    </span>
+
+                                    <span class="status-option-copy">
+
+                                        <strong>
+                                            Finalizadas
+                                        </strong>
+
+                                        <small>
+                                            Campañas que completaron su ciclo
+                                        </small>
+
+                                    </span>
+
+                                    <span class="status-option-check">
+                                        <i data-lucide="check"></i>
+                                    </span>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <!-- ACTUALIZAR -->
+                        <button
+                            class="filter-button"
+                            id="refreshCampaigns"
+                            type="button"
+                            title="Actualizar campañas"
+                            aria-label="Actualizar campañas"
+                        >
+                            <i data-lucide="refresh-cw"></i>
+                        </button>
+
+                    </div>
+
+                    <!-- =============================================
+                         TABLA
+                    ============================================== -->
+                    <div class="table-container">
+
+                        <table class="campaign-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Campaña</th>
+                                    <th>Estado</th>
+                                    <th>Responsable</th>
+                                    <th>Periodo</th>
+                                    <th>Progreso</th>
+                                    <th class="actions-heading">
+                                        Acciones
+                                    </th>
+                                </tr>
+
+                            </thead>
+
+                            <!-- EL JAVASCRIPT GENERA LAS FILAS -->
+                            <tbody id="campaignTableBody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                    <!-- ESTADO SIN RESULTADOS -->
+                    <div
+                        class="empty-state"
+                        id="emptyState"
+                    >
+
+                        <div class="empty-state-visual">
+
+                            <div class="empty-ring empty-ring-one"></div>
+                            <div class="empty-ring empty-ring-two"></div>
+
+                            <div class="empty-state-icon">
+                                <i data-lucide="search-x"></i>
+                            </div>
+
+                        </div>
+
+                        <h3>
+                            No encontramos campañas
+                        </h3>
+
+                        <p>
+                            Cambia el texto de búsqueda o selecciona
+                            otro estado para continuar.
+                        </p>
+
+                        <button
+                            class="secondary-button"
+                            id="clearFilters"
+                            type="button"
+                        >
+                            Limpiar filtros
+                        </button>
+
+                    </div>
+
+                    <!-- PAGINACIÓN -->
+                    <div class="panel-footer">
+
+                        <span>
+                            Mostrando
+                            <strong id="visibleCampaigns">0</strong>
+                            de
+                            <strong id="campaignCount">0</strong>
+                            campañas
+                        </span>
+
+                        <div class="pagination">
+
+                            <button
+                                type="button"
+                                disabled
+                                aria-label="Página anterior"
+                            >
+                                <i data-lucide="chevron-left"></i>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="active-page"
+                            >
+                                1
+                            </button>
+
+                            <button
+                                type="button"
+                                disabled
+                                aria-label="Página siguiente"
+                            >
+                                <i data-lucide="chevron-right"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- FOOTER -->
+                <footer class="page-footer">
+
+                    <div class="footer-brand">
+
+                        <i data-lucide="orbit"></i>
+
+                        <strong>
+                            TecnoSula
+                        </strong>
+
+                        <span>
+                            Tecnología para una mejor gestión.
+                        </span>
+
+                    </div>
+
+                    <span>
+                        Campaign Management Platform
+                    </span>
+
+                </footer>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- =====================================================
+         MODAL CREAR / EDITAR CAMPAÑA
+    ====================================================== -->
+    <div
+        class="modal-overlay"
+        id="campaignModal"
+    >
+
+        <div class="campaign-modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span id="modalEyebrow">
+                        Nueva operación
+                    </span>
+
+                    <h2 id="modalTitle">
+                        Registrar campaña
+                    </h2>
+
+                    <p>
+                        Completa la información necesaria para
+                        registrar una campaña.
+                    </p>
+
+                </div>
+
+                <button
+                    class="modal-close"
+                    id="closeCampaignModal"
+                    type="button"
+                    aria-label="Cerrar modal"
+                >
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <form id="campaignForm">
+
+                <input
+                    type="hidden"
+                    id="campaignId"
+                >
+
+                <!-- NOMBRE -->
+                <div class="form-group full-width">
+
+                    <label for="campaignName">
+                        Nombre de la campaña
+                    </label>
+
+                    <div class="input-control">
+
+                        <i data-lucide="radio-tower"></i>
+
+                        <input
+                            type="text"
+                            id="campaignName"
+                            placeholder="Ejemplo: Lanzamiento digital"
+                            maxlength="100"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <!-- ESTADO -->
+                    <div class="form-group">
+
+                        <label for="campaignStatus">
+                            Estado
+                        </label>
+
+                        <div class="input-control">
+
+                            <i data-lucide="activity"></i>
+
+                            <select
+                                id="campaignStatus"
+                                required
+                            >
+                                <option value="">
+                                    Seleccionar estado
+                                </option>
+
+                                <option value="activa">
+                                    Activa
+                                </option>
+
+                                <option value="pausada">
+                                    Pausada
+                                </option>
+
+                                <option value="finalizada">
+                                    Finalizada
+                                </option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <!-- RESPONSABLE -->
+                    <div class="form-group">
+
+                        <label for="campaignResponsible">
+                            Responsable
+                        </label>
+
+                        <div class="input-control">
+
+                            <i data-lucide="user-round"></i>
+
+                            <input
+                                type="text"
+                                id="campaignResponsible"
+                                placeholder="Nombre del responsable"
+                                maxlength="100"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <!-- FECHA INICIO -->
+                    <div class="form-group">
+
+                        <label for="campaignStart">
+                            Fecha de inicio
+                        </label>
+
+                        <div class="input-control">
+
+                            <i data-lucide="calendar-days"></i>
+
+                            <input
+                                type="date"
+                                id="campaignStart"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <!-- FECHA FINAL -->
+                    <div class="form-group">
+
+                        <label for="campaignEnd">
+                            Fecha final
+                        </label>
+
+                        <div class="input-control">
+
+                            <i data-lucide="calendar-check"></i>
+
+                            <input
+                                type="date"
+                                id="campaignEnd"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- DESCRIPCIÓN -->
+                <div class="form-group full-width">
+
+                    <label for="campaignDescription">
+                        Descripción
+                    </label>
+
+                    <textarea
+                        id="campaignDescription"
+                        rows="4"
+                        maxlength="500"
+                        placeholder="Describe el objetivo principal de la campaña..."
+                        required
+                    ></textarea>
+
+                </div>
+
+                <!-- PROGRESO -->
+                <div class="form-group full-width">
+
+                    <div class="range-heading">
+
+                        <label for="campaignProgress">
+                            Progreso inicial
+                        </label>
+
+                        <strong id="progressValue">
+                            0%
+                        </strong>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="campaignProgress"
+                        min="0"
+                        max="100"
+                        value="0"
+                    >
+
+                </div>
+
+                <div class="modal-actions">
+
+                    <button
+                        class="secondary-button"
+                        id="cancelCampaignModal"
+                        type="button"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        class="primary-button"
+                        type="submit"
+                    >
+                        <i data-lucide="save"></i>
+                        Guardar campaña
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- =====================================================
+         MODAL ELIMINAR
+    ====================================================== -->
+    <div
+        class="modal-overlay"
+        id="deleteModal"
+    >
+
+        <div class="confirmation-modal">
+
+            <button
+                class="modal-close"
+                id="closeDeleteModal"
+                type="button"
+                aria-label="Cerrar modal"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+            <div class="confirmation-icon">
+                <i data-lucide="trash-2"></i>
+            </div>
+
+            <span>
+                Confirmación requerida
+            </span>
+
+            <h2>
+                Eliminar campaña
+            </h2>
+
+            <p>
+                Esta acción eliminará la campaña seleccionada.
+                Confirma que deseas continuar.
+            </p>
+
+            <div class="confirmation-actions">
+
+                <button
+                    class="secondary-button"
+                    id="cancelDelete"
+                    type="button"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    class="danger-button"
+                    id="confirmDelete"
+                    type="button"
+                >
+                    Eliminar campaña
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+  <script src="JS/campanas.js?v=3"></script>
+<script src="JS/notificaciones.js?v=3"></script>
+
+</body>
+</html>
+
