@@ -88,9 +88,10 @@ public AuthController(
     var jwt = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler()
         .WriteToken(token);
 
-    return Ok(new
+ return Ok(new
     {
         token = jwt,
+        idUsuario = usuario.IdUsuario,
         nombre = usuario.Nombre,
         rol = usuario.Rol.Nombre
     });

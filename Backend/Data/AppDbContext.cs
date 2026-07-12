@@ -16,24 +16,11 @@ namespace Backend.Data
 
         public DbSet<RecuperacionPassword> RecuperacionesPassword { get; set; }
 
+        public DbSet<Campana> Campanas { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<RecuperacionPassword>()
-    .ToTable("RecuperacionPassword");
-
-modelBuilder.Entity<RecuperacionPassword>()
-    .HasKey(r => r.IdRecuperacion);
-
-modelBuilder.Entity<RecuperacionPassword>()
-    .Property(r => r.IdRecuperacion)
-    .HasColumnName("id_recuperacion");
-
-
-modelBuilder.Entity<RecuperacionPassword>()
-    .HasOne(r => r.Usuario)
-    .WithMany()
-    .HasForeignKey(r => r.IdUsuario);
 
             // ==========================
             // TABLA USUARIOS
@@ -111,6 +98,40 @@ modelBuilder.Entity<RecuperacionPassword>()
             });
 
             // ==========================
+            // TABLA CAMPAÑAS
+            // ==========================
+            modelBuilder.Entity<Campana>(entity =>
+            {
+                entity.ToTable("Campanas");
+
+                entity.HasKey(c => c.IdCampana);
+
+                entity.Property(c => c.IdCampana)
+                    .HasColumnName("id_campana");
+
+                entity.Property(c => c.Nombre)
+                    .HasColumnName("nombre");
+
+                entity.Property(c => c.Descripcion)
+                    .HasColumnName("descripcion");
+
+                entity.Property(c => c.FechaInicio)
+                    .HasColumnName("fecha_inicio");
+
+                entity.Property(c => c.FechaFin)
+                    .HasColumnName("fecha_fin");
+
+                entity.Property(c => c.Presupuesto)
+                    .HasColumnName("presupuesto");
+
+                entity.Property(c => c.Estado)
+                    .HasColumnName("estado");
+
+                entity.Property(c => c.IdUsuario)
+                    .HasColumnName("id_usuario");
+            });
+
+            // ==========================
             // RELACIÓN USUARIO -> ROL
             // ==========================
             modelBuilder.Entity<Usuario>()
@@ -125,6 +146,14 @@ modelBuilder.Entity<RecuperacionPassword>()
                 .HasOne(r => r.Usuario)
                 .WithMany()
                 .HasForeignKey(r => r.IdUsuario);
+
+            // ==========================
+            // RELACIÓN CAMPAÑA -> USUARIO
+            // ==========================
+            modelBuilder.Entity<Campana>()
+                .HasOne(c => c.Usuario)
+                .WithMany()
+                .HasForeignKey(c => c.IdUsuario);
         }
     }
-}
+} 

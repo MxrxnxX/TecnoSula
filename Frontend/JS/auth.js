@@ -53,6 +53,12 @@ loginForm.addEventListener("submit", async function(event){
                 data.token
             );
 
+            // Guardamos el ID del usuario logueado
+            localStorage.setItem(
+                "idUsuario",
+                data.idUsuario
+            );
+
 
             mensaje.style.color = "green";
 
