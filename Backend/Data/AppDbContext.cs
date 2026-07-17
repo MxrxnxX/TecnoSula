@@ -1,30 +1,35 @@
-using Microsoft.EntityFrameworkCore;
 using Backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Data
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options)
+        public AppDbContext(
+            DbContextOptions<AppDbContext> options
+        ) : base(options)
         {
         }
 
-        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; } = null!;
 
-        public DbSet<Rol> Roles { get; set; }
+        public DbSet<Rol> Roles { get; set; } = null!;
 
-        public DbSet<RecuperacionPassword> RecuperacionesPassword { get; set; }
+        public DbSet<RecuperacionPassword>
+            RecuperacionesPassword { get; set; } = null!;
 
-        public DbSet<Campana> Campanas { get; set; }
+        public DbSet<Campana> Campanas { get; set; } = null!;
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(
+            ModelBuilder modelBuilder
+        )
         {
             base.OnModelCreating(modelBuilder);
 
-            // ==========================
+            // =================================================
             // TABLA USUARIOS
-            // ==========================
+            // =================================================
+
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.ToTable("Usuarios");
@@ -56,9 +61,10 @@ namespace Backend.Data
                     .HasColumnName("id_rol");
             });
 
-            // ==========================
+            // =================================================
             // TABLA ROLES
-            // ==========================
+            // =================================================
+
             modelBuilder.Entity<Rol>(entity =>
             {
                 entity.ToTable("Roles");
@@ -72,9 +78,10 @@ namespace Backend.Data
                     .HasColumnName("nombre");
             });
 
-            // ==========================
-            // TABLA RECUPERACION PASSWORD
-            // ==========================
+            // =================================================
+            // TABLA RECUPERACIÓN PASSWORD
+            // =================================================
+
             modelBuilder.Entity<RecuperacionPassword>(entity =>
             {
                 entity.ToTable("RecuperacionPassword");
@@ -97,9 +104,10 @@ namespace Backend.Data
                     .HasColumnName("usado");
             });
 
-            // ==========================
+            // =================================================
             // TABLA CAMPAÑAS
-            // ==========================
+            // =================================================
+
             modelBuilder.Entity<Campana>(entity =>
             {
                 entity.ToTable("Campanas");
@@ -110,50 +118,69 @@ namespace Backend.Data
                     .HasColumnName("id_campana");
 
                 entity.Property(c => c.Nombre)
-                    .HasColumnName("nombre");
+                    .HasColumnName("nombre")
+                    .HasMaxLength(100)
+                    .IsRequired();
 
                 entity.Property(c => c.Descripcion)
-                    .HasColumnName("descripcion");
+                    .HasColumnName("descripcion")
+                    .HasMaxLength(255);
 
                 entity.Property(c => c.FechaInicio)
-                    .HasColumnName("fecha_inicio");
+                    .HasColumnName("fecha_inicio")
+                    .IsRequired();
 
                 entity.Property(c => c.FechaFin)
-                    .HasColumnName("fecha_fin");
+                    .HasColumnName("fecha_fin")
+                    .IsRequired();
 
                 entity.Property(c => c.Presupuesto)
-                    .HasColumnName("presupuesto");
+                    .HasColumnName("presupuesto")
+                    .HasPrecision(18, 2);
+
+                entity.Property(c => c.Progreso)
+                    .HasColumnName("progreso")
+                    .HasDefaultValue(0)
+                    .IsRequired();
 
                 entity.Property(c => c.Estado)
-                    .HasColumnName("estado");
+                    .HasColumnName("estado")
+                    .HasMaxLength(20)
+                    .HasDefaultValue("Activa")
+                    .IsRequired();
 
                 entity.Property(c => c.IdUsuario)
-                    .HasColumnName("id_usuario");
+                    .HasColumnName("id_usuario")
+                    .IsRequired();
             });
 
-            // ==========================
+            // =================================================
             // RELACIÓN USUARIO -> ROL
-            // ==========================
+            // =================================================
+
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.Rol)
                 .WithMany(r => r.Usuarios)
                 .HasForeignKey(u => u.IdRol);
 
-            // ==========================
+            // =================================================
             // RELACIÓN RECUPERACIÓN -> USUARIO
-            // ==========================
+            // =================================================
+
             modelBuilder.Entity<RecuperacionPassword>()
                 .HasOne(r => r.Usuario)
                 .WithMany()
                 .HasForeignKey(r => r.IdUsuario);
 
-            // ==========================
+            // =================================================
             // RELACIÓN CAMPAÑA -> USUARIO
-            // ==========================
+            // =================================================
+
             modelBuilder.Entity<Campana>()
                 .HasOne(c => c.Usuario)
                 .WithMany()
-                .HasForeignKey(c => c.IdUsuario);
+                .HasForeignKey(c => c.IdUsuario)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
-} 
+}
