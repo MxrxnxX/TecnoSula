@@ -5,10 +5,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const token = localStorage.getItem("token");
 
+    const idUsuario = Number(
+        localStorage.getItem("idUsuario")
+    );
+
+    const CAMPANAS_API_URL =
+        "http://localhost:5208/api/Campanas";
+
     if (!token) {
         window.location.href = "index.html";
         return;
     }
+
+    if (!Number.isInteger(idUsuario) || idUsuario <= 0) {
+        console.warn(
+            "No se encontró un idUsuario válido en la sesión."
+        );
+    }
+
+    // EL RESTO DE TU CÓDIGO CONTINÚA AQUÍ
 
     // =====================================================
     // ICONOS LUCIDE
@@ -86,6 +101,12 @@ const statusFilterOptions = Array.from(
     // MODAL DE CAMPAÑAS
     // =====================================================
 
+    const statusPillGroup =
+    document.getElementById("statusPillGroup");
+
+const statusPills = Array.from(
+    document.querySelectorAll(".status-pill")
+);
     const campaignModal = document.getElementById("campaignModal");
 
     const openCreateModal =
@@ -130,14 +151,17 @@ const statusFilterOptions = Array.from(
     const campaignDescription =
         document.getElementById("campaignDescription");
 
+    const campaignBudget =
+        document.getElementById("campaignBudget");
+
     const campaignProgress =
         document.getElementById("campaignProgress");
 
     const progressValue =
         document.getElementById("progressValue");
 
-    const submitCampaignButton =
-        campaignForm.querySelector('button[type="submit"]');
+   const submitCampaignButton =
+    campaignForm?.querySelector('button[type="submit"]');
 
     // =====================================================
     // MODAL DE ELIMINACIÓN
@@ -154,88 +178,339 @@ const statusFilterOptions = Array.from(
     const confirmDelete =
         document.getElementById("confirmDelete");
 
+        const successModal =
+    document.getElementById("successModal");
+
+const successModalMessage =
+    document.getElementById("successModalMessage");
+
+const closeSuccessModal =
+    document.getElementById("closeSuccessModal");
+
     // =====================================================
     // CAMPAÑAS DE DEMOSTRACIÓN
     // Luego se reemplazan por los endpoints del backend.
     // =====================================================
 
-    const defaultCampaigns = [
-        {
-            id: "1",
-            name: "Lanzamiento digital",
-            status: "activa",
-            responsible: "Estiff Moreno",
-            start: "2026-07-12",
-            end: "2026-08-30",
-            description:
-                "Posicionamiento digital de nuevos servicios.",
-            progress: 68,
-            icon: "rocket"
-        },
-        {
-            id: "2",
-            name: "Fidelización de clientes",
-            status: "pausada",
-            responsible: "Equipo comercial",
-            start: "2026-07-05",
-            end: "2026-09-15",
-            description:
-                "Fortalecimiento de la relación con clientes actuales.",
-            progress: 34,
-            icon: "users-round"
-        },
-        {
-            id: "3",
-            name: "Promoción empresarial",
-            status: "finalizada",
-            responsible: "Área de marketing",
-            start: "2026-05-10",
-            end: "2026-06-30",
-            description:
-                "Promoción de soluciones empresariales de TecnoSula.",
-            progress: 100,
-            icon: "briefcase-business"
+   let campaigns = [];
+let selectedCampaignId = null;
+let modalMode = "create";
+
+// =====================================================
+// CONEXIÓN CON EL BACKEND
+// =====================================================
+
+async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+        ...options,
+
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            ...(options.headers || {})
         }
-    ];
+    });
 
-    let campaigns = loadCampaigns();
-    let selectedCampaignId = null;
-    let modalMode = "create";
+    let data = {};
 
-    // =====================================================
-    // ALMACENAMIENTO TEMPORAL
-    // =====================================================
-
-    function loadCampaigns() {
-        const savedCampaigns =
-            localStorage.getItem("tecnosulaCampaignsDemo");
-
-        if (!savedCampaigns) {
-            return [...defaultCampaigns];
-        }
-
-        try {
-            const parsedCampaigns = JSON.parse(savedCampaigns);
-
-            return Array.isArray(parsedCampaigns)
-                ? parsedCampaigns
-                : [...defaultCampaigns];
-        } catch (error) {
-            console.error(
-                "No se pudieron cargar las campañas:",
-                error
-            );
-
-            return [...defaultCampaigns];
-        }
+    try {
+        data = await response.json();
+    } catch {
+        data = {};
     }
 
-    function saveCampaigns() {
-        localStorage.setItem(
-            "tecnosulaCampaignsDemo",
-            JSON.stringify(campaigns)
+    if (!response.ok) {
+        let validationMessage = "";
+
+        if (data.errors) {
+            validationMessage = Object.values(data.errors)
+                .flat()
+                .join("\n");
+        }
+
+        throw new Error(
+            data.mensaje ||
+            data.message ||
+            validationMessage ||
+            `Error del servidor: ${response.status}`
         );
     }
+
+    return data;
+}
+
+function mapCampaignFromBackend(campaign) {
+    const rawProgress =
+        campaign.progreso ??
+        campaign.Progreso ??
+        0;
+
+    const progress = clampProgress(
+        Number(rawProgress)
+    );
+
+    console.log(
+        "Campaña recibida:",
+        campaign.nombre ?? campaign.Nombre,
+        "Progreso original:",
+        rawProgress,
+        "Progreso convertido:",
+        progress
+    );
+
+    return {
+        id: String(
+            campaign.idCampana ??
+            campaign.IdCampana
+        ),
+
+        name:
+            campaign.nombre ??
+            campaign.Nombre ??
+            "",
+
+        status: normalizeText(
+            campaign.estado ??
+            campaign.Estado ??
+            "Activa"
+        ),
+
+        responsible:
+            campaign.responsable ??
+            campaign.Responsable ??
+            "Sin responsable",
+
+        start:
+            (
+                campaign.fechaInicio ??
+                campaign.FechaInicio ??
+                ""
+            ).substring(0, 10),
+
+        end:
+            (
+                campaign.fechaFin ??
+                campaign.FechaFin ??
+                ""
+            ).substring(0, 10),
+
+        description:
+            campaign.descripcion ??
+            campaign.Descripcion ??
+            "",
+
+        presupuesto:
+            campaign.presupuesto ??
+            campaign.Presupuesto ??
+            "",
+
+        progress: progress
+    };
+}
+async function loadCampaignsFromDatabase() {
+    try {
+        if (refreshCampaigns) {
+            refreshCampaigns.disabled = true;
+        }
+
+        const data = await apiRequest(
+            CAMPANAS_API_URL,
+            {
+                method: "GET"
+            }
+        );
+
+        campaigns = Array.isArray(data)
+            ? data.map(mapCampaignFromBackend)
+            : [];
+            console.table(
+    campaigns.map(campaign => ({
+        nombre: campaign.name,
+        progreso: campaign.progress,
+        presupuesto: campaign.presupuesto
+    }))
+);
+
+        renderCampaigns();
+    } catch (error) {
+        console.error(
+            "Error al cargar campañas:",
+            error
+        );
+
+        campaigns = [];
+        renderCampaigns();
+
+        alert(
+            error.message ||
+            "No se pudieron cargar las campañas."
+        );
+    } finally {
+        if (refreshCampaigns) {
+            refreshCampaigns.disabled = false;
+        }
+    }
+}
+
+async function createCampaignInDatabase() {
+    if (
+        !Number.isInteger(idUsuario) ||
+        idUsuario <= 0
+    ) {
+        throw new Error(
+            "No se encontró el usuario de la sesión. Cierra sesión e inicia nuevamente."
+        );
+    }
+
+    const presupuesto = Number(
+        campaignBudget.value
+    );
+
+    const progreso = Number(
+        campaignProgress.value
+    );
+
+    if (
+        !Number.isFinite(presupuesto) ||
+        presupuesto <= 0
+    ) {
+        throw new Error(
+            "Debes ingresar un presupuesto mayor que cero."
+        );
+    }
+
+    if (
+        !Number.isInteger(progreso) ||
+        progreso < 0 ||
+        progreso > 100
+    ) {
+        throw new Error(
+            "El progreso debe estar entre 0 y 100."
+        );
+    }
+
+    const request = {
+        nombre: campaignName.value.trim(),
+
+        descripcion:
+            campaignDescription.value.trim() ||
+            null,
+
+        fechaInicio:
+            campaignStart.value,
+
+        fechaFin:
+            campaignEnd.value,
+
+        presupuesto:
+            presupuesto,
+
+        progreso:
+            progreso,
+
+        idUsuario:
+            idUsuario,
+
+        estado:
+            campaignStatus.value
+    };
+
+    console.log(
+        "Datos enviados al crear:",
+        request
+    );
+
+    return await apiRequest(
+        CAMPANAS_API_URL,
+        {
+            method: "POST",
+            body: JSON.stringify(request)
+        }
+    );
+}
+
+async function updateCampaignInDatabase(id) {
+    const presupuesto = Number(
+        campaignBudget.value
+    );
+
+    const progreso = Number(
+        campaignProgress.value
+    );
+
+    if (
+        !Number.isFinite(presupuesto) ||
+        presupuesto <= 0
+    ) {
+        throw new Error(
+            "Debes ingresar un presupuesto mayor que cero."
+        );
+    }
+
+    if (
+        !Number.isInteger(progreso) ||
+        progreso < 0 ||
+        progreso > 100
+    ) {
+        throw new Error(
+            "El progreso debe estar entre 0 y 100."
+        );
+    }
+
+    const request = {
+        nombre: campaignName.value.trim(),
+
+        descripcion:
+            campaignDescription.value.trim() ||
+            null,
+
+        fechaInicio:
+            campaignStart.value,
+
+        fechaFin:
+            campaignEnd.value,
+
+        presupuesto:
+            presupuesto,
+
+        progreso:
+            progreso,
+
+        estado:
+            campaignStatus.value
+    };
+
+    console.log(
+        "Datos enviados al editar:",
+        request
+    );
+
+    return await apiRequest(
+        `${CAMPANAS_API_URL}/${id}`,
+        {
+            method: "PUT",
+            body: JSON.stringify(request)
+        }
+    );
+}
+
+async function cancelCampaignInDatabase(id) {
+    return await apiRequest(
+        `${CAMPANAS_API_URL}/${id}/cancelar`,
+        {
+            method: "PATCH"
+        }
+    );
+}
+
+async function deleteCampaignFromDatabase(id) {
+    return await apiRequest(
+        `${CAMPANAS_API_URL}/${id}`,
+        {
+            method: "DELETE"
+        }
+    );
+}
 
     // =====================================================
     // FUNCIONES AUXILIARES
@@ -400,24 +675,43 @@ const statusFilterOptions = Array.from(
         }).format(date);
     }
 
-    function getStatusData(status) {
-        const statuses = {
-            activa: {
-                label: "Activa",
-                className: "active-status"
-            },
-            pausada: {
-                label: "Pausada",
-                className: "paused-status"
-            },
-            finalizada: {
-                label: "Finalizada",
-                className: "finished-status"
-            }
-        };
+   function getStatusData(status) {
+    const statuses = {
+        activa: {
+            label: "Activa",
+            className: "active-status"
+        },
 
-        return statuses[status] || statuses.pausada;
+        pausada: {
+            label: "Pausada",
+            className: "paused-status"
+        },
+
+        finalizada: {
+            label: "Finalizada",
+            className: "finished-status"
+        },
+
+        cancelada: {
+            label: "Cancelada",
+            className: "paused-status"
+        }
+    };
+
+    return statuses[status] || {
+        label: status || "Sin estado",
+        className: "paused-status"
+    };
+}
+statusPillGroup?.addEventListener("click", event => {
+    const button = event.target.closest(".status-pill");
+
+    if (!button) {
+        return;
     }
+
+    setCampaignStatus(button.dataset.status);
+});
 
     function createIdentifier() {
         if (
@@ -439,6 +733,16 @@ const statusFilterOptions = Array.from(
 
         return Math.min(100, Math.max(0, number));
     }
+    function setCampaignStatus(value) {
+    campaignStatus.value = value;
+
+    statusPills.forEach(button => {
+        const isActive =
+            button.dataset.status === value;
+
+        button.classList.toggle("active", isActive);
+    });
+}
 
     // =====================================================
     // RENDERIZAR TABLA
@@ -469,8 +773,14 @@ const statusFilterOptions = Array.from(
                 const statusData =
                     getStatusData(campaign.status);
 
-                const progress =
-                    clampProgress(campaign.progress);
+              const progress = clampProgress(
+    Number(
+        campaign.progress ??
+        campaign.progreso ??
+        campaign.Progreso ??
+        0
+    )
+);
 
                 return `
                     <tr
@@ -771,87 +1081,363 @@ if (employeeInitials) {
             document.body.classList.remove("modal-open");
         }
     }
+    function showSuccessMessage(message) {
+    successModalMessage.textContent = message;
 
-    function enableCampaignFields(enabled) {
-        const fields = campaignForm.querySelectorAll(
-            "input:not([type='hidden']), select, textarea"
-        );
+    showModal(successModal);
+    renderIcons();
+}
 
-        fields.forEach(field => {
-            field.disabled = !enabled;
-        });
+function closeSuccessMessage() {
+    hideModal(successModal);
+}
+
+closeSuccessModal?.addEventListener(
+    "click",
+    closeSuccessMessage
+);
+
+successModal?.addEventListener(
+    "click",
+    event => {
+        if (event.target === successModal) {
+            closeSuccessMessage();
+        }
+    }
+);
+
+  // =====================================================
+// CONTROL DE LOS CAMPOS DEL MODAL
+// =====================================================
+
+function setControlEnabled(control, enabled) {
+    if (!control) {
+        return;
     }
 
-    function resetCampaignForm() {
-        campaignForm.reset();
-        campaignId.value = "";
+    control.disabled = !enabled;
+
+    if (enabled) {
+        control.removeAttribute("disabled");
+    } else {
+        control.setAttribute("disabled", "");
+    }
+
+    control.style.pointerEvents =
+        enabled ? "auto" : "none";
+
+    control.style.opacity =
+        enabled ? "1" : "0.65";
+
+    control.tabIndex =
+        enabled ? 0 : -1;
+}
+
+function setDatePickerEnabled(input, enabled) {
+    if (!input) {
+        return;
+    }
+
+    input.disabled = !enabled;
+
+    if (enabled) {
+        input.removeAttribute("disabled");
+    } else {
+        input.setAttribute("disabled", "");
+    }
+
+    const picker = input._flatpickr;
+
+    if (!picker?.altInput) {
+        return;
+    }
+
+    picker.altInput.disabled = !enabled;
+
+    if (enabled) {
+        picker.altInput.removeAttribute("disabled");
+    } else {
+        picker.altInput.setAttribute("disabled", "");
+        picker.close();
+    }
+
+    // Flatpickr requiere readonly para abrir el calendario
+    // sin escribir manualmente.
+    picker.altInput.readOnly = true;
+    picker.altInput.setAttribute("readonly", "");
+
+    picker.altInput.style.pointerEvents =
+        enabled ? "auto" : "none";
+
+    picker.altInput.style.opacity =
+        enabled ? "1" : "0.65";
+
+    picker.altInput.tabIndex =
+        enabled ? 0 : -1;
+}
+
+function setStatusButtonsEnabled(enabled) {
+    statusPills.forEach(button => {
+        button.disabled = !enabled;
+
+        if (enabled) {
+            button.removeAttribute("disabled");
+        } else {
+            button.setAttribute("disabled", "");
+        }
+
+        button.style.pointerEvents =
+            enabled ? "auto" : "none";
+
+        button.style.opacity =
+            enabled ? "1" : "0.55";
+
+        button.setAttribute(
+            "aria-disabled",
+            String(!enabled)
+        );
+    });
+}
+
+function setCampaignFormMode(mode) {
+    const editable =
+        mode === "create" ||
+        mode === "edit";
+
+    // Evita que el formulario completo quede inerte.
+    campaignForm.inert = false;
+    campaignForm.removeAttribute("inert");
+
+    const editableControls = [
+        campaignName,
+        campaignBudget,
+        campaignDescription,
+        campaignProgress
+    ];
+
+    editableControls.forEach(control => {
+        setControlEnabled(control, editable);
+
+        if (editable) {
+            control.readOnly = false;
+            control.removeAttribute("readonly");
+        }
+    });
+
+    setDatePickerEnabled(
+        campaignStart,
+        editable
+    );
+
+    setDatePickerEnabled(
+        campaignEnd,
+        editable
+    );
+
+    setStatusButtonsEnabled(editable);
+
+    // El responsable nunca se modifica.
+    setControlEnabled(
+        campaignResponsible,
+        editable
+    );
+
+    campaignResponsible.readOnly = true;
+    campaignResponsible.setAttribute(
+        "readonly",
+        ""
+    );
+
+    if (!editable) {
+        setControlEnabled(
+            campaignResponsible,
+            false
+        );
+    }
+}
+
+function resetCampaignForm() {
+    campaignForm.reset();
+
+    campaignId.value = "";
+    campaignBudget.value = "";
+    campaignProgress.value = "0";
+    progressValue.textContent = "0%";
+
+    selectedCampaignId = null;
+
+    setCampaignStatus("activa");
+
+    if (campaignStart._flatpickr) {
+        campaignStart._flatpickr.clear(false);
+        campaignStart._flatpickr.set(
+            "minDate",
+            null
+        );
+    } else {
+        campaignStart.value = "";
+    }
+
+    if (campaignEnd._flatpickr) {
+        campaignEnd._flatpickr.clear(false);
+        campaignEnd._flatpickr.set(
+            "minDate",
+            null
+        );
+    } else {
+        campaignEnd.value = "";
+    }
+}
+
+function fillCampaignForm(campaign) {
+    const progress = clampProgress(
+        campaign.progress ?? 0
+    );
+
+    campaignId.value =
+        campaign.id || "";
+
+    campaignName.value =
+        campaign.name || "";
+
+    campaignResponsible.value =
+        campaign.responsible || "";
+
+    campaignDescription.value =
+        campaign.description || "";
+
+    campaignBudget.value =
+        campaign.presupuesto ?? "";
+
+    campaignProgress.value =
+        String(progress);
+
+    progressValue.textContent =
+        `${progress}%`;
+
+    setCampaignStatus(
+        campaign.status || "activa"
+    );
+
+    if (campaignStart._flatpickr) {
+        campaignStart._flatpickr.setDate(
+            campaign.start || null,
+            false,
+            "Y-m-d"
+        );
+    } else {
+        campaignStart.value =
+            campaign.start || "";
+    }
+
+    if (campaignEnd._flatpickr) {
+        campaignEnd._flatpickr.setDate(
+            campaign.end || null,
+            false,
+            "Y-m-d"
+        );
+    } else {
+        campaignEnd.value =
+            campaign.end || "";
+    }
+
+    if (
+        campaign.start &&
+        campaignEnd._flatpickr
+    ) {
+        campaignEnd._flatpickr.set(
+            "minDate",
+            campaign.start
+        );
+    }
+}
+
+function openCampaignForm(
+    mode,
+    campaign = null
+) {
+    modalMode = mode;
+
+    resetCampaignForm();
+
+    if (mode === "create") {
+        modalEyebrow.textContent =
+            "Nueva operación";
+
+        modalTitle.textContent =
+            "Registrar campaña";
+
+        campaignResponsible.value =
+            loggedUserName;
+
         campaignProgress.value = "0";
         progressValue.textContent = "0%";
-        selectedCampaignId = null;
+
+        setCampaignStatus("activa");
+        setCampaignFormMode("create");
+
+        submitCampaignButton.style.display =
+            "inline-flex";
+
+        cancelCampaignModal.textContent =
+            "Cancelar";
+    } else if (
+        mode === "edit" &&
+        campaign
+    ) {
+        modalEyebrow.textContent =
+            "Modificar operación";
+
+        modalTitle.textContent =
+            "Editar campaña";
+
+        selectedCampaignId =
+            campaign.id;
+
+        fillCampaignForm(campaign);
+        setCampaignFormMode("edit");
+
+        submitCampaignButton.style.display =
+            "inline-flex";
+
+        cancelCampaignModal.textContent =
+            "Cancelar";
+    } else if (
+        mode === "view" &&
+        campaign
+    ) {
+        modalEyebrow.textContent =
+            "Información de campaña";
+
+        modalTitle.textContent =
+            "Detalle de campaña";
+
+        selectedCampaignId =
+            campaign.id;
+
+        fillCampaignForm(campaign);
+        setCampaignFormMode("view");
+
+        submitCampaignButton.style.display =
+            "none";
+
+        cancelCampaignModal.textContent =
+            "Cerrar";
     }
 
-    function fillCampaignForm(campaign) {
-        campaignId.value = campaign.id;
-        campaignName.value = campaign.name;
-        campaignStatus.value = campaign.status;
-        campaignResponsible.value = campaign.responsible;
-        campaignStart.value = campaign.start;
-        campaignEnd.value = campaign.end;
-        campaignDescription.value = campaign.description;
-        campaignProgress.value = campaign.progress;
-        progressValue.textContent =
-            `${campaign.progress}%`;
-    }
+    showModal(campaignModal);
+    renderIcons();
+}
 
-    function openCampaignForm(mode, campaign = null) {
-        modalMode = mode;
-        resetCampaignForm();
+function closeCampaignForm() {
+    hideModal(campaignModal);
 
-        if (mode === "create") {
-            modalEyebrow.textContent = "Nueva operación";
-            modalTitle.textContent = "Registrar campaña";
+    setCampaignFormMode("create");
+    resetCampaignForm();
 
-            enableCampaignFields(true);
-            submitCampaignButton.style.display = "inline-flex";
-            cancelCampaignModal.textContent = "Cancelar";
-        }
-
-        if (mode === "edit" && campaign) {
-            modalEyebrow.textContent = "Modificar operación";
-            modalTitle.textContent = "Editar campaña";
-
-            selectedCampaignId = campaign.id;
-
-            fillCampaignForm(campaign);
-            enableCampaignFields(true);
-
-            submitCampaignButton.style.display = "inline-flex";
-            cancelCampaignModal.textContent = "Cancelar";
-        }
-
-        if (mode === "view" && campaign) {
-            modalEyebrow.textContent = "Información de campaña";
-            modalTitle.textContent = "Detalle de campaña";
-
-            selectedCampaignId = campaign.id;
-
-            fillCampaignForm(campaign);
-            enableCampaignFields(false);
-
-            submitCampaignButton.style.display = "none";
-            cancelCampaignModal.textContent = "Cerrar";
-        }
-
-        showModal(campaignModal);
-        renderIcons();
-    }
-
-    function closeCampaignForm() {
-        hideModal(campaignModal);
-        enableCampaignFields(true);
-        submitCampaignButton.style.display = "inline-flex";
-        resetCampaignForm();
-    }
+    submitCampaignButton.style.display =
+        "inline-flex";
+}
     function openStatusDropdown() {
     customStatusFilter?.classList.add("open");
 
@@ -987,11 +1573,30 @@ document.addEventListener("click", event => {
     // CREAR Y EDITAR
     // =====================================================
 
-    campaignForm?.addEventListener("submit", event => {
+    campaignForm?.addEventListener(
+    "submit",
+    async event => {
         event.preventDefault();
 
         const startDate = campaignStart.value;
         const endDate = campaignEnd.value;
+
+        if (!campaignName.value.trim()) {
+            alert(
+                "Debes escribir el nombre de la campaña."
+            );
+
+            campaignName.focus();
+            return;
+        }
+
+        if (!startDate || !endDate) {
+            alert(
+                "Debes seleccionar las fechas de la campaña."
+            );
+
+            return;
+        }
 
         if (endDate < startDate) {
             alert(
@@ -1002,47 +1607,56 @@ document.addEventListener("click", event => {
             return;
         }
 
-       const campaignData = {
-    id:
-        modalMode === "edit"
-            ? selectedCampaignId
-            : createIdentifier(),
+        const originalButtonText =
+            submitCampaignButton.innerHTML;
 
-    name: campaignName.value.trim(),
-    status: campaignStatus.value,
+        try {
+            submitCampaignButton.disabled = true;
+            submitCampaignButton.textContent =
+                "Guardando...";
 
-    responsible:
-        campaignResponsible.value.trim(),
+         if (modalMode === "edit") {
+    await updateCampaignInDatabase(
+        selectedCampaignId
+    );
 
-    start: startDate,
-    end: endDate,
+    closeCampaignForm();
 
-    description:
-        campaignDescription.value.trim(),
+    await loadCampaignsFromDatabase();
 
-    progress: clampProgress(
-        campaignProgress.value
-    )
-};
+    showSuccessMessage(
+        "Los cambios de la campaña se guardaron correctamente."
+    );
+} else {
+    await createCampaignInDatabase();
 
-        if (modalMode === "edit") {
-            campaigns = campaigns.map(campaign =>
-                campaign.id === selectedCampaignId
-                    ? {
-                          ...campaign,
-                          ...campaignData
-                      }
-                    : campaign
+    closeCampaignForm();
+
+    await loadCampaignsFromDatabase();
+
+    showSuccessMessage(
+        "La campaña fue registrada exitosamente y ya está disponible en la plataforma."
+    );
+}
+        } catch (error) {
+            console.error(
+                "Error al guardar la campaña:",
+                error
             );
-        } else {
-            campaigns.unshift(campaignData);
-        }
 
-        saveCampaigns();
-        closeCampaignForm();
-        syncCustomStatusFilter();
-        renderCampaigns();
-    });
+            alert(
+                error.message ||
+                "No se pudo guardar la campaña."
+            );
+        } finally {
+            submitCampaignButton.disabled = false;
+            submitCampaignButton.innerHTML =
+                originalButtonText;
+
+            renderIcons();
+        }
+    }
+);
 
     // =====================================================
     // ACCIONES DE LA TABLA
@@ -1115,20 +1729,59 @@ document.addEventListener("click", event => {
         }
     });
 
-    confirmDelete?.addEventListener("click", () => {
+   confirmDelete?.addEventListener(
+    "click",
+    async () => {
         if (!selectedCampaignId) {
             return;
         }
 
-        campaigns = campaigns.filter(
-            campaign =>
-                campaign.id !== selectedCampaignId
+        const campaign = campaigns.find(
+            item =>
+                item.id === selectedCampaignId
         );
 
-        saveCampaigns();
-        closeDeleteConfirmation();
-        renderCampaigns();
-    });
+        if (!campaign) {
+            return;
+        }
+
+        const id = selectedCampaignId;
+
+        try {
+            confirmDelete.disabled = true;
+            confirmDelete.textContent =
+                "Eliminando...";
+
+            if (campaign.status !== "cancelada") {
+                await cancelCampaignInDatabase(id);
+            }
+
+            await deleteCampaignFromDatabase(id);
+
+            closeDeleteConfirmation();
+
+            alert(
+                "Campaña eliminada correctamente."
+            );
+
+            await loadCampaignsFromDatabase();
+        } catch (error) {
+            console.error(
+                "Error al eliminar la campaña:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "No se pudo eliminar la campaña."
+            );
+        } finally {
+            confirmDelete.disabled = false;
+            confirmDelete.textContent =
+                "Eliminar";
+        }
+    }
+);
 
     // =====================================================
     // BUSCADOR Y FILTROS
@@ -1153,12 +1806,17 @@ document.addEventListener("click", event => {
         campaignSearch.focus();
     });
 
-    refreshCampaigns?.addEventListener("click", () => {
+   refreshCampaigns?.addEventListener(
+    "click",
+    async () => {
         campaignSearch.value = "";
         statusFilter.value = "todos";
 
-        renderCampaigns();
-    });
+        syncCustomStatusFilter();
+
+        await loadCampaignsFromDatabase();
+    }
+);
 
     document.addEventListener("keydown", event => {
         if (
@@ -1186,6 +1844,103 @@ document.addEventListener("click", event => {
     // =====================================================
     // PRIMER RENDERIZADO
     // =====================================================
+if (typeof flatpickr !== "undefined") {
+    flatpickr.localize({
+        firstDayOfWeek: 1,
+        weekdays: {
+            shorthand: [
+                "Dom",
+                "Lun",
+                "Mar",
+                "Mié",
+                "Jue",
+                "Vie",
+                "Sáb"
+            ],
 
-    renderCampaigns();
+            longhand: [
+                "Domingo",
+                "Lunes",
+                "Martes",
+                "Miércoles",
+                "Jueves",
+                "Viernes",
+                "Sábado"
+            ]
+        },
+
+        months: {
+            shorthand: [
+                "Ene",
+                "Feb",
+                "Mar",
+                "Abr",
+                "May",
+                "Jun",
+                "Jul",
+                "Ago",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dic"
+            ],
+
+            longhand: [
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre"
+            ]
+        }
+    });
+
+    const startDatePicker = flatpickr(
+        campaignStart,
+        {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "d M, Y",
+            disableMobile: true,
+            allowInput: false,
+            monthSelectorType: "static",
+            altInputClass: "flatpickr-input",
+            onChange: selectedDates => {
+                if (selectedDates.length > 0) {
+                    endDatePicker.set(
+                        "minDate",
+                        selectedDates[0]
+                    );
+                }
+            }
+        }
+    );
+
+    const endDatePicker = flatpickr(
+        campaignEnd,
+        {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "d M, Y",
+            disableMobile: true,
+            allowInput: false,
+            monthSelectorType: "static",
+            altInputClass: "flatpickr-input"
+        }
+    );
+
+    startDatePicker.altInput.placeholder =
+        "Seleccionar fecha de inicio";
+
+    endDatePicker.altInput.placeholder =
+        "Seleccionar fecha final";
+}
+    loadCampaignsFromDatabase();
 });

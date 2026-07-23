@@ -1,0 +1,492 @@
+/* =========================================================
+   TECNOSULA - GESTIÓN DE USUARIOS
+========================================================= */
+
+:root {
+    --users-primary: #2f6df6;
+    --users-primary-light: #68a0ff;
+    --users-background: rgba(8, 22, 43, 0.72);
+    --users-surface: rgba(13, 32, 59, 0.82);
+    --users-border: rgba(116, 164, 255, 0.16);
+    --users-border-strong: rgba(84, 144, 255, 0.34);
+    --users-text: #f3f7ff;
+    --users-muted: #8fa2bd;
+    --users-success: #38d996;
+    --users-danger: #ff667d;
+    --users-warning: #ffbc5c;
+}
+
+/* =========================================================
+   CONTENIDO GENERAL
+========================================================= */
+
+.page-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 48px 52px 80px;
+}
+
+.users-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 30px;
+}
+
+.users-header > div {
+    max-width: 760px;
+}
+
+.users-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: var(--users-primary-light);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.users-eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        var(--users-primary),
+        var(--users-primary-light)
+    );
+}
+
+.users-header h2 {
+    margin: 0 0 10px;
+    color: var(--users-text);
+    font-size: clamp(2rem, 3vw, 3.1rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+}
+
+.users-header p {
+    max-width: 660px;
+    margin: 0;
+    color: var(--users-muted);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+/* =========================================================
+   PANEL PRINCIPAL
+========================================================= */
+
+.users-panel {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--users-border);
+    border-radius: 24px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 42, 76, 0.82),
+            rgba(6, 18, 36, 0.9)
+        );
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    backdrop-filter: blur(18px);
+}
+
+.users-panel::before {
+    content: "";
+    position: absolute;
+    top: -180px;
+    right: -120px;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: rgba(47, 109, 246, 0.12);
+    filter: blur(70px);
+}
+
+/* =========================================================
+   BARRA DE BÚSQUEDA Y FILTROS
+========================================================= */
+
+.users-toolbar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 22px;
+    border-bottom: 1px solid var(--users-border);
+}
+
+.users-search {
+    position: relative;
+    flex: 1;
+    max-width: 520px;
+}
+
+.users-search > svg {
+    position: absolute;
+    top: 50%;
+    left: 17px;
+    width: 19px;
+    height: 19px;
+    color: #7087a7;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+.users-search input {
+    width: 100%;
+    height: 48px;
+    padding: 0 18px 0 50px;
+    border: 1px solid rgba(120, 159, 220, 0.17);
+    border-radius: 14px;
+    outline: none;
+    color: var(--users-text);
+    background: rgba(4, 14, 30, 0.62);
+    font: inherit;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.users-search input::placeholder {
+    color: #71839c;
+}
+
+.users-search input:focus {
+    border-color: rgba(74, 134, 255, 0.75);
+    background: rgba(7, 22, 45, 0.9);
+    box-shadow:
+        0 0 0 4px rgba(47, 109, 246, 0.12),
+        0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+#statusFilter {
+    min-width: 195px;
+    height: 48px;
+    padding: 0 42px 0 16px;
+    border: 1px solid rgba(120, 159, 220, 0.17);
+    border-radius: 14px;
+    outline: none;
+    color: var(--users-text);
+    background-color: rgba(4, 14, 30, 0.78);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#statusFilter:focus {
+    border-color: rgba(74, 134, 255, 0.75);
+    box-shadow: 0 0 0 4px rgba(47, 109, 246, 0.12);
+}
+
+#statusFilter option {
+    color: #eaf2ff;
+    background: #0a1a30;
+}
+
+/* =========================================================
+   TABLA
+========================================================= */
+
+.users-table-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.users-table {
+    width: 100%;
+    min-width: 920px;
+    border-collapse: collapse;
+}
+
+.users-table thead {
+    background: rgba(4, 16, 34, 0.48);
+}
+
+.users-table th {
+    padding: 17px 20px;
+    border-bottom: 1px solid var(--users-border);
+    color: #8399b7;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.users-table td {
+    padding: 19px 20px;
+    border-bottom: 1px solid rgba(116, 164, 255, 0.09);
+    color: #dce7f7;
+    font-size: 0.92rem;
+    vertical-align: middle;
+}
+
+.users-table tbody tr {
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.users-table tbody tr:hover {
+    background: rgba(54, 111, 220, 0.075);
+}
+
+.users-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Mensaje de carga o tabla vacía */
+
+.users-table td[colspan] {
+    height: 230px;
+    color: var(--users-muted);
+    font-size: 0.96rem;
+    text-align: center;
+}
+
+/* =========================================================
+   USUARIO EN LA TABLA
+========================================================= */
+
+.user-identity {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.user-table-avatar {
+    display: grid;
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(100, 157, 255, 0.3);
+    border-radius: 13px;
+    color: #dceaff;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(47, 109, 246, 0.5),
+            rgba(25, 72, 159, 0.4)
+        );
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.user-identity-data {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.user-identity-data strong {
+    color: #f3f7ff;
+    font-size: 0.91rem;
+}
+
+.user-identity-data span {
+    color: #7186a3;
+    font-size: 0.76rem;
+}
+
+/* =========================================================
+   ETIQUETAS DE ESTADO Y ROL
+========================================================= */
+
+.user-status,
+.user-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    width: fit-content;
+    padding: 7px 11px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+.user-status::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.user-status.active {
+    color: #77efba;
+    background: rgba(56, 217, 150, 0.11);
+}
+
+.user-status.active::before {
+    background: var(--users-success);
+    box-shadow: 0 0 10px rgba(56, 217, 150, 0.7);
+}
+
+.user-status.inactive {
+    color: #ff91a3;
+    background: rgba(255, 102, 125, 0.11);
+}
+
+.user-status.inactive::before {
+    background: var(--users-danger);
+}
+
+.user-role {
+    color: #a9c8ff;
+    background: rgba(47, 109, 246, 0.11);
+}
+
+/* =========================================================
+   BOTONES DE ACCIÓN
+========================================================= */
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-action-button {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba(121, 160, 220, 0.16);
+    border-radius: 11px;
+    color: #8fa5c2;
+    background: rgba(7, 20, 41, 0.65);
+    cursor: pointer;
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.user-action-button svg {
+    width: 17px;
+    height: 17px;
+}
+
+.user-action-button:hover {
+    color: #ffffff;
+    border-color: rgba(80, 140, 255, 0.5);
+    background: rgba(47, 109, 246, 0.18);
+    transform: translateY(-2px);
+}
+
+.user-action-button.danger:hover {
+    color: #ff9bac;
+    border-color: rgba(255, 102, 125, 0.4);
+    background: rgba(255, 102, 125, 0.1);
+}
+
+/* =========================================================
+   SCROLL DE LA TABLA
+========================================================= */
+
+.users-table-container::-webkit-scrollbar {
+    height: 9px;
+}
+
+.users-table-container::-webkit-scrollbar-track {
+    background: rgba(4, 14, 30, 0.5);
+}
+
+.users-table-container::-webkit-scrollbar-thumb {
+    border: 2px solid rgba(4, 14, 30, 0.5);
+    border-radius: 999px;
+    background: rgba(83, 134, 220, 0.42);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+    .page-content {
+        padding: 38px 28px 70px;
+    }
+}
+
+@media (max-width: 760px) {
+    .page-content {
+        padding: 30px 18px 60px;
+    }
+
+    .users-header {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 22px;
+    }
+
+    .users-header h2 {
+        font-size: 2rem;
+    }
+
+    .users-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .users-search {
+        max-width: none;
+    }
+
+    #statusFilter {
+        width: 100%;
+    }
+
+    .users-panel {
+        border-radius: 18px;
+    }
+}
+
+@media (max-width: 520px) {
+    .page-content {
+        padding-right: 13px;
+        padding-left: 13px;
+    }
+
+    .users-header p {
+        font-size: 0.91rem;
+    }
+
+    .users-toolbar {
+        padding: 13px;
+    }
+    /* Ocultar Gestión de usuarios hasta validar el rol */
+#adminUsersModule[hidden] {
+    display: none !important;
+}
+
+/* Ocultar toda la página mientras se comprueban los permisos */
+body.pagina-admin-protegida {
+    visibility: hidden;
+}
+}

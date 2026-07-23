@@ -11,6 +11,13 @@
 
     <title>TecnoSula | Gestión de campañas</title>
 
+    <!-- ESTILOS BASE DE FLATPICKR -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    >
+    
+
     <!-- ESTILOS PRINCIPALES -->
     <link
         rel="stylesheet"
@@ -22,6 +29,10 @@
         rel="stylesheet"
         href="Css/notificaciones.css"
     >
+    <link
+    rel="stylesheet"
+    href="Css/permisos.css?v=1"
+>
 
     <!-- ICONOS LUCIDE -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -117,6 +128,18 @@
                         <span>Reportes</span>
 
                     </a>
+                  <a
+    href="usuarios.html"
+    class="navigation-link admin-only"
+    id="adminUsersModule"
+>
+    <div class="navigation-icon">
+        <i data-lucide="users"></i>
+    </div>
+
+    <span>Gestión de usuarios</span>
+</a>
+
 
                     <a
                         href="configuracion.html"
@@ -1213,41 +1236,50 @@
 
                 <div class="form-row">
 
-                    <!-- ESTADO -->
-                    <div class="form-group">
+             <div class="form-group">
 
-                        <label for="campaignStatus">
-                            Estado
-                        </label>
+    <label>
+        Estado
+    </label>
 
-                        <div class="input-control">
+    <input
+        type="hidden"
+        id="campaignStatus"
+        value="activa"
+    >
 
-                            <i data-lucide="activity"></i>
+    <div class="status-pill-group" id="statusPillGroup">
 
-                            <select
-                                id="campaignStatus"
-                                required
-                            >
-                                <option value="">
-                                    Seleccionar estado
-                                </option>
+        <button
+            type="button"
+            class="status-pill active"
+            data-status="activa"
+        >
+            <i data-lucide="activity"></i>
+            Activa
+        </button>
 
-                                <option value="activa">
-                                    Activa
-                                </option>
+        <button
+            type="button"
+            class="status-pill"
+            data-status="pausada"
+        >
+            <i data-lucide="pause-circle"></i>
+            Pausada
+        </button>
 
-                                <option value="pausada">
-                                    Pausada
-                                </option>
+        <button
+            type="button"
+            class="status-pill"
+            data-status="finalizada"
+        >
+            <i data-lucide="circle-check-big"></i>
+            Finalizada
+        </button>
 
-                                <option value="finalizada">
-                                    Finalizada
-                                </option>
-                            </select>
+    </div>
 
-                        </div>
-
-                    </div>
+</div>
 
                     <!-- RESPONSABLE -->
                     <div class="form-group">
@@ -1320,22 +1352,46 @@
 
                 </div>
 
-                <!-- DESCRIPCIÓN -->
-                <div class="form-group full-width">
+               <!-- PRESUPUESTO -->
+<div class="form-group full-width">
 
-                    <label for="campaignDescription">
-                        Descripción
-                    </label>
+    <label for="campaignBudget">
+        Presupuesto
+    </label>
 
-                    <textarea
-                        id="campaignDescription"
-                        rows="4"
-                        maxlength="500"
-                        placeholder="Describe el objetivo principal de la campaña..."
-                        required
-                    ></textarea>
+    <div class="input-control">
 
-                </div>
+        <i data-lucide="wallet-cards"></i>
+
+        <input
+            type="number"
+            id="campaignBudget"
+            placeholder="Ejemplo: 250000"
+            min="0.01"
+            step="0.01"
+            required
+        >
+
+    </div>
+
+</div>
+
+<!-- DESCRIPCIÓN -->
+<div class="form-group full-width">
+
+    <label for="campaignDescription">
+        Descripción
+    </label>
+
+    <textarea
+        id="campaignDescription"
+        rows="4"
+        maxlength="255"
+        placeholder="Describe el objetivo principal de la campaña..."
+        required
+    ></textarea>
+
+</div>
 
                 <!-- PROGRESO -->
                 <div class="form-group full-width">
@@ -1447,10 +1503,51 @@
         </div>
 
     </div>
+<div
+    class="modal-overlay"
+    id="successModal"
+>
+    <div class="success-modal">
 
-  <script src="JS/campanas.js?v=3"></script>
-<script src="JS/notificaciones.js?v=3"></script>
+        <div class="success-modal-icon">
+            <i data-lucide="circle-check-big"></i>
+        </div>
 
+        <span class="success-modal-eyebrow">
+            Operación completada
+        </span>
+
+        <h2>
+            Campaña creada correctamente
+        </h2>
+
+        <p id="successModalMessage">
+            La campaña fue registrada exitosamente en la base de datos.
+        </p>
+
+        <button
+            class="primary-button"
+            id="closeSuccessModal"
+            type="button"
+        >
+            <i data-lucide="check"></i>
+            Aceptar
+        </button>
+
+    </div>
+</div>
+<!-- SISTEMA DE NOTIFICACIONES DE LA INTERFAZ -->
+<div
+    class="toast-container"
+    id="toastContainer"
+    aria-live="polite"
+    aria-atomic="true"
+></div>
+<script src="JS/api.js"></script>
+<script src="JS/permisos.js?v=3"></script>
+<script src="JS/notificaciones.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="JS/campanas.js"></script>
 </body>
 </html>
 

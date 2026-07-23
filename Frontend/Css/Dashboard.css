@@ -3097,4 +3097,8 @@ a {
     .callout-decoration {
         transform: scale(0.9);
     }
+    /* Ocultar completamente el módulo administrativo */
+#adminUsersModule[hidden] {
+    display: none !important;
+}
 }

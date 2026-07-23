@@ -90,8 +90,8 @@ if (fullName) {
 
             mensaje.style.color = "red";
 
-            mensaje.textContent =
-            data.message || "Credenciales incorrectas";
+           mensaje.textContent =
+    data.mensaje || "Credenciales incorrectas";
 
 
         }

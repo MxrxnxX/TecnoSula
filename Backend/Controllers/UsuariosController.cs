@@ -1,10 +1,12 @@
 using Backend.Data;
+using Backend.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Backend.DTOs;
 
 namespace Backend.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     [ApiController]
     [Route("api/[controller]")]
     public class UsuariosController : ControllerBase
@@ -15,100 +17,135 @@ namespace Backend.Controllers
         {
             _context = context;
         }
+
+        // =====================================================
+        // CONSULTAR TODOS LOS USUARIOS
+        // GET: api/Usuarios
+        // =====================================================
         [HttpGet]
-public async Task<IActionResult> GetUsuarios()
-{
-    var usuarios = await _context.Usuarios
-        .Include(u => u.Rol)
-        .Select(u => new
+        public async Task<IActionResult> GetUsuarios()
         {
-            u.IdUsuario,
-            u.Nombre,
-            u.Apellido,
-            u.Correo,
-            u.Telefono,
-            u.Estado,
-            Rol = u.Rol.Nombre
-        })
-        .ToListAsync();
+            var usuarios = await _context.Usuarios
+                .Include(u => u.Rol)
+                .Select(u => new
+                {
+                    u.IdUsuario,
+                    u.Nombre,
+                    u.Apellido,
+                    u.Correo,
+                    u.Telefono,
+                    u.Estado,
+                    Rol = u.Rol.Nombre
+                })
+                .ToListAsync();
 
-    return Ok(usuarios);
-}
-[HttpGet("{id}")]
-public async Task<IActionResult> GetUsuario(int id)
-{
-    var usuario = await _context.Usuarios
-        .Include(u => u.Rol)
-        .Where(u => u.IdUsuario == id)
-        .Select(u => new
+            return Ok(usuarios);
+        }
+
+        // =====================================================
+        // CONSULTAR UN USUARIO
+        // GET: api/Usuarios/1
+        // =====================================================
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUsuario(int id)
         {
-            u.IdUsuario,
-            u.Nombre,
-            u.Apellido,
-            u.Correo,
-            u.Telefono,
-            u.Estado,
-            Rol = u.Rol.Nombre
-        })
-        .FirstOrDefaultAsync();
+            var usuario = await _context.Usuarios
+                .Include(u => u.Rol)
+                .Where(u => u.IdUsuario == id)
+                .Select(u => new
+                {
+                    u.IdUsuario,
+                    u.Nombre,
+                    u.Apellido,
+                    u.Correo,
+                    u.Telefono,
+                    u.Estado,
+                    u.IdRol,
+                    Rol = u.Rol.Nombre
+                })
+                .FirstOrDefaultAsync();
 
-    if (usuario == null)
-    {
-        return NotFound(new
+            if (usuario == null)
+            {
+                return NotFound(new
+                {
+                    mensaje = "Usuario no encontrado."
+                });
+            }
+
+            return Ok(usuario);
+        }
+
+        // =====================================================
+        // EDITAR USUARIO
+        // PUT: api/Usuarios/1
+        // =====================================================
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUsuario(
+            int id,
+            [FromBody] UpdateUsuarioRequest request
+        )
         {
-            mensaje = "Usuario no encontrado."
-        });
-    }
+            var usuario = await _context.Usuarios.FindAsync(id);
 
-    return Ok(usuario);
-}
-[HttpPut("{id}")]
-public async Task<IActionResult> UpdateUsuario(int id, UpdateUsuarioRequest request)
-{
-    var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+            {
+                return NotFound(new
+                {
+                    mensaje = "Usuario no encontrado."
+                });
+            }
 
-    if (usuario == null)
-    {
-        return NotFound(new
+            var rolExiste = await _context.Roles
+                .AnyAsync(r => r.IdRol == request.IdRol);
+
+            if (!rolExiste)
+            {
+                return BadRequest(new
+                {
+                    mensaje = "El rol seleccionado no existe."
+                });
+            }
+
+            usuario.Nombre = request.Nombre;
+            usuario.Apellido = request.Apellido;
+            usuario.Telefono = request.Telefono;
+            usuario.Estado = request.Estado;
+            usuario.IdRol = request.IdRol;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                mensaje = "Usuario actualizado correctamente."
+            });
+        }
+
+        // =====================================================
+        // DESACTIVAR USUARIO
+        // DELETE: api/Usuarios/1
+        // =====================================================
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUsuario(int id)
         {
-            mensaje = "Usuario no encontrado."
-        });
-    }
+            var usuario = await _context.Usuarios.FindAsync(id);
 
-    usuario.Nombre = request.Nombre;
-    usuario.Apellido = request.Apellido;
-    usuario.Telefono = request.Telefono;
-    usuario.Estado = request.Estado;
-    usuario.IdRol = request.IdRol;
+            if (usuario == null)
+            {
+                return NotFound(new
+                {
+                    mensaje = "Usuario no encontrado."
+                });
+            }
 
-    await _context.SaveChangesAsync();
+            usuario.Estado = "Inactivo";
 
-    return Ok(new
-    {
-        mensaje = "Usuario actualizado correctamente."
-    });
-}
-[HttpDelete("{id}")]
-public async Task<IActionResult> DeleteUsuario(int id)
-{
-    var usuario = await _context.Usuarios.FindAsync(id);
+            await _context.SaveChangesAsync();
 
-    if (usuario == null)
-    {
-        return NotFound(new
-        {
-            mensaje = "Usuario no encontrado."
-        });
-    }
-
-    usuario.Estado = "Inactivo";
-
-    await _context.SaveChangesAsync();
-
-    return Ok(new
-    {
-        mensaje = "Usuario desactivado correctamente."
-    });
-}
+            return Ok(new
+            {
+                mensaje = "Usuario desactivado correctamente."
+            });
+        }
     }
 }

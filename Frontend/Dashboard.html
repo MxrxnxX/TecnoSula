@@ -20,6 +20,10 @@
         rel="stylesheet"
         href="Css/notificaciones.css"
     >
+    <link
+    rel="stylesheet"
+    href="Css/permisos.css?v=1"
+>
 
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -113,6 +117,17 @@
                         <span>Reportes</span>
 
                     </a>
+                <a
+    href="usuarios.html"
+    class="navigation-link admin-only"
+    id="adminUsersModule"
+>
+    <div class="navigation-icon">
+        <i data-lucide="users"></i>
+    </div>
+
+    <span>Gestión de usuarios</span>
+</a>
 
                     <a
                         href="configuracion.html"
@@ -933,8 +948,9 @@
 
     </div>
 
-    <script src="JS/Dashboard.js?v=6"></script>
-    <script src="JS/notificaciones.js?v=6"></script>
+<script src="JS/permisos.js?v=3"></script>
+<script src="JS/Dashboard.js?v=7"></script>
+<script src="JS/notificaciones.js?v=6"></script>
 
 </body>
 

@@ -1,0 +1,14 @@
+/* Todo elemento exclusivo del administrador nace oculto */
+.admin-only {
+    display: none !important;
+}
+
+/* Solo JavaScript agrega esta clase al administrador */
+.navigation-link.admin-only.admin-visible {
+    display: flex !important;
+}
+
+/* La página de usuarios no se muestra mientras valida el permiso */
+body.pagina-admin-protegida {
+    visibility: hidden;
+}

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TecnoSula | Gestión de usuarios</title>
+
+    <link
+        rel="stylesheet"
+        href="Css/Dashboard.css"
+    >
+
+  <link
+    rel="stylesheet"
+    href="Css/usuarios.css?v=2"
+>
+<link
+    rel="stylesheet"
+    href="Css/permisos.css?v=1"
+>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+</head>
+
+<body
+    class="pagina-admin-protegida"
+    data-requiere-admin="true"
+>
+
+    <div class="app">
+
+    <div class="app">
+
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <div class="sidebar-header">
+
+                <a
+                    href="Dashboard.html"
+                    class="brand"
+                >
+                    <div class="brand-logo">
+                        <i data-lucide="orbit"></i>
+                    </div>
+
+                    <div class="brand-text">
+                        <strong>TecnoSula</strong>
+                        <span>Campaign System</span>
+                    </div>
+                </a>
+
+                <button
+                    class="close-sidebar"
+                    id="closeSidebar"
+                    type="button"
+                    aria-label="Cerrar menú"
+                >
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <div class="navigation-group">
+
+                <span class="navigation-label">
+                    Plataforma
+                </span>
+
+                <nav class="navigation">
+
+                    <a
+                        href="Dashboard.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="layout-dashboard"></i>
+                        </div>
+
+                        <span>Inicio</span>
+                    </a>
+
+                    <a
+                        href="campanas.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="radio-tower"></i>
+                        </div>
+
+                        <span>Campañas</span>
+                    </a>
+
+                    <a
+                        href="reportes.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="file-chart-column"></i>
+                        </div>
+
+                        <span>Reportes</span>
+                    </a>
+<a
+    href="usuarios.html"
+    class="navigation-link admin-only"
+    id="adminUsersModule"
+>
+    <div class="navigation-icon">
+        <i data-lucide="users"></i>
+    </div>
+
+    <span>Gestión de usuarios</span>
+</a>
+
+                    <a
+                        href="configuracion.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="settings"></i>
+                        </div>
+
+                        <span>Configuración</span>
+                    </a>
+
+                </nav>
+
+            </div>
+
+            <div class="sidebar-footer">
+
+                <div class="employee-profile">
+
+                    <div class="employee-avatar">
+
+                        <span id="employeeInitials">
+                            AD
+                        </span>
+
+                        <div class="online-point"></div>
+
+                    </div>
+
+                    <div class="employee-data">
+
+                        <strong id="employeeName">
+                            Administrador
+                        </strong>
+
+                        <span>
+                            Gestión administrativa
+                        </span>
+
+                    </div>
+
+                    <button
+                        class="logout-button"
+                        id="logoutButton"
+                        type="button"
+                        title="Cerrar sesión"
+                        aria-label="Cerrar sesión"
+                    >
+                        <i data-lucide="log-out"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <div
+            class="sidebar-overlay"
+            id="sidebarOverlay"
+        ></div>
+
+        <main class="main-content">
+
+            <div class="background-effects">
+                <div class="background-grid"></div>
+
+                <div class="glow glow-one"></div>
+                <div class="glow glow-two"></div>
+                <div class="glow glow-three"></div>
+            </div>
+
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        class="menu-button"
+                        id="openSidebar"
+                        type="button"
+                        aria-label="Abrir menú"
+                    >
+                        <i data-lucide="menu"></i>
+                    </button>
+
+                    <div>
+                        <span>Administración</span>
+                        <h1>Gestión de usuarios</h1>
+                    </div>
+
+                </div>
+
+                <div class="topbar-actions">
+
+                    <button
+                        class="primary-button"
+                        id="newUserButton"
+                        type="button"
+                    >
+                        <i data-lucide="user-plus"></i>
+                        Nuevo usuario
+                    </button>
+
+                </div>
+
+            </header>
+
+            <div class="page-content">
+
+                <section class="users-header">
+
+                    <div>
+                        <span class="users-eyebrow">
+                            Módulo administrativo
+                        </span>
+
+                        <h2>
+                            Control de usuarios
+                        </h2>
+
+                        <p>
+                            Consulta, registra, edita y administra el estado
+                            de los usuarios de TecnoSula.
+                        </p>
+                    </div>
+
+                </section>
+
+                <section class="users-panel">
+
+                    <div class="users-toolbar">
+
+                        <div class="users-search">
+
+                            <i data-lucide="search"></i>
+
+                            <input
+                                type="search"
+                                id="userSearch"
+                                placeholder="Buscar por nombre o correo"
+                            >
+
+                        </div>
+
+                        <select id="statusFilter">
+                            <option value="todos">
+                                Todos los estados
+                            </option>
+
+                            <option value="Activo">
+                                Activos
+                            </option>
+
+                            <option value="Inactivo">
+                                Inactivos
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <div class="users-table-container">
+
+                        <table class="users-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Correo</th>
+                                    <th>Teléfono</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="usersTableBody">
+
+                                <tr>
+                                    <td colspan="6">
+                                        Cargando usuarios...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+<script src="JS/permisos.js?v=3"></script>
+<script src="JS/usuarios.js?v=2"></script>
+</body>
+
+
+</html>

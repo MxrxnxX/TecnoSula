@@ -60,6 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const activeCampaignsElement =
         document.getElementById("activeCampaigns");
+        const adminUsersModule =
+    document.getElementById("adminUsersModule");
 
     // =====================================================
     // FUNCIONES AUXILIARES
@@ -169,6 +171,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tokenPayload =
         decodeTokenPayload(token);
+        // =====================================================
+// MÓDULO EXCLUSIVO DEL ADMINISTRADOR
+// =====================================================
+
+const ADMIN_EMAIL =
+    "admin@tecnosula.com";
+
+const tokenEmail =
+    tokenPayload?.[
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+    ] ||
+    tokenPayload?.email ||
+    tokenPayload?.correo ||
+    "";
+
+const currentUserEmail =
+    String(tokenEmail)
+        .trim()
+        .toLowerCase();
+
+if (adminUsersModule) {
+    adminUsersModule.hidden =
+        currentUserEmail !== ADMIN_EMAIL;
+}
 
     const tokenName =
         tokenPayload?.[
@@ -321,3 +347,79 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     );
 });
+// =====================================================
+// MOSTRAR GESTIÓN DE USUARIOS SOLO AL ADMINISTRADOR
+// =====================================================
+async function controlarModuloUsuarios() {
+    const menuUsuarios =
+        document.getElementById("adminUsersModule");
+
+    if (!menuUsuarios) {
+        return;
+    }
+
+    // Siempre oculto mientras se comprueba el rol
+    menuUsuarios.hidden = true;
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        window.location.replace("index.html");
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:5208/api/Auth/perfil",
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json"
+                }
+            }
+        );
+
+        if (!respuesta.ok) {
+            if (respuesta.status === 401) {
+                localStorage.removeItem("token");
+                window.location.replace("index.html");
+            }
+
+            return;
+        }
+
+        const perfil = await respuesta.json();
+
+        console.log("Perfil recibido:", perfil);
+
+        const rol = String(
+            perfil.rol?.nombre ??
+            perfil.rol?.Nombre ??
+            perfil.rol ??
+            perfil.Rol ??
+            perfil.nombreRol ??
+            perfil.usuario?.rol ??
+            ""
+        )
+            .trim()
+            .toLowerCase();
+
+        // Solamente se muestra para Administrador
+        menuUsuarios.hidden =
+            rol !== "administrador";
+
+    } catch (error) {
+        console.error(
+            "No se pudo verificar el rol:",
+            error
+        );
+
+        menuUsuarios.hidden = true;
+    }
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    controlarModuloUsuarios
+);

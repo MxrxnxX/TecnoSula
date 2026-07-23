@@ -5,6 +5,7 @@ using Backend.DTOs;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Backend.Services;
+using System.Security.Claims;
 
 namespace Backend.Controllers
 {
@@ -63,12 +64,25 @@ public AuthController(
     }
 
     // Crear los datos que llevará el token
-    var claims = new[]
-    {
-        new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, usuario.Nombre),
-        new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Email, usuario.Correo),
-        new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Role, usuario.Rol.Nombre)
-    };
+   var claims = new List<Claim>
+{
+    new Claim(
+        ClaimTypes.NameIdentifier,
+        usuario.IdUsuario.ToString()
+    ),
+    new Claim(
+        ClaimTypes.Name,
+        usuario.Nombre
+    ),
+    new Claim(
+        ClaimTypes.Email,
+        usuario.Correo
+    ),
+    new Claim(
+        ClaimTypes.Role,
+        usuario.Rol.Nombre
+    )
+};
 
     var key = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
         System.Text.Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
@@ -89,12 +103,13 @@ public AuthController(
         .WriteToken(token);
 
  return Ok(new
-    {
-        token = jwt,
-        idUsuario = usuario.IdUsuario,
-        nombre = usuario.Nombre,
-        rol = usuario.Rol.Nombre
-    });
+{
+    token = jwt,
+    idUsuario = usuario.IdUsuario,
+    nombre = usuario.Nombre,
+    correo = usuario.Correo,
+    rol = usuario.Rol.Nombre
+});
 }
  [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
@@ -158,11 +173,22 @@ public AuthController(
 [HttpGet("perfil")]
 public IActionResult Perfil()
 {
+    var nombre = User.Identity?.Name;
+
+    var correo = User.FindFirst(
+        System.Security.Claims.ClaimTypes.Email
+    )?.Value;
+
+    var rol = User.FindFirst(
+        System.Security.Claims.ClaimTypes.Role
+    )?.Value;
+
     return Ok(new
     {
         mensaje = "Acceso permitido con JWT",
-        usuario = User.Identity?.Name,
-        rol = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+        usuario = nombre,
+        correo = correo,
+        rol = rol
     });
 }
 [HttpPost("recuperar")]
