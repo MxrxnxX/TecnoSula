@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TecnoSula | Publicación y programación</title>
+
+    <link
+        rel="stylesheet"
+        href="Css/Dashboard.css"
+    >
+    <link
+    rel="stylesheet"
+    href="Css/transiciones.css?v=2"
+>
+
+    <link
+        rel="stylesheet"
+        href="Css/publicaciones.css?v=1"
+    >
+
+    <link
+        rel="stylesheet"
+        href="Css/permisos.css?v=1"
+    >
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- =====================================================
+             BARRA LATERAL
+        ====================================================== -->
+
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <div class="sidebar-header">
+
+                <a
+                    href="Dashboard.html"
+                    class="brand"
+                >
+                    <div class="brand-logo">
+                        <i data-lucide="orbit"></i>
+                    </div>
+
+                    <div class="brand-text">
+                        <strong>TecnoSula</strong>
+                        <span>Campaign System</span>
+                    </div>
+                </a>
+
+                <button
+                    class="close-sidebar"
+                    id="closeSidebar"
+                    type="button"
+                    aria-label="Cerrar menú"
+                >
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <div class="navigation-group">
+
+                <span class="navigation-label">
+                    Plataforma
+                </span>
+
+                <nav class="navigation">
+
+                    <a
+                        href="Dashboard.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="layout-dashboard"></i>
+                        </div>
+
+                        <span>Inicio</span>
+                    </a>
+
+                    <a
+                        href="campanas.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="radio-tower"></i>
+                        </div>
+
+                        <span>Campañas</span>
+                    </a>
+
+                    <a
+                        href="publicaciones.html"
+                        class="navigation-link active"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="calendar-clock"></i>
+                        </div>
+
+                        <span>Publicación y programación</span>
+
+                        <div class="active-line"></div>
+                    </a>
+
+                    <a
+                        href="usuarios.html"
+                        class="navigation-link admin-only"
+                        id="adminUsersModule"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="users"></i>
+                        </div>
+
+                        <span>Gestión de usuarios</span>
+                    </a>
+
+                    <a
+                        href="configuracion.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="settings"></i>
+                        </div>
+
+                        <span>Configuración</span>
+                    </a>
+
+                </nav>
+
+            </div>
+<!-- TARJETA LATERAL DE PUBLICACIONES -->
+
+<article class="sidebar-advertisement">
+
+    <div class="advertisement-icon">
+        <i data-lucide="calendar-clock"></i>
+    </div>
+
+    <span>PLANIFICACIÓN DIGITAL</span>
+
+    <h3>
+        Publica en el momento correcto.
+    </h3>
+
+    <p>
+        Organiza contenido, plataformas y horarios
+        desde un único calendario de trabajo.
+    </p>
+
+    <div class="advertisement-decoration"></div>
+
+</article>
+
+<!-- PERFIL DEL USUARIO -->
+
+<div class="sidebar-footer">
+
+    <div class="employee-profile">
+
+        <div class="employee-avatar">
+
+            <span id="employeeInitials">
+                EM
+            </span>
+
+            <div class="online-point"></div>
+
+        </div>
+
+        <div class="employee-data">
+
+            <strong id="employeeName">
+                Usuario TecnoSula
+            </strong>
+
+            <span id="employeeRole">
+                Gestión de campañas
+            </span>
+
+        </div>
+
+        <button
+            class="logout-button"
+            id="logoutButton"
+            type="button"
+            title="Cerrar sesión"
+            aria-label="Cerrar sesión"
+        >
+            <i data-lucide="log-out"></i>
+        </button>
+
+    </div>
+
+</div>
+
+<!-- CIERRE CORRECTO DEL SIDEBAR -->
+
+</aside>
+
+<!-- OVERLAY DEL SIDEBAR MÓVIL -->
+
+<div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+></div>
+
+<!-- =====================================================
+     CONTENIDO PRINCIPAL
+====================================================== -->
+
+
+        <main class="main-content">
+
+            <div class="background-effects">
+
+                <div class="background-grid"></div>
+
+                <div class="glow glow-one"></div>
+                <div class="glow glow-two"></div>
+                <div class="glow glow-three"></div>
+
+            </div>
+
+            <!-- =================================================
+                 BARRA SUPERIOR
+            ================================================== -->
+
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        class="menu-button"
+                        id="openSidebar"
+                        type="button"
+                        aria-label="Abrir menú"
+                    >
+                        <i data-lucide="menu"></i>
+                    </button>
+
+                    <div>
+                        <span>Planificación de contenido</span>
+
+                        <h1>
+                            Publicación y programación
+                        </h1>
+                    </div>
+
+                </div>
+
+                <div class="topbar-actions">
+<!-- CENTRO DE NOTIFICACIONES -->
+
+<div class="notifications-wrapper">
+
+    <button
+        class="notification-button"
+        type="button"
+        aria-label="Abrir notificaciones"
+        aria-expanded="false"
+    >
+        <i data-lucide="bell"></i>
+
+        <span
+            class="notification-point"
+            aria-hidden="true"
+        ></span>
+
+        <span
+            class="notification-count hidden"
+            aria-label="0 notificaciones sin leer"
+        >
+            0
+        </span>
+    </button>
+
+    <section
+        class="notifications-panel"
+        aria-hidden="true"
+    >
+
+        <!-- ENCABEZADO -->
+
+        <div class="notifications-panel-header">
+
+            <div>
+
+                <span class="notifications-eyebrow">
+                    Centro de actividad
+                </span>
+
+                <h2>Notificaciones</h2>
+
+            </div>
+
+            <button
+                class="close-notifications-button"
+                type="button"
+                aria-label="Cerrar notificaciones"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
+        <!-- INFORMACIÓN -->
+
+        <div class="notifications-toolbar">
+
+            <div class="notifications-status">
+
+                <span
+                    class="notifications-status-point"
+                    aria-hidden="true"
+                ></span>
+
+                <span id="unreadNotificationsText">
+                    No hay notificaciones sin leer
+                </span>
+
+            </div>
+
+            <button
+                class="mark-read-button"
+                type="button"
+            >
+                <i data-lucide="check-check"></i>
+                Marcar leídas
+            </button>
+
+        </div>
+
+        <!-- LISTA DINÁMICA -->
+
+        <div class="notifications-list"></div>
+
+        <!-- ESTADO VACÍO -->
+
+        <div class="notifications-empty">
+
+            <div class="notifications-empty-visual">
+
+                <span
+                    class="empty-notification-ring ring-one"
+                ></span>
+
+                <span
+                    class="empty-notification-ring ring-two"
+                ></span>
+
+                <div class="notifications-empty-icon">
+                    <i data-lucide="bell-ring"></i>
+                </div>
+
+            </div>
+
+            <h3>Todo está bajo control</h3>
+
+            <p>
+                No tienes notificaciones pendientes.
+            </p>
+
+        </div>
+
+        <!-- PIE -->
+
+        <div class="notifications-footer">
+
+            <span>
+                Las alertas se actualizarán automáticamente.
+            </span>
+
+            <button
+                id="clearNotificationsButton"
+                type="button"
+            >
+                Limpiar notificaciones
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+                    <button
+                        class="primary-button"
+                        id="newPublicationButton"
+                        type="button"
+                    >
+                        <i data-lucide="plus"></i>
+                        Nueva publicación
+                    </button>
+
+                </div>
+
+            </header>
+            <!-- OVERLAY DE NOTIFICACIONES -->
+
+<div
+    class="notifications-overlay"
+    id="notificationsOverlay"
+></div>
+
+            <div class="publication-page">
+
+                <!-- =================================================
+                     ENCABEZADO DEL MÓDULO
+                ================================================== -->
+
+                <section class="publication-hero">
+
+                    <div class="publication-hero-content">
+
+                        <div class="publication-hero-badges">
+
+                            <span class="publication-eyebrow">
+                                Centro de contenido
+                            </span>
+
+                            <span class="demo-badge">
+                                <i data-lucide="presentation"></i>
+                                Modo demostración
+                            </span>
+
+                        </div>
+
+                        <h2>
+                            Organiza el contenido de tus campañas
+                            <span>en un solo lugar.</span>
+                        </h2>
+
+                        <p>
+                            Crea publicaciones, selecciona la plataforma,
+                            establece una fecha y administra el calendario
+                            de contenido de cada campaña de marketing.
+                        </p>
+
+                    </div>
+
+                    <div class="publication-hero-visual">
+
+                        <div class="hero-calendar">
+
+                            <div class="hero-calendar-header">
+
+                                <div>
+                                    <span>Próxima publicación</span>
+                                    <strong>Hoy, 7:00 p. m.</strong>
+                                </div>
+
+                                <div class="hero-calendar-icon">
+                                    <i data-lucide="send"></i>
+                                </div>
+
+                            </div>
+
+                            <div class="hero-calendar-content">
+
+                                <span class="hero-platform instagram">
+                                    <i data-lucide="instagram"></i>
+                                    Instagram
+                                </span>
+
+                                <h3>
+                                    Regreso a clases: descuentos especiales
+                                </h3>
+
+                                <p>
+                                    Contenido preparado para la campaña
+                                    Regreso a clases.
+                                </p>
+
+                            </div>
+
+                            <div class="hero-calendar-footer">
+
+                                <span>
+                                    <i data-lucide="calendar-days"></i>
+                                    26 de julio
+                                </span>
+
+                                <span class="scheduled-indicator">
+                                    Programada
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- =================================================
+                     MÉTRICAS
+                ================================================== -->
+
+                <section class="publication-metrics">
+
+                    <article class="publication-metric-card scheduled">
+
+                        <div class="metric-icon">
+                            <i data-lucide="calendar-check"></i>
+                        </div>
+
+                        <div class="metric-information">
+                            <span>Programadas</span>
+                            <strong>08</strong>
+                            <small>Contenido pendiente</small>
+                        </div>
+
+                        <div class="metric-trend">
+                            <i data-lucide="arrow-up-right"></i>
+                        </div>
+
+                    </article>
+
+                    <article class="publication-metric-card draft">
+
+                        <div class="metric-icon">
+                            <i data-lucide="file-pen-line"></i>
+                        </div>
+
+                        <div class="metric-information">
+                            <span>Borradores</span>
+                            <strong>03</strong>
+                            <small>En preparación</small>
+                        </div>
+
+                        <div class="metric-trend">
+                            <i data-lucide="minus"></i>
+                        </div>
+
+                    </article>
+
+                    <article class="publication-metric-card published">
+
+                        <div class="metric-icon">
+                            <i data-lucide="circle-check-big"></i>
+                        </div>
+
+                        <div class="metric-information">
+                            <span>Publicadas</span>
+                            <strong>15</strong>
+                            <small>Contenido completado</small>
+                        </div>
+
+                        <div class="metric-trend">
+                            <i data-lucide="trending-up"></i>
+                        </div>
+
+                    </article>
+
+                    <article class="publication-metric-card cancelled">
+
+                        <div class="metric-icon">
+                            <i data-lucide="circle-x"></i>
+                        </div>
+
+                        <div class="metric-information">
+                            <span>Canceladas</span>
+                            <strong>02</strong>
+                            <small>Contenido descartado</small>
+                        </div>
+
+                        <div class="metric-trend">
+                            <i data-lucide="archive"></i>
+                        </div>
+
+                    </article>
+
+                </section>
+
+                <!-- =================================================
+                     FILTROS
+                ================================================== -->
+
+                <section class="publication-toolbar">
+
+                    <div class="publication-search">
+
+                        <i data-lucide="search"></i>
+
+                        <input
+                            type="search"
+                            id="publicationSearch"
+                            placeholder="Buscar una publicación"
+                        >
+
+                    </div>
+
+                    <div class="publication-filters">
+
+                        <div class="filter-control">
+
+                            <i data-lucide="radio-tower"></i>
+
+                            <select id="campaignFilter">
+
+                                <option value="todas">
+                                    Todas las campañas
+                                </option>
+
+                                <option value="regreso-clases">
+                                    Regreso a clases
+                                </option>
+
+                                <option value="verano">
+                                    Promoción de verano
+                                </option>
+
+                                <option value="black-friday">
+                                    Black Friday
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="filter-control">
+
+                            <i data-lucide="share-2"></i>
+
+                            <select id="platformFilter">
+
+                                <option value="todas">
+                                    Todas las plataformas
+                                </option>
+
+                                <option value="instagram">
+                                    Instagram
+                                </option>
+
+                                <option value="facebook">
+                                    Facebook
+                                </option>
+
+                                <option value="tiktok">
+                                    TikTok
+                                </option>
+
+                                <option value="x">
+                                    X
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="filter-control">
+
+                            <i data-lucide="list-filter"></i>
+
+                            <select id="publicationStatusFilter">
+
+                                <option value="todos">
+                                    Todos los estados
+                                </option>
+
+                                <option value="Programada">
+                                    Programadas
+                                </option>
+
+                                <option value="Borrador">
+                                    Borradores
+                                </option>
+
+                                <option value="Publicada">
+                                    Publicadas
+                                </option>
+
+                                <option value="Cancelada">
+                                    Canceladas
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <button
+                            class="calendar-view-button"
+                            id="calendarViewButton"
+                            type="button"
+                        >
+                            <i data-lucide="calendar-range"></i>
+                            Vista calendario
+                        </button>
+
+                    </div>
+
+                </section>
+
+                <!-- =================================================
+                     ÁREA DE TRABAJO
+                ================================================== -->
+
+                <section class="publication-workspace">
+
+                    <!-- =============================================
+                         LISTADO DE PUBLICACIONES
+                    ============================================== -->
+
+                    <div class="publication-list-panel">
+
+                        <div class="panel-heading">
+
+                            <div>
+                                <span>Contenido registrado</span>
+                                <h2>Publicaciones</h2>
+                            </div>
+
+                            <div class="publication-result-count">
+                                <strong>6</strong>
+                                <span>resultados</span>
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="publication-list"
+                            id="publicationList"
+                        >
+
+                            <!-- PUBLICACIÓN 1 -->
+
+                            <article
+                                class="publication-card"
+                                data-status="Programada"
+                                data-platform="Instagram"
+                            >
+
+                                <div class="publication-preview preview-school">
+
+                                    <div class="preview-overlay"></div>
+
+                                    <span class="preview-type">
+                                        <i data-lucide="image"></i>
+                                        Imagen
+                                    </span>
+
+                                    <div class="preview-campaign">
+                                        Regreso a clases
+                                    </div>
+
+                                </div>
+
+                                <div class="publication-card-content">
+
+                                    <div class="publication-card-top">
+
+                                        <div class="publication-platform instagram">
+
+                                            <i data-lucide="instagram"></i>
+
+                                            <span>Instagram</span>
+
+                                        </div>
+
+                                        <span class="publication-status scheduled">
+                                            <i data-lucide="clock-3"></i>
+                                            Programada
+                                        </span>
+
+                                    </div>
+
+                                    <h3>
+                                        Descuentos especiales para el regreso a clases
+                                    </h3>
+
+                                    <p>
+                                        Encuentra los mejores productos escolares
+                                        con promociones disponibles durante todo agosto.
+                                    </p>
+
+                                    <div class="publication-schedule">
+
+                                        <div>
+                                            <i data-lucide="calendar-days"></i>
+
+                                            <span>
+                                                <small>Fecha</small>
+                                                01 de agosto de 2026
+                                            </span>
+                                        </div>
+
+                                        <div>
+                                            <i data-lucide="clock"></i>
+
+                                            <span>
+                                                <small>Hora</small>
+                                                8:00 a. m.
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="publication-card-footer">
+
+                                        <span class="campaign-reference">
+                                            <i data-lucide="radio"></i>
+                                            Campaña Regreso a clases
+                                        </span>
+
+                                        <div class="publication-actions">
+
+                                            <button
+                                                class="publication-action-button"
+                                                type="button"
+                                                title="Vista previa"
+                                            >
+                                                <i data-lucide="eye"></i>
+                                            </button>
+
+                                            <button
+                                                class="publication-action-button edit"
+                                                type="button"
+                                                title="Editar publicación"
+                                                data-action="edit"
+                                            >
+                                                <i data-lucide="pencil"></i>
+                                            </button>
+
+                                            <button
+                                                class="publication-action-button schedule"
+                                                type="button"
+                                                title="Modificar programación"
+                                                data-action="reschedule"
+                                            >
+                                                <i data-lucide="calendar-clock"></i>
+                                            </button>
+
+                                            <button
+                                                class="publication-action-button danger"
+                                                type="button"
+                                                title="Eliminar publicación"
+                                                data-action="delete"
+                                            >
+                                                <i data-lucide="trash-2"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+
+                            <!-- PUBLICACIÓN 2 -->
+
+                            <article
+                                class="publication-card"
+                                data-status="Borrador"
+                                data-platform="Facebook"
+                            >
+
+                                <div class="publication-preview preview-summer">
+
+                                    <div class="preview-overlay"></div>
+
+                                    <span class="preview-type">
+                                        <i data-lucide="video"></i>
+                                        Video
+                                    </span>
+
+                                    <div class="preview-campaign">
+                                        Promoción de verano
+                                    </div>
+
+                                </div>
+
+                                <div class="publication-card-content">
+
+                                    <div class="publication-card-top">
+
+                                        <div class="publication-platform facebook">
+
+                                            <i data-lucide="facebook"></i>
+
+                                            <span>Facebook</span>
+
+                                        </div>
+
+                                        <span class="publication-status draft">
+                                            <i data-lucide="file-pen-line"></i>
+                                            Borrador
+                                        </span>
+
+                                    </div>
+
+                                    <h3>
+                                        Este verano disfruta un 25% de descuento
+                                    </h3>
+
+                                    <p>
+                                        Publicación promocional pendiente de revisión
+                                        y aprobación antes de establecer una fecha.
+                                    </p>
+
+                                    <div class="publication-schedule empty">
+
+                                        <div>
+                                            <i data-lucide="calendar-x"></i>
+
+                                            <span>
+                                                <small>Programación</small>
+                                                Fecha todavía no asignada
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="publication-card-footer">
+
+                                        <span class="campaign-reference">
+                                            <i data-lucide="radio"></i>
+                                            Campaña Promoción de verano
+                                        </span>
+
+                                        <div class="publication-actions">
+
+                                            <button
+                                                class="publication-action-button"
+                                                type="button"
+                                                title="Vista previa"
+                                            >
+                                                <i data-lucide="eye"></i>
+                                            </button>
+
+                                            <button
+                                                class="publication-action-button edit"
+                                                type="button"
+                                                title="Editar publicación"
+                                                data-action="edit"
+                                            >
+                                                <i data-lucide="pencil"></i>
+                                            </button>
+
+                                            <button
+                                                class="publication-action-button schedule"
+                                                type="button"
+                                                title="Programar publicación"
+                                                data-action="reschedule"
+                                            >
+                                                <i data-lucide="calendar-plus"></i>
+                                            </button>
+
+                                            <button
+                                                class="publication-action-button danger"
+                                                type="button"
+                                                title="Eliminar publicación"
+                                                data-action="delete"
+                                            >
+                                                <i data-lucide="trash-2"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+
+                            <!-- PUBLICACIÓN 3 -->
+
+                            <article
+                                class="publication-card"
+                                data-status="Programada"
+                                data-platform="TikTok"
+                            >
+
+                                <div class="publication-preview preview-black-friday">
+
+                                    <div class="preview-overlay"></div>
+
+                                    <span class="preview-type">
+                                        <i data-lucide="video"></i>
+                                        Video corto
+                                    </span>
+
+                                    <div class="preview-campaign">
+                                        Black Friday
+                                    </div>
+
+                                </div>
+
+                                <div class="publication-card-content">
+
+                                    <div class="publication-card-top">
+
+                                        <div class="publication-platform tiktok">
+
+                                            <i data-lucide="music-2"></i>
+
+                                            <span>TikTok</span>
+
+                                        </div>
+
+                                        <span class="publication-status scheduled">
+                                            <i data-lucide="clock-3"></i>
+                                            Programada
+                                        </span>
+
+                                    </div>
+
+                                    <h3>
+                                        Este viernes comienzan nuestros descuentos
+                                    </h3>
+
+                                    <p>
+                                        Video promocional con adelanto de las ofertas
+                                        principales de la campaña Black Friday.
+                                    </p>
+
+                                    <div class="publication-schedule">
+
+                                        <div>
+                                            <i data-lucide="calendar-days"></i>
+
+                                            <span>
+                                                <small>Fecha</small>
+                                                25 de noviembre de 2026
+                                            </span>
+                                        </div>
+
+                                        <div>
+                                            <i data-lucide="clock"></i>
+
+                                            <span>
+                                                <small>Hora</small>
+                                                7:00 p. m.
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="publication-card-footer">
+
+                                        <span class="campaign-reference">
+                                            <i data-lucide="radio"></i>
+                                            Campaña Black Friday
+                                        </span>
+
+                                        <div class="publication-actions">
+
+                                            <button
+                                                class="publication-action-button"
+                                                type="button"
+                                                title="Vista previa"
+                                            >
+                                                <i data-lucide="eye"></i>
+                                            </button>
+
+                                            <button
+                                                class="publication-action-button edit"
+                                                type="button"
+                                                title="Editar publicación"
+                                                data-action="edit"
+                                            >
+                                                <i data-lucide="pencil"></i>
+                                            </button>
+
+                                            <button
+                                                class="publication-action-button schedule"
+                                                type="button"
+                                                title="Modificar programación"
+                                                data-action="reschedule"
+                                            >
+                                                <i data-lucide="calendar-clock"></i>
+                                            </button>
+
+                                            <button
+                                                class="publication-action-button danger"
+                                                type="button"
+                                                title="Eliminar publicación"
+                                                data-action="delete"
+                                            >
+                                                <i data-lucide="trash-2"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+
+                        </div>
+
+                    </div>
+
+                    <!-- =============================================
+                         AGENDA
+                    ============================================== -->
+
+                    <aside class="publication-agenda">
+
+                        <div class="agenda-heading">
+
+                            <div>
+                                <span>Planificación</span>
+                                <h2>Próximas publicaciones</h2>
+                            </div>
+
+                            <button
+                                class="agenda-more-button"
+                                type="button"
+                                aria-label="Más opciones"
+                            >
+                                <i data-lucide="ellipsis"></i>
+                            </button>
+
+                        </div>
+
+                        <div class="agenda-date">
+
+                            <div class="agenda-date-number">
+                                26
+                            </div>
+
+                            <div>
+                                <strong>Domingo</strong>
+                                <span>Julio de 2026</span>
+                            </div>
+
+                            <i data-lucide="calendar-days"></i>
+
+                        </div>
+
+                        <div class="agenda-timeline">
+
+                            <article class="agenda-item">
+
+                                <div class="agenda-time">
+                                    08:00
+                                </div>
+
+                                <div class="agenda-line">
+                                    <span></span>
+                                </div>
+
+                                <div class="agenda-content">
+
+                                    <span class="agenda-platform instagram">
+                                        <i data-lucide="instagram"></i>
+                                        Instagram
+                                    </span>
+
+                                    <strong>
+                                        Promoción regreso a clases
+                                    </strong>
+
+                                    <small>
+                                        Campaña Regreso a clases
+                                    </small>
+
+                                </div>
+
+                            </article>
+
+                            <article class="agenda-item">
+
+                                <div class="agenda-time">
+                                    14:30
+                                </div>
+
+                                <div class="agenda-line">
+                                    <span></span>
+                                </div>
+
+                                <div class="agenda-content">
+
+                                    <span class="agenda-platform facebook">
+                                        <i data-lucide="facebook"></i>
+                                        Facebook
+                                    </span>
+
+                                    <strong>
+                                        Productos destacados
+                                    </strong>
+
+                                    <small>
+                                        Campaña Promoción de verano
+                                    </small>
+
+                                </div>
+
+                            </article>
+
+                            <article class="agenda-item">
+
+                                <div class="agenda-time">
+                                    19:00
+                                </div>
+
+                                <div class="agenda-line">
+                                    <span></span>
+                                </div>
+
+                                <div class="agenda-content">
+
+                                    <span class="agenda-platform tiktok">
+                                        <i data-lucide="music-2"></i>
+                                        TikTok
+                                    </span>
+
+                                    <strong>
+                                        Adelanto Black Friday
+                                    </strong>
+
+                                    <small>
+                                        Campaña Black Friday
+                                    </small>
+
+                                </div>
+
+                            </article>
+
+                        </div>
+
+                        <div class="agenda-summary">
+
+                            <div class="agenda-summary-icon">
+                                <i data-lucide="sparkles"></i>
+                            </div>
+
+                            <div>
+                                <strong>Agenda organizada</strong>
+
+                                <p>
+                                    Tienes 3 publicaciones preparadas para hoy.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </aside>
+
+                </section>
+
+            </div>
+
+        </main>
+
+        <!-- =====================================================
+             MODAL DE PUBLICACIÓN
+        ====================================================== -->
+
+        <div
+            class="publication-modal-overlay"
+            id="publicationModal"
+            aria-hidden="true"
+            hidden
+        >
+
+            <div
+                class="publication-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="publicationModalTitle"
+            >
+
+                <div class="publication-modal-header">
+
+                    <div>
+                        <span>Gestión de contenido</span>
+
+                        <h2 id="publicationModalTitle">
+                            Nueva publicación
+                        </h2>
+
+                        <p>
+                            Prepara el contenido y establece su programación.
+                        </p>
+                    </div>
+
+                    <button
+                        class="publication-modal-close"
+                        id="closePublicationModal"
+                        type="button"
+                        aria-label="Cerrar formulario"
+                    >
+                        <i data-lucide="x"></i>
+                    </button>
+
+                </div>
+
+                <form id="publicationForm">
+
+                    <div class="publication-form-grid">
+
+                        <div class="publication-form-group publication-form-full">
+
+                            <label for="publicationCampaign">
+                                Campaña relacionada
+                            </label>
+
+                            <div class="publication-input-wrapper">
+
+                                <i data-lucide="radio-tower"></i>
+
+                                <select
+                                    id="publicationCampaign"
+                                    required
+                                >
+                                    <option value="">
+                                        Seleccione una campaña
+                                    </option>
+
+                                    <option value="Regreso a clases">
+                                        Regreso a clases
+                                    </option>
+
+                                    <option value="Promoción de verano">
+                                        Promoción de verano
+                                    </option>
+
+                                    <option value="Black Friday">
+                                        Black Friday
+                                    </option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="publication-form-group publication-form-full">
+
+                            <label for="publicationTitle">
+                                Título de la publicación
+                            </label>
+
+                            <div class="publication-input-wrapper">
+
+                                <i data-lucide="type"></i>
+
+                                <input
+                                    type="text"
+                                    id="publicationTitle"
+                                    maxlength="120"
+                                    placeholder="Ejemplo: Promoción de verano"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                        <div class="publication-form-group publication-form-full">
+
+                            <label for="publicationDescription">
+                                Contenido o descripción
+                            </label>
+
+                            <div class="publication-textarea-wrapper">
+
+                                <textarea
+                                    id="publicationDescription"
+                                    maxlength="500"
+                                    rows="5"
+                                    placeholder="Escribe el contenido que tendrá la publicación..."
+                                    required
+                                ></textarea>
+
+                                <div class="character-counter">
+                                    <span id="descriptionCounter">0</span>
+                                    / 500
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="publication-form-group publication-form-full">
+
+                            <label>
+                                Archivo multimedia
+                            </label>
+
+                            <button
+                                class="media-upload-area"
+                                id="mediaUploadArea"
+                                type="button"
+                            >
+
+                                <span class="media-upload-icon">
+                                    <i data-lucide="image-up"></i>
+                                </span>
+
+                                <span>
+                                    <strong>Seleccionar imagen o video</strong>
+                                    <small>
+                                        PNG, JPG o MP4 · Máximo 20 MB
+                                    </small>
+                                </span>
+
+                                <span class="media-upload-button">
+                                    Examinar
+                                </span>
+
+                            </button>
+
+                        </div>
+
+                        <div class="publication-form-group publication-form-full">
+
+                            <label>
+                                Plataforma
+                            </label>
+
+                            <input
+                                type="hidden"
+                                id="publicationPlatform"
+                            >
+
+                            <div class="platform-selector">
+
+                                <button
+                                    class="platform-option instagram"
+                                    type="button"
+                                    data-platform="Instagram"
+                                >
+                                    <i data-lucide="instagram"></i>
+                                    <span>Instagram</span>
+                                    <i
+                                        class="platform-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                                <button
+                                    class="platform-option facebook"
+                                    type="button"
+                                    data-platform="Facebook"
+                                >
+                                    <i data-lucide="facebook"></i>
+                                    <span>Facebook</span>
+                                    <i
+                                        class="platform-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                                <button
+                                    class="platform-option tiktok"
+                                    type="button"
+                                    data-platform="TikTok"
+                                >
+                                    <i data-lucide="music-2"></i>
+                                    <span>TikTok</span>
+                                    <i
+                                        class="platform-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                                <button
+                                    class="platform-option x"
+                                    type="button"
+                                    data-platform="X"
+                                >
+                                    <i data-lucide="at-sign"></i>
+                                    <span>X</span>
+                                    <i
+                                        class="platform-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="publication-form-group">
+
+                            <label for="publicationDate">
+                                Fecha
+                            </label>
+
+                            <div class="publication-input-wrapper">
+
+                                <i data-lucide="calendar-days"></i>
+
+                                <input
+                                    type="date"
+                                    id="publicationDate"
+                                >
+
+                            </div>
+
+                        </div>
+
+                        <div class="publication-form-group">
+
+                            <label for="publicationTime">
+                                Hora
+                            </label>
+
+                            <div class="publication-input-wrapper">
+
+                                <i data-lucide="clock"></i>
+
+                                <input
+                                    type="time"
+                                    id="publicationTime"
+                                >
+
+                            </div>
+
+                        </div>
+
+                        <div class="publication-form-group publication-form-full">
+
+                            <label>
+                                Estado de la publicación
+                            </label>
+
+                            <input
+                                type="hidden"
+                                id="publicationStatus"
+                                value="Borrador"
+                            >
+
+                            <div class="publication-status-selector">
+
+                                <button
+                                    class="publication-status-option selected"
+                                    type="button"
+                                    data-status="Borrador"
+                                >
+                                    <i data-lucide="file-pen-line"></i>
+
+                                    <span>
+                                        <strong>Borrador</strong>
+                                        <small>Guardar sin programar</small>
+                                    </span>
+
+                                    <i
+                                        class="status-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                                <button
+                                    class="publication-status-option"
+                                    type="button"
+                                    data-status="Programada"
+                                >
+                                    <i data-lucide="calendar-check"></i>
+
+                                    <span>
+                                        <strong>Programada</strong>
+                                        <small>Asignar fecha y hora</small>
+                                    </span>
+
+                                    <i
+                                        class="status-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="publication-form-message"
+                        id="publicationFormMessage"
+                    ></div>
+
+                    <div class="publication-modal-actions">
+
+                        <button
+                            class="secondary-button"
+                            id="cancelPublicationButton"
+                            type="button"
+                        >
+                            Cancelar
+                        </button>
+
+                        <button
+                            class="primary-button"
+                            id="savePublicationButton"
+                            type="submit"
+                        >
+                            <i data-lucide="save"></i>
+                            Guardar publicación
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<script src="JS/api.js"></script>
+<script src="JS/permisos.js?v=3"></script>
+<script src="JS/notificaciones.js?v=2"></script>
+<script src="JS/publicaciones.js?v=2"></script>
+<script src="JS/transiciones.js?v=2"></script>
+
+</body>
+
+</html>

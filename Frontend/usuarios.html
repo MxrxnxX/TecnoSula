@@ -11,14 +11,18 @@
 
     <title>TecnoSula | Gestión de usuarios</title>
 
-    <link
-        rel="stylesheet"
-        href="Css/Dashboard.css"
-    >
-
-  <link
+ <link
     rel="stylesheet"
-    href="Css/usuarios.css?v=2"
+    href="Css/Dashboard.css?v=2"
+>
+<link
+    rel="stylesheet"
+    href="Css/transiciones.css?v=2"
+>
+
+<link
+    rel="stylesheet"
+    href="Css/usuarios.css?v=9"
 >
 <link
     rel="stylesheet"
@@ -28,7 +32,6 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-</head>
 
 <body
     class="pagina-admin-protegida"
@@ -37,7 +40,7 @@
 
     <div class="app">
 
-    <div class="app">
+  
 
         <aside
             class="sidebar"
@@ -100,43 +103,72 @@
 
                         <span>Campañas</span>
                     </a>
+<a
+    href="publicaciones.html"
+    class="navigation-link"
+>
+    <div class="navigation-icon">
+        <i data-lucide="calendar-clock"></i>
+    </div>
 
-                    <a
-                        href="reportes.html"
-                        class="navigation-link"
-                    >
-                        <div class="navigation-icon">
-                            <i data-lucide="file-chart-column"></i>
-                        </div>
+    <span>Publicación y programación</span>
+</a>
 
-                        <span>Reportes</span>
-                    </a>
 <a
     href="usuarios.html"
-    class="navigation-link admin-only"
+    class="navigation-link admin-only active"
     id="adminUsersModule"
+    aria-current="page"
 >
     <div class="navigation-icon">
         <i data-lucide="users"></i>
     </div>
 
     <span>Gestión de usuarios</span>
+
+    <span
+        class="active-line"
+        aria-hidden="true"
+    ></span>
 </a>
 
-                    <a
-                        href="configuracion.html"
-                        class="navigation-link"
-                    >
-                        <div class="navigation-icon">
-                            <i data-lucide="settings"></i>
-                        </div>
+<a
+    href="configuracion.html"
+    class="navigation-link"
+>
+    <div class="navigation-icon">
+        <i data-lucide="settings"></i>
+    </div>
 
-                        <span>Configuración</span>
-                    </a>
-
+    <span>Configuración</span>
+</a>
                 </nav>
 
             </div>
+            <!-- TARJETA LATERAL DE GESTIÓN DE USUARIOS -->
+
+<article class="sidebar-advertisement">
+
+    <div class="advertisement-icon">
+        <i data-lucide="shield-check"></i>
+    </div>
+
+    <span>CONTROL ADMINISTRATIVO</span>
+
+    <h3>
+        Usuarios bajo control.
+    </h3>
+
+    <p>
+        Administra accesos, roles y estados desde
+        un entorno seguro y centralizado.
+    </p>
+
+    <div class="advertisement-decoration"></div>
+
+</article>
+
+
 
             <div class="sidebar-footer">
 
@@ -216,6 +248,139 @@
                 </div>
 
                 <div class="topbar-actions">
+                    <!-- CENTRO DE NOTIFICACIONES -->
+
+<div class="notifications-wrapper">
+
+    <button
+        class="notification-button"
+        type="button"
+        aria-label="Abrir notificaciones"
+        aria-expanded="false"
+    >
+        <i data-lucide="bell"></i>
+
+        <span
+            class="notification-point"
+            aria-hidden="true"
+        ></span>
+
+        <span
+            class="notification-count hidden"
+            aria-label="0 notificaciones sin leer"
+        >
+            0
+        </span>
+    </button>
+
+    <section
+        class="notifications-panel"
+        aria-hidden="true"
+    >
+
+        <!-- ENCABEZADO -->
+
+        <div class="notifications-panel-header">
+
+            <div>
+
+                <span class="notifications-eyebrow">
+                    Centro de actividad
+                </span>
+
+                <h2>Notificaciones</h2>
+
+            </div>
+
+            <button
+                class="close-notifications-button"
+                type="button"
+                aria-label="Cerrar notificaciones"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
+        <!-- INFORMACIÓN -->
+
+        <div class="notifications-toolbar">
+
+            <div class="notifications-status">
+
+                <span
+                    class="notifications-status-point"
+                    aria-hidden="true"
+                ></span>
+
+                <span id="unreadNotificationsText">
+                    No hay notificaciones sin leer
+                </span>
+
+            </div>
+
+            <button
+                class="mark-read-button"
+                type="button"
+            >
+                <i data-lucide="check-check"></i>
+                Marcar leídas
+            </button>
+
+        </div>
+
+        <!-- LISTA DINÁMICA -->
+
+        <div class="notifications-list"></div>
+
+        <!-- ESTADO VACÍO -->
+
+        <div class="notifications-empty">
+
+            <div class="notifications-empty-visual">
+
+                <span
+                    class="empty-notification-ring ring-one"
+                ></span>
+
+                <span
+                    class="empty-notification-ring ring-two"
+                ></span>
+
+                <div class="notifications-empty-icon">
+                    <i data-lucide="bell-ring"></i>
+                </div>
+
+            </div>
+
+            <h3>Todo está bajo control</h3>
+
+            <p>
+                No tienes notificaciones pendientes.
+            </p>
+
+        </div>
+
+        <!-- PIE -->
+
+        <div class="notifications-footer">
+
+            <span>
+                Las alertas se actualizarán automáticamente.
+            </span>
+
+            <button
+                id="clearNotificationsButton"
+                type="button"
+            >
+                Limpiar notificaciones
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
 
                     <button
                         class="primary-button"
@@ -229,6 +394,13 @@
                 </div>
 
             </header>
+            <!-- OVERLAY DE NOTIFICACIONES -->
+
+<div
+    class="notifications-overlay"
+    id="notificationsOverlay"
+></div>
+
 
             <div class="page-content">
 
@@ -267,19 +439,152 @@
 
                         </div>
 
-                        <select id="statusFilter">
-                            <option value="todos">
-                                Todos los estados
-                            </option>
+                      <!-- FILTRO PERSONALIZADO DE USUARIOS -->
 
-                            <option value="Activo">
-                                Activos
-                            </option>
+<div
+    class="user-status-filter"
+    id="userStatusFilter"
+    data-status="todos"
+>
+    <!-- SELECT OCULTO: CONSERVA LA LÓGICA ACTUAL -->
 
-                            <option value="Inactivo">
-                                Inactivos
-                            </option>
-                        </select>
+    <select
+        id="statusFilter"
+        class="native-user-status-select"
+        tabindex="-1"
+        aria-hidden="true"
+    >
+        <option value="todos">
+            Todos los estados
+        </option>
+
+        <option value="Activo">
+            Activos
+        </option>
+
+        <option value="Inactivo">
+            Inactivos
+        </option>
+    </select>
+
+    <!-- BOTÓN PRINCIPAL -->
+
+    <button
+        class="user-status-filter-trigger"
+        id="userStatusFilterTrigger"
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+    >
+        <span
+            class="user-status-filter-main-icon"
+            id="userStatusFilterIcon"
+        >
+            <i data-lucide="users-round"></i>
+        </span>
+
+        <span class="user-status-filter-information">
+            <small>Filtrar por estado</small>
+
+            <strong id="userStatusFilterLabel">
+                Todos los usuarios
+            </strong>
+        </span>
+
+        <span class="user-status-filter-chevron">
+            <i data-lucide="chevron-down"></i>
+        </span>
+    </button>
+
+    <!-- MENÚ DESPLEGABLE -->
+
+    <div
+        class="user-status-filter-menu"
+        id="userStatusFilterMenu"
+        role="listbox"
+        aria-label="Filtrar usuarios por estado"
+        hidden
+    >
+        <span class="user-status-filter-menu-label">
+            Estado de la cuenta
+        </span>
+
+        <!-- TODOS -->
+
+        <button
+            class="user-status-filter-option selected"
+            type="button"
+            role="option"
+            aria-selected="true"
+            data-status-value="todos"
+            data-status-label="Todos los usuarios"
+            data-status-icon="users-round"
+        >
+            <span class="user-filter-option-icon all">
+                <i data-lucide="users-round"></i>
+            </span>
+
+            <span class="user-filter-option-text">
+                <strong>Todos los usuarios</strong>
+                <small>Mostrar todas las cuentas</small>
+            </span>
+
+            <span class="user-filter-option-check">
+                <i data-lucide="check"></i>
+            </span>
+        </button>
+
+        <!-- ACTIVOS -->
+
+        <button
+            class="user-status-filter-option"
+            type="button"
+            role="option"
+            aria-selected="false"
+            data-status-value="Activo"
+            data-status-label="Usuarios activos"
+            data-status-icon="circle-check-big"
+        >
+            <span class="user-filter-option-icon active">
+                <i data-lucide="circle-check-big"></i>
+            </span>
+
+            <span class="user-filter-option-text">
+                <strong>Usuarios activos</strong>
+                <small>Con acceso habilitado</small>
+            </span>
+
+            <span class="user-filter-option-check">
+                <i data-lucide="check"></i>
+            </span>
+        </button>
+
+        <!-- INACTIVOS -->
+
+        <button
+            class="user-status-filter-option"
+            type="button"
+            role="option"
+            aria-selected="false"
+            data-status-value="Inactivo"
+            data-status-label="Usuarios inactivos"
+            data-status-icon="circle-off"
+        >
+            <span class="user-filter-option-icon inactive">
+                <i data-lucide="circle-off"></i>
+            </span>
+
+            <span class="user-filter-option-text">
+                <strong>Usuarios inactivos</strong>
+                <small>Con acceso deshabilitado</small>
+            </span>
+
+            <span class="user-filter-option-check">
+                <i data-lucide="check"></i>
+            </span>
+        </button>
+    </div>
+</div>
 
                     </div>
 
@@ -313,15 +618,362 @@
                     </div>
 
                 </section>
-
-            </div>
+                          </div>
 
         </main>
 
+        <!-- =====================================================
+             MODAL PARA EDITAR USUARIO
+        ====================================================== -->
+
+        <div
+            class="user-modal-overlay"
+            id="editUserModal"
+            aria-hidden="true"
+            hidden
+        >
+
+            <div
+                class="user-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="editUserModalTitle"
+            >
+
+                <div class="user-modal-header">
+
+                    <div>
+                        <span class="user-modal-eyebrow">
+                            Administración
+                        </span>
+
+                        <h2 id="editUserModalTitle">
+                            Editar usuario
+                        </h2>
+
+                       <p id="editUserModalDescription">
+    Modifica la información y los permisos del usuario.
+</p>
+                    </div>
+
+                    <button
+                        class="user-modal-close"
+                        id="closeEditUserModal"
+                        type="button"
+                        aria-label="Cerrar formulario"
+                    >
+                        <i data-lucide="x"></i>
+                    </button>
+
+                </div>
+
+                <form id="editUserForm">
+
+                    <input
+                        type="hidden"
+                        id="editUserId"
+                    >
+
+                    <div class="user-form-grid">
+
+                        <!-- NOMBRE -->
+
+                        <div class="user-form-group">
+
+                            <label for="editUserName">
+                                Nombre
+                            </label>
+
+                            <div class="user-input-wrapper">
+                                <i data-lucide="user"></i>
+
+                                <input
+                                    type="text"
+                                    id="editUserName"
+                                    maxlength="100"
+                                    required
+                                >
+                            </div>
+
+                        </div>
+
+                        <!-- APELLIDO -->
+
+                        <div class="user-form-group">
+
+                            <label for="editUserLastName">
+                                Apellido
+                            </label>
+
+                            <div class="user-input-wrapper">
+                                <i data-lucide="user-round"></i>
+
+                                <input
+                                    type="text"
+                                    id="editUserLastName"
+                                    maxlength="100"
+                                    required
+                                >
+                            </div>
+
+                        </div>
+
+                        <!-- CORREO -->
+
+                        <div class="user-form-group user-form-group-full">
+
+                            <label for="editUserEmail">
+                                Correo electrónico
+                            </label>
+
+                            <div class="user-input-wrapper">
+                                <i data-lucide="mail"></i>
+
+                                <input
+                                    type="email"
+                                    id="editUserEmail"
+                                    maxlength="150"
+                                    required
+                                >
+                            </div>
+
+                        </div>
+
+                        <!-- TELÉFONO -->
+
+                        <div class="user-form-group user-form-group-full">
+
+                            <label for="editUserPhone">
+                                Teléfono
+                            </label>
+
+                            <div class="user-input-wrapper">
+                                <i data-lucide="phone"></i>
+
+                                <input
+                                    type="text"
+                                    id="editUserPhone"
+                                    maxlength="20"
+                                >
+                            </div>
+
+                        </div>
+
+                        <!-- CONTRASEÑA PARA NUEVO USUARIO -->
+
+<div
+    class="user-form-group user-form-group-full"
+    id="editUserPasswordGroup"
+    hidden
+>
+    <label for="editUserPassword">
+        Contraseña temporal
+    </label>
+
+    <div class="user-input-wrapper">
+        <i data-lucide="lock-keyhole"></i>
+
+        <input
+            type="password"
+            id="editUserPassword"
+            minlength="6"
+            maxlength="100"
+            autocomplete="new-password"
+            placeholder="Mínimo 6 caracteres"
+        >
+    </div>
+</div>
+
+                        <!-- ROL -->
+
+                        <div class="user-form-group user-form-group-full">
+
+                            <label>
+                                Rol del usuario
+                            </label>
+
+                            <input
+                                type="hidden"
+                                id="editUserRole"
+                            >
+
+                            <div
+                                class="user-option-grid role-options"
+                                id="roleOptions"
+                            >
+
+                                <button
+                                    class="user-option-card role-option"
+                                    type="button"
+                                    data-role-id="1"
+                                    aria-pressed="false"
+                                >
+                                    <span class="user-option-icon administrator">
+                                        <i data-lucide="shield-check"></i>
+                                    </span>
+
+                                    <span class="user-option-information">
+                                        <strong>Administrador</strong>
+                                        <small>Control completo del sistema</small>
+                                    </span>
+
+                                    <span class="user-option-check">
+                                        <i data-lucide="check"></i>
+                                    </span>
+                                </button>
+
+                                <button
+                                    class="user-option-card role-option"
+                                    type="button"
+                                    data-role-id="2"
+                                    aria-pressed="false"
+                                >
+                                    <span class="user-option-icon employee">
+                                        <i data-lucide="briefcase-business"></i>
+                                    </span>
+
+                                    <span class="user-option-information">
+                                        <strong>Empleado</strong>
+                                        <small>Gestiona las campañas asignadas</small>
+                                    </span>
+
+                                    <span class="user-option-check">
+                                        <i data-lucide="check"></i>
+                                    </span>
+                                </button>
+
+                                <button
+                                    class="user-option-card role-option"
+                                    type="button"
+                                    data-role-id="3"
+                                    aria-pressed="false"
+                                >
+                                    <span class="user-option-icon client">
+                                        <i data-lucide="user-round"></i>
+                                    </span>
+
+                                    <span class="user-option-information">
+                                        <strong>Cliente</strong>
+                                        <small>Acceso limitado a la plataforma</small>
+                                    </span>
+
+                                    <span class="user-option-check">
+                                        <i data-lucide="check"></i>
+                                    </span>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <!-- ESTADO -->
+
+                        <div class="user-form-group user-form-group-full">
+
+                            <label>
+                                Estado de la cuenta
+                            </label>
+
+                            <input
+                                type="hidden"
+                                id="editUserStatus"
+                            >
+
+                            <div
+                                class="user-option-grid status-options"
+                                id="statusOptions"
+                            >
+
+                                <button
+                                    class="user-option-card status-option active-option"
+                                    type="button"
+                                    data-status="Activo"
+                                    aria-pressed="false"
+                                >
+                                    <span class="user-option-icon status-active">
+                                        <i data-lucide="circle-check-big"></i>
+                                    </span>
+
+                                    <span class="user-option-information">
+                                        <strong>Activo</strong>
+                                        <small>
+                                            Puede iniciar sesión y utilizar el sistema
+                                        </small>
+                                    </span>
+
+                                    <span class="user-option-check">
+                                        <i data-lucide="check"></i>
+                                    </span>
+                                </button>
+
+                                <button
+                                    class="user-option-card status-option inactive-option"
+                                    type="button"
+                                    data-status="Inactivo"
+                                    aria-pressed="false"
+                                >
+                                    <span class="user-option-icon status-inactive">
+                                        <i data-lucide="circle-off"></i>
+                                    </span>
+
+                                    <span class="user-option-information">
+                                        <strong>Inactivo</strong>
+                                        <small>
+                                            No podrá iniciar sesión en la plataforma
+                                        </small>
+                                    </span>
+
+                                    <span class="user-option-check">
+                                        <i data-lucide="check"></i>
+                                    </span>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="user-form-message"
+                        id="editUserMessage"
+                    ></div>
+
+                    <div class="user-modal-actions">
+
+                        <button
+                            class="secondary-button"
+                            id="cancelEditUserButton"
+                            type="button"
+                        >
+                            <i data-lucide="x"></i>
+                            Cancelar
+                        </button>
+
+                        <button
+                            class="primary-button"
+                            id="saveEditUserButton"
+                            type="submit"
+                        >
+                            <i data-lucide="save"></i>
+                            Guardar cambios
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
 
+<script src="JS/api.js"></script>
 <script src="JS/permisos.js?v=3"></script>
-<script src="JS/usuarios.js?v=2"></script>
+<script src="JS/transiciones.js?v=2"></script>
+<script src="JS/notificaciones.js?v=2"></script>
+<script src="JS/usuarios.js?v=8"></script>
 </body>
 
 

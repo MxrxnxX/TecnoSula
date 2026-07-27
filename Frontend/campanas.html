@@ -16,13 +16,14 @@
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
     >
+    <link
+    rel="stylesheet"
+    href="Css/transiciones.css?v=2"
+>
     
 
     <!-- ESTILOS PRINCIPALES -->
-    <link
-        rel="stylesheet"
-        href="Css/campanas.css"
-    >
+   <link rel="stylesheet" href="Css/campanas.css?v=8">
 
     <!-- ESTILOS COMPARTIDOS DE NOTIFICACIONES -->
     <link
@@ -116,18 +117,16 @@
 
                     </a>
 
-                    <a
-                        href="reportes.html"
-                        class="navigation-link"
-                    >
+                   <a
+    href="publicaciones.html"
+    class="navigation-link"
+>
+    <div class="navigation-icon">
+        <i data-lucide="calendar-clock"></i>
+    </div>
 
-                        <div class="navigation-icon">
-                            <i data-lucide="file-chart-column"></i>
-                        </div>
-
-                        <span>Reportes</span>
-
-                    </a>
+    <span>Publicación y programación</span>
+</a>
                   <a
     href="usuarios.html"
     class="navigation-link admin-only"
@@ -1517,9 +1516,9 @@
             Operación completada
         </span>
 
-        <h2>
-            Campaña creada correctamente
-        </h2>
+      <h2 id="successModalTitle">
+    Campaña creada correctamente
+</h2>
 
         <p id="successModalMessage">
             La campaña fue registrada exitosamente en la base de datos.
@@ -1543,11 +1542,70 @@
     aria-live="polite"
     aria-atomic="true"
 ></div>
+<!-- =====================================================
+     MODAL DE RESTRICCIÓN Y VALIDACIÓN
+====================================================== -->
+
+<div
+    class="restriction-modal-overlay"
+    id="restrictionModal"
+    aria-hidden="true"
+    hidden
+>
+    <div
+        class="restriction-modal"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="restrictionModalTitle"
+        aria-describedby="restrictionModalMessage"
+    >
+
+        <button
+            class="restriction-modal-close"
+            id="closeRestrictionModal"
+            type="button"
+            aria-label="Cerrar mensaje"
+        >
+            <i data-lucide="x"></i>
+        </button>
+
+        <div
+            class="restriction-modal-icon"
+            id="restrictionModalIcon"
+        >
+            <i data-lucide="triangle-alert"></i>
+        </div>
+
+        <span class="restriction-modal-eyebrow">
+            Validación del sistema
+        </span>
+
+        <h2 id="restrictionModalTitle">
+            Acción no permitida
+        </h2>
+
+        <p id="restrictionModalMessage">
+            Revisa la información ingresada antes de continuar.
+        </p>
+
+        <button
+            class="primary-button restriction-modal-accept"
+            id="acceptRestrictionModal"
+            type="button"
+        >
+            <i data-lucide="check"></i>
+            Entendido
+        </button>
+
+    </div>
+</div>
 <script src="JS/api.js"></script>
 <script src="JS/permisos.js?v=3"></script>
-<script src="JS/notificaciones.js"></script>
+<script src="JS/transiciones.js?v=2"></script>
+<script src="JS/notificaciones.js?v=2"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="JS/campanas.js"></script>
+<script src="JS/campanas.js?v=9"></script>
+
 </body>
 </html>
 

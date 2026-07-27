@@ -167,6 +167,17 @@ namespace Backend.Controllers
                 });
             }
 
+            if (
+                estadoNormalizado == "Finalizada" &&
+                request.Progreso < 100
+            )
+            {
+                return BadRequest(new
+                {
+                    mensaje = "Una campaña solo puede finalizarse cuando alcanza el 100% de progreso."
+                });
+            }
+
             var usuarioExiste = await _context.Usuarios
                 .AnyAsync(
                     u => u.IdUsuario == request.IdUsuario
@@ -190,10 +201,17 @@ namespace Backend.Controllers
                         : request.Descripcion.Trim(),
 
                 FechaInicio = request.FechaInicio,
+
                 FechaFin = request.FechaFin,
+
                 Presupuesto = request.Presupuesto,
+
                 Progreso = request.Progreso,
-                Estado = estadoNormalizado,
+
+                Estado = request.Progreso == 100
+                    ? "Finalizada"
+                    : estadoNormalizado,
+
                 IdUsuario = request.IdUsuario
             };
 
@@ -288,6 +306,17 @@ namespace Backend.Controllers
                 });
             }
 
+            if (
+                estadoNormalizado == "Finalizada" &&
+                request.Progreso < 100
+            )
+            {
+                return BadRequest(new
+                {
+                    mensaje = "Una campaña solo puede finalizarse cuando alcanza el 100% de progreso."
+                });
+            }
+
             campana.Nombre =
                 request.Nombre.Trim();
 
@@ -309,13 +338,17 @@ namespace Backend.Controllers
                 request.Progreso;
 
             campana.Estado =
-                estadoNormalizado;
+                request.Progreso == 100
+                    ? "Finalizada"
+                    : estadoNormalizado;
 
             await _context.SaveChangesAsync();
 
             return Ok(new
             {
-                mensaje = "Los cambios de la campaña fueron guardados correctamente."
+                mensaje = "Los cambios de la campaña fueron guardados correctamente.",
+                estado = campana.Estado,
+                progreso = campana.Progreso
             });
         }
 
@@ -495,14 +528,6 @@ namespace Backend.Controllers
                 });
             }
 
-            if (campana.Estado != "Cancelada")
-            {
-                return Conflict(new
-                {
-                    mensaje = "Antes de eliminar una campaña, debes cancelarla."
-                });
-            }
-
             _context.Campanas.Remove(campana);
 
             await _context.SaveChangesAsync();
@@ -533,7 +558,9 @@ namespace Backend.Controllers
             return estadoLimpio switch
             {
                 "activa" => "Activa",
+
                 "pausada" => "Pausada",
+
                 "finalizada" => "Finalizada",
 
                 "cancelada" when permitirCancelada =>

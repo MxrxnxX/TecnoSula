@@ -38,6 +38,119 @@ document.addEventListener("DOMContentLoaded", () => {
             );
         }
     }
+    // =====================================================
+// MOSTRAR MENSAJES PROFESIONALES
+// =====================================================
+
+function showRestrictionMessage(
+    title,
+    message,
+    type = "warning"
+) {
+    if (
+        !restrictionModal ||
+        !restrictionModalTitle ||
+        !restrictionModalMessage ||
+        !restrictionModalIcon
+    ) {
+        console.error(title, message);
+        return;
+    }
+
+    const modalTypes = {
+        warning: {
+            eyebrow: "Validación del sistema",
+            icon: "triangle-alert"
+        },
+
+        error: {
+            eyebrow: "Operación no completada",
+            icon: "circle-x"
+        },
+
+        information: {
+            eyebrow: "Información del sistema",
+            icon: "info"
+        }
+    };
+
+    const selectedType =
+        modalTypes[type] ||
+        modalTypes.warning;
+
+    restrictionModal.dataset.type = type;
+
+    restrictionModalTitle.textContent =
+        title;
+
+    restrictionModalMessage.textContent =
+        message;
+
+    restrictionModalIcon.innerHTML = `
+        <i data-lucide="${selectedType.icon}"></i>
+    `;
+
+    const eyebrow =
+        restrictionModal.querySelector(
+            ".restriction-modal-eyebrow"
+        );
+
+    if (eyebrow) {
+        eyebrow.textContent =
+            selectedType.eyebrow;
+    }
+
+    /* Primero se incorpora al documento */
+    restrictionModal.hidden = false;
+
+    restrictionModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    /* Después se ejecuta la animación */
+    requestAnimationFrame(() => {
+        restrictionModal.classList.add("show");
+    });
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+    renderIcons();
+
+    window.setTimeout(() => {
+        acceptRestrictionModal?.focus();
+    }, 220);
+}
+
+function closeRestrictionMessage() {
+    if (!restrictionModal) {
+        return;
+    }
+
+    restrictionModal.classList.remove("show");
+
+    restrictionModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    window.setTimeout(() => {
+        restrictionModal.hidden = true;
+    }, 220);
+
+    const anotherModalOpen =
+        document.querySelector(
+            ".modal-overlay.show"
+        );
+
+    if (!anotherModalOpen) {
+        document.body.classList.remove(
+            "modal-open"
+        );
+    }
+}
 
     renderIcons();
 
@@ -180,12 +293,35 @@ const statusPills = Array.from(
 
         const successModal =
     document.getElementById("successModal");
+    const successModalTitle =
+    document.getElementById("successModalTitle");
 
 const successModalMessage =
     document.getElementById("successModalMessage");
 
 const closeSuccessModal =
     document.getElementById("closeSuccessModal");
+    // =====================================================
+// MODAL DE RESTRICCIÓN Y VALIDACIÓN
+// =====================================================
+
+const restrictionModal =
+    document.getElementById("restrictionModal");
+
+const restrictionModalTitle =
+    document.getElementById("restrictionModalTitle");
+
+const restrictionModalMessage =
+    document.getElementById("restrictionModalMessage");
+
+const restrictionModalIcon =
+    document.getElementById("restrictionModalIcon");
+
+const closeRestrictionModalButton =
+    document.getElementById("closeRestrictionModal");
+
+const acceptRestrictionModal =
+    document.getElementById("acceptRestrictionModal");
 
     // =====================================================
     // CAMPAÑAS DE DEMOSTRACIÓN
@@ -341,10 +477,12 @@ async function loadCampaignsFromDatabase() {
         campaigns = [];
         renderCampaigns();
 
-        alert(
-            error.message ||
-            "No se pudieron cargar las campañas."
-        );
+      showRestrictionMessage(
+    "No se pudieron cargar las campañas",
+    error.message ||
+    "No fue posible obtener la información del servidor.",
+    "error"
+);
     } finally {
         if (refreshCampaigns) {
             refreshCampaigns.disabled = false;
@@ -411,8 +549,10 @@ async function createCampaignInDatabase() {
         idUsuario:
             idUsuario,
 
-        estado:
-            campaignStatus.value
+       estado:
+    progreso >= 100
+        ? "Finalizada"
+        : campaignStatus.value
     };
 
     console.log(
@@ -476,8 +616,10 @@ async function updateCampaignInDatabase(id) {
         progreso:
             progreso,
 
-        estado:
-            campaignStatus.value
+      estado:
+    progreso >= 100
+        ? "Finalizada"
+        : campaignStatus.value
     };
 
     console.log(
@@ -494,14 +636,7 @@ async function updateCampaignInDatabase(id) {
     );
 }
 
-async function cancelCampaignInDatabase(id) {
-    return await apiRequest(
-        `${CAMPANAS_API_URL}/${id}/cancelar`,
-        {
-            method: "PATCH"
-        }
-    );
-}
+
 
 async function deleteCampaignFromDatabase(id) {
     return await apiRequest(
@@ -703,15 +838,59 @@ async function deleteCampaignFromDatabase(id) {
         className: "paused-status"
     };
 }
-statusPillGroup?.addEventListener("click", event => {
-    const button = event.target.closest(".status-pill");
+statusPillGroup?.addEventListener(
+    "click",
+    event => {
+        const button =
+            event.target.closest(
+                ".status-pill"
+            );
 
-    if (!button) {
-        return;
+        if (!button) {
+            return;
+        }
+
+        const selectedStatus =
+            button.dataset.status;
+
+        const progress =
+            clampProgress(
+                campaignProgress.value
+            );
+
+        if (
+            selectedStatus === "finalizada" &&
+            progress < 100
+        ) {
+            showRestrictionMessage(
+                "Progreso insuficiente",
+                "La campaña debe alcanzar el 100% de progreso antes de poder marcarse como finalizada.",
+                "warning"
+            );
+
+            return;
+        }
+
+        if (
+            progress === 100 &&
+            selectedStatus !== "finalizada"
+        ) {
+            setCampaignStatus("finalizada");
+
+            showRestrictionMessage(
+                "Campaña completada",
+                "Una campaña que alcanzó el 100% de progreso debe permanecer en estado Finalizada.",
+                "information"
+            );
+
+            return;
+        }
+
+        setCampaignStatus(
+            selectedStatus
+        );
     }
-
-    setCampaignStatus(button.dataset.status);
-});
+);
 
     function createIdentifier() {
         if (
@@ -1081,8 +1260,14 @@ if (employeeInitials) {
             document.body.classList.remove("modal-open");
         }
     }
-    function showSuccessMessage(message) {
-    successModalMessage.textContent = message;
+  function showSuccessMessage(title, message) {
+    if (successModalTitle) {
+        successModalTitle.textContent = title;
+    }
+
+    if (successModalMessage) {
+        successModalMessage.textContent = message;
+    }
 
     showModal(successModal);
     renderIcons();
@@ -1102,6 +1287,28 @@ successModal?.addEventListener(
     event => {
         if (event.target === successModal) {
             closeSuccessMessage();
+        }
+    }
+);
+// =====================================================
+// EVENTOS DEL MODAL DE RESTRICCIÓN
+// =====================================================
+
+closeRestrictionModalButton?.addEventListener(
+    "click",
+    closeRestrictionMessage
+);
+
+acceptRestrictionModal?.addEventListener(
+    "click",
+    closeRestrictionMessage
+);
+
+restrictionModal?.addEventListener(
+    "click",
+    event => {
+        if (event.target === restrictionModal) {
+            closeRestrictionMessage();
         }
     }
 );
@@ -1523,15 +1730,40 @@ function syncCustomStatusFilter() {
     // PROGRESO
     // =====================================================
 
-    campaignProgress?.addEventListener("input", () => {
-        progressValue.textContent =
-            `${campaignProgress.value}%`;
-    });
+ campaignProgress?.addEventListener(
+    "input",
+    () => {
+        const progress =
+            clampProgress(
+                campaignProgress.value
+            );
 
-    statusFilterTrigger?.addEventListener(
+        progressValue.textContent =
+            `${progress}%`;
+
+        if (progress === 100) {
+            setCampaignStatus("finalizada");
+            return;
+        }
+
+        if (
+            campaignStatus.value ===
+            "finalizada"
+        ) {
+            setCampaignStatus("activa");
+        }
+    }
+);
+// =====================================================
+// ABRIR Y CERRAR FILTRO DE ESTADOS
+// =====================================================
+
+statusFilterTrigger?.addEventListener(
     "click",
     event => {
+        event.preventDefault();
         event.stopPropagation();
+
         toggleStatusDropdown();
     }
 );
@@ -1582,30 +1814,36 @@ document.addEventListener("click", event => {
         const endDate = campaignEnd.value;
 
         if (!campaignName.value.trim()) {
-            alert(
-                "Debes escribir el nombre de la campaña."
-            );
+           showRestrictionMessage(
+    "Nombre obligatorio",
+    "Debes escribir un nombre para poder registrar la campaña.",
+    "warning"
+);
 
             campaignName.focus();
             return;
         }
 
-        if (!startDate || !endDate) {
-            alert(
-                "Debes seleccionar las fechas de la campaña."
-            );
+       if (!startDate || !endDate) {
+    showRestrictionMessage(
+        "Fechas incompletas",
+        "Selecciona la fecha de inicio y la fecha de finalización de la campaña.",
+        "warning"
+    );
 
-            return;
-        }
+    return;
+}
 
-        if (endDate < startDate) {
-            alert(
-                "La fecha final no puede ser anterior a la fecha de inicio."
-            );
+      if (endDate < startDate) {
+    showRestrictionMessage(
+        "Periodo incorrecto",
+        "La fecha de finalización no puede ser anterior a la fecha de inicio.",
+        "warning"
+    );
 
-            campaignEnd.focus();
-            return;
-        }
+    campaignEnd.focus();
+    return;
+}
 
         const originalButtonText =
             submitCampaignButton.innerHTML;
@@ -1624,17 +1862,42 @@ document.addEventListener("click", event => {
 
     await loadCampaignsFromDatabase();
 
-    showSuccessMessage(
-        "Los cambios de la campaña se guardaron correctamente."
-    );
+  showSuccessMessage(
+    "Campaña actualizada correctamente",
+    "Los cambios realizados fueron guardados correctamente."
+);
 } else {
+    const nombreCampanaCreada =
+        campaignName.value.trim();
+
     await createCampaignInDatabase();
+
+    window.TecnoSulaNotifications?.agregar({
+        titulo: "Nueva campaña registrada",
+
+        mensaje:
+            `La campaña "${nombreCampanaCreada}" ` +
+            "fue creada correctamente.",
+
+        tipo: "success",
+
+        icono: "radio-tower",
+
+        categoria: "Campaña",
+
+        iconoCategoria: "megaphone",
+
+        accion: "Ver campaña",
+
+        enlace: "campanas.html"
+    });
 
     closeCampaignForm();
 
     await loadCampaignsFromDatabase();
 
     showSuccessMessage(
+        "Campaña creada correctamente",
         "La campaña fue registrada exitosamente y ya está disponible en la plataforma."
     );
 }
@@ -1644,10 +1907,12 @@ document.addEventListener("click", event => {
                 error
             );
 
-            alert(
-                error.message ||
-                "No se pudo guardar la campaña."
-            );
+           showRestrictionMessage(
+    "No se pudo guardar la campaña",
+    error.message ||
+    "Ocurrió un problema al guardar la información.",
+    "error"
+);
         } finally {
             submitCampaignButton.disabled = false;
             submitCampaignButton.innerHTML =
@@ -1729,19 +1994,10 @@ document.addEventListener("click", event => {
         }
     });
 
-   confirmDelete?.addEventListener(
+  confirmDelete?.addEventListener(
     "click",
     async () => {
         if (!selectedCampaignId) {
-            return;
-        }
-
-        const campaign = campaigns.find(
-            item =>
-                item.id === selectedCampaignId
-        );
-
-        if (!campaign) {
             return;
         }
 
@@ -1749,34 +2005,35 @@ document.addEventListener("click", event => {
 
         try {
             confirmDelete.disabled = true;
+
             confirmDelete.textContent =
                 "Eliminando...";
-
-            if (campaign.status !== "cancelada") {
-                await cancelCampaignInDatabase(id);
-            }
 
             await deleteCampaignFromDatabase(id);
 
             closeDeleteConfirmation();
 
-            alert(
-                "Campaña eliminada correctamente."
-            );
-
             await loadCampaignsFromDatabase();
+
+           showSuccessMessage(
+    "Campaña eliminada correctamente",
+    "La campaña fue eliminada permanentemente de la plataforma."
+);
         } catch (error) {
             console.error(
                 "Error al eliminar la campaña:",
                 error
             );
 
-            alert(
-                error.message ||
-                "No se pudo eliminar la campaña."
-            );
+          showRestrictionMessage(
+    "No se pudo eliminar la campaña",
+    error.message ||
+    "Ocurrió un problema al intentar eliminar la campaña.",
+    "error"
+);
         } finally {
             confirmDelete.disabled = false;
+
             confirmDelete.textContent =
                 "Eliminar";
         }
@@ -1827,18 +2084,35 @@ document.addEventListener("click", event => {
             campaignSearch.focus();
         }
 
-        if (event.key === "Escape") {
-            closeSidebar();
-            closeStatusDropdown();
+      if (event.key === "Escape") {
+    if (
+        restrictionModal?.classList.contains(
+            "show"
+        )
+    ) {
+        closeRestrictionMessage();
+        return;
+    }
 
-            if (campaignModal.classList.contains("show")) {
-                closeCampaignForm();
-            }
+    closeSidebar();
+    closeStatusDropdown();
 
-            if (deleteModal.classList.contains("show")) {
-                closeDeleteConfirmation();
-            }
-        }
+    if (
+        campaignModal.classList.contains(
+            "show"
+        )
+    ) {
+        closeCampaignForm();
+    }
+
+    if (
+        deleteModal.classList.contains(
+            "show"
+        )
+    ) {
+        closeDeleteConfirmation();
+    }
+}
     });
 
     // =====================================================
@@ -1942,5 +2216,6 @@ if (typeof flatpickr !== "undefined") {
     endDatePicker.altInput.placeholder =
         "Seleccionar fecha final";
 }
+syncCustomStatusFilter();
     loadCampaignsFromDatabase();
 });

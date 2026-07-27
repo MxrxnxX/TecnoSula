@@ -4260,8 +4260,303 @@ span.flatpickr-weekday {
     cursor: pointer !important;
     opacity: 1 !important;
 }
+
 /* Gestión de usuarios oculta mientras se comprueba el rol */
 #adminUsersModule[hidden] {
     display: none !important;
 }
+
+/* CIERRA EL RESPONSIVE DE 620 PX */
+}
+
+/* =========================================================
+   MODAL DE RESTRICCIÓN Y VALIDACIÓN
+========================================================= */
+.restriction-modal-overlay {
+    position: fixed;
+    z-index: 120000;
+    inset: 0;
+
+    display: grid;
+    place-items: center;
+
+    padding: 24px;
+
+    visibility: hidden;
+    pointer-events: none;
+
+    background: rgba(2, 8, 18, 0.84);
+
+    opacity: 0;
+
+    backdrop-filter: blur(10px);
+
+    transition:
+        opacity 220ms ease,
+        visibility 220ms ease;
+}
+.restriction-modal-overlay[hidden] {
+    display: none !important;
+}
+
+.restriction-modal-overlay.show {
+    visibility: visible;
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.restriction-modal {
+    position: relative;
+
+    width: min(470px, calc(100vw - 32px));
+
+    padding: 34px 32px 30px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(251, 191, 36, 0.22);
+    border-radius: 24px;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(245, 158, 11, 0.14),
+            transparent 40%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(16, 38, 67, 0.99),
+            rgba(5, 17, 33, 0.99)
+        );
+
+    box-shadow:
+        0 35px 100px rgba(0, 0, 0, 0.58),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+    text-align: center;
+
+    opacity: 0;
+
+    transform: translateY(18px) scale(0.96);
+
+    transition:
+        opacity 220ms ease,
+        transform 220ms ease;
+}
+
+.restriction-modal-overlay.show .restriction-modal {
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+}
+
+/* =========================================================
+   BOTÓN CERRAR
+========================================================= */
+
+.restriction-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+
+    display: grid;
+
+    width: 36px;
+    height: 36px;
+
+    place-items: center;
+
+    cursor: pointer;
+
+    border: 1px solid rgba(148, 190, 255, 0.12);
+    border-radius: 11px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    color: #7187a1;
+
+    transition:
+        transform 200ms ease,
+        color 200ms ease,
+        border-color 200ms ease,
+        background 200ms ease;
+}
+
+.restriction-modal-close:hover {
+    transform: rotate(4deg);
+
+    border-color: rgba(96, 165, 250, 0.3);
+
+    background: rgba(37, 99, 235, 0.1);
+
+    color: #f8fbff;
+}
+
+.restriction-modal-close svg {
+    width: 17px;
+    height: 17px;
+}
+
+/* =========================================================
+   ICONO
+========================================================= */
+
+.restriction-modal-icon {
+    display: grid;
+
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 19px;
+
+    place-items: center;
+
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 21px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(245, 158, 11, 0.16),
+            rgba(245, 158, 11, 0.06)
+        );
+
+    color: #fcd46b;
+
+    box-shadow:
+        0 15px 35px rgba(245, 158, 11, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.restriction-modal-icon svg {
+    width: 29px;
+    height: 29px;
+}
+
+/* =========================================================
+   TEXTOS
+========================================================= */
+
+.restriction-modal-eyebrow {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #d6a94c;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+
+    text-transform: uppercase;
+}
+
+.restriction-modal h2 {
+    margin: 0 0 11px;
+
+    color: #f8fbff;
+
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 24px;
+    line-height: 1.25;
+}
+
+.restriction-modal p {
+    max-width: 360px;
+
+    margin: 0 auto;
+
+    color: #8296af;
+
+    font-size: 11px;
+    line-height: 1.75;
+}
+
+.restriction-modal-accept {
+    min-width: 170px;
+
+    margin-top: 25px;
+}
+
+/* =========================================================
+   TIPO ERROR
+========================================================= */
+
+.restriction-modal-overlay[data-type="error"]
+.restriction-modal {
+    border-color: rgba(251, 113, 133, 0.23);
+}
+
+.restriction-modal-overlay[data-type="error"]
+.restriction-modal-icon {
+    border-color: rgba(251, 113, 133, 0.25);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(244, 63, 94, 0.16),
+            rgba(244, 63, 94, 0.06)
+        );
+
+    color: #fda4af;
+
+    box-shadow:
+        0 15px 35px rgba(244, 63, 94, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.restriction-modal-overlay[data-type="error"]
+.restriction-modal-eyebrow {
+    color: #f28ca0;
+}
+
+/* =========================================================
+   TIPO INFORMACIÓN
+========================================================= */
+
+.restriction-modal-overlay[data-type="information"]
+.restriction-modal {
+    border-color: rgba(96, 165, 250, 0.23);
+}
+
+.restriction-modal-overlay[data-type="information"]
+.restriction-modal-icon {
+    border-color: rgba(96, 165, 250, 0.25);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(37, 99, 235, 0.16),
+            rgba(37, 99, 235, 0.06)
+        );
+
+    color: #93c5fd;
+}
+
+.restriction-modal-overlay[data-type="information"]
+.restriction-modal-eyebrow {
+    color: #7caee7;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 520px) {
+    .restriction-modal-overlay {
+        padding: 16px;
+    }
+
+    .restriction-modal {
+        padding: 32px 22px 25px;
+    }
+
+    .restriction-modal h2 {
+        font-size: 21px;
+    }
+
+    .restriction-modal-accept {
+        width: 100%;
+    }
 }
