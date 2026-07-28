@@ -1082,33 +1082,164 @@
     // =====================================================
     // FUNCIONES DISPONIBLES PARA OTROS ARCHIVOS
     // =====================================================
+// =====================================================
+// REGISTRAR ACCIONES GENERALES DEL SISTEMA
+// =====================================================
 
-    window.TecnoSulaNotifications = {
-        add:
-            addNotification,
+function registerSystemAction({
+    module = "Sistema",
+    action = "information",
+    entityName = "",
+    message = "",
+    link = "",
+    actionLabel = "Consultar"
+} = {}) {
+    const actionConfigurations = {
+        create: {
+            type: "success",
+            icon: "circle-plus",
+            title: `${module} creado`,
+            categoryIcon: "plus"
+        },
 
-        agregar:
-            addNotification,
+        update: {
+            type: "information",
+            icon: "file-pen-line",
+            title: `${module} actualizado`,
+            categoryIcon: "pencil"
+        },
 
-        list:
-            loadNotifications,
+        delete: {
+            type: "urgent",
+            icon: "trash-2",
+            title: `${module} eliminado`,
+            categoryIcon: "trash-2"
+        },
 
-        listar:
-            loadNotifications,
+        activate: {
+            type: "success",
+            icon: "circle-check-big",
+            title: `${module} activado`,
+            categoryIcon: "activity"
+        },
 
-        markAllAsRead:
-            markAllNotificationsAsRead,
+        deactivate: {
+            type: "warning",
+            icon: "circle-pause",
+            title: `${module} desactivado`,
+            categoryIcon: "activity"
+        },
 
-        marcarTodasComoLeidas:
-            markAllNotificationsAsRead,
+        schedule: {
+            type: "success",
+            icon: "calendar-check",
+            title: `${module} programado`,
+            categoryIcon: "calendar-clock"
+        },
 
-        clear:
-            clearNotifications,
+        reschedule: {
+            type: "information",
+            icon: "calendar-sync",
+            title: `${module} reprogramado`,
+            categoryIcon: "calendar-clock"
+        },
 
-        limpiar:
-            clearNotifications
+        cancel: {
+            type: "warning",
+            icon: "calendar-x-2",
+            title: `${module} cancelado`,
+            categoryIcon: "circle-x"
+        },
+
+        duplicate: {
+            type: "success",
+            icon: "copy-plus",
+            title: `${module} duplicado`,
+            categoryIcon: "copy"
+        },
+
+        status: {
+            type: "information",
+            icon: "refresh-cw",
+            title: `Estado de ${module} actualizado`,
+            categoryIcon: "activity"
+        },
+
+        information: {
+            type: "information",
+            icon: "bell",
+            title: module,
+            categoryIcon: "activity"
+        }
     };
 
+    const configuration =
+        actionConfigurations[action] ||
+        actionConfigurations.information;
+
+    const cleanEntityName =
+        String(entityName || "").trim();
+
+    const defaultMessage =
+        cleanEntityName
+            ? `La acción se completó correctamente en "${cleanEntityName}".`
+            : "La acción se completó correctamente.";
+
+    return addNotification({
+        title:
+            configuration.title,
+
+        message:
+            message || defaultMessage,
+
+        type:
+            configuration.type,
+
+        icon:
+            configuration.icon,
+
+        category:
+            module,
+
+        categoryIcon:
+            configuration.categoryIcon,
+
+        actionLabel,
+
+        link
+    });
+}
+  window.TecnoSulaNotifications = {
+    add:
+        addNotification,
+
+    agregar:
+        addNotification,
+
+    registerActivity:
+        addNotification,
+
+    registrarActividad:
+        addNotification,
+
+    list:
+        loadNotifications,
+
+    listar:
+        loadNotifications,
+
+    markAllAsRead:
+        markAllNotificationsAsRead,
+
+    marcarTodasComoLeidas:
+        markAllNotificationsAsRead,
+
+    clear:
+        clearNotifications,
+
+    limpiar:
+        clearNotifications
+};
     // =====================================================
     // ACTUALIZAR EN LA MISMA PÁGINA
     // =====================================================

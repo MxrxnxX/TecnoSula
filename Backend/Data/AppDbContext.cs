@@ -11,6 +11,10 @@ namespace Backend.Data
         {
         }
 
+        // =====================================================
+        // TABLAS EXISTENTES
+        // =====================================================
+
         public DbSet<Usuario> Usuarios { get; set; } = null!;
 
         public DbSet<Rol> Roles { get; set; } = null!;
@@ -19,6 +23,19 @@ namespace Backend.Data
             RecuperacionesPassword { get; set; } = null!;
 
         public DbSet<Campana> Campanas { get; set; } = null!;
+
+        // =====================================================
+        // TABLAS DE PUBLICACIÓN Y PROGRAMACIÓN
+        // =====================================================
+
+        public DbSet<Publicacion>
+            Publicaciones { get; set; } = null!;
+
+        public DbSet<RedSocial>
+            RedesSociales { get; set; } = null!;
+
+        public DbSet<PublicacionRedSocial>
+            PublicacionRedesSociales { get; set; } = null!;
 
         protected override void OnModelCreating(
             ModelBuilder modelBuilder
@@ -155,6 +172,132 @@ namespace Backend.Data
             });
 
             // =================================================
+            // TABLA PUBLICACIONES
+            // =================================================
+
+            modelBuilder.Entity<Publicacion>(entity =>
+            {
+                entity.ToTable("Publicaciones");
+
+                entity.HasKey(p => p.IdPublicacion);
+
+                entity.Property(p => p.IdPublicacion)
+                    .HasColumnName("id_publicacion");
+
+                entity.Property(p => p.Titulo)
+                    .HasColumnName("titulo")
+                    .HasMaxLength(150)
+                    .IsRequired();
+
+                entity.Property(p => p.Descripcion)
+                    .HasColumnName("descripcion")
+                    .HasMaxLength(1000)
+                    .IsRequired();
+
+                entity.Property(p => p.TipoMultimedia)
+                    .HasColumnName("tipo_multimedia")
+                    .HasMaxLength(30);
+
+                entity.Property(p => p.UrlMultimedia)
+                    .HasColumnName("url_multimedia")
+                    .HasMaxLength(500);
+
+                entity.Property(p => p.FechaProgramacion)
+                    .HasColumnName("fecha_programacion")
+                    .HasColumnType("datetime2(0)");
+
+                entity.Property(p => p.Estado)
+                    .HasColumnName("estado")
+                    .HasMaxLength(20)
+                    .HasDefaultValue("Borrador")
+                    .IsRequired();
+
+                entity.Property(p => p.IdCampana)
+                    .HasColumnName("id_campana")
+                    .IsRequired();
+
+                entity.Property(p => p.IdUsuario)
+                    .HasColumnName("id_usuario")
+                    .IsRequired();
+
+                entity.Property(p => p.FechaCreacion)
+                    .HasColumnName("fecha_creacion")
+                    .HasColumnType("datetime2(0)")
+                    .HasDefaultValueSql("SYSDATETIME()")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(p => p.FechaActualizacion)
+                    .HasColumnName("fecha_actualizacion")
+                    .HasColumnType("datetime2(0)");
+
+                entity.HasIndex(p => p.IdCampana)
+                    .HasDatabaseName(
+                        "IX_Publicaciones_IdCampana"
+                    );
+
+                entity.HasIndex(p => p.Estado)
+                    .HasDatabaseName(
+                        "IX_Publicaciones_Estado"
+                    );
+
+                entity.HasIndex(p => p.FechaProgramacion)
+                    .HasDatabaseName(
+                        "IX_Publicaciones_FechaProgramacion"
+                    );
+            });
+
+            // =================================================
+            // TABLA REDES SOCIALES
+            // =================================================
+
+            modelBuilder.Entity<RedSocial>(entity =>
+            {
+                entity.ToTable("RedesSociales");
+
+                entity.HasKey(r => r.IdRedSocial);
+
+                entity.Property(r => r.IdRedSocial)
+                    .HasColumnName("id_red_social");
+
+                entity.Property(r => r.Nombre)
+                    .HasColumnName("nombre")
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.Property(r => r.Estado)
+                    .HasColumnName("estado")
+                    .HasDefaultValue(true)
+                    .IsRequired();
+
+                entity.HasIndex(r => r.Nombre)
+                    .IsUnique()
+                    .HasDatabaseName(
+                        "UQ_RedesSociales_Nombre"
+                    );
+            });
+
+            // =================================================
+            // TABLA INTERMEDIA PUBLICACIÓN - RED SOCIAL
+            // =================================================
+
+            modelBuilder.Entity<PublicacionRedSocial>(entity =>
+            {
+                entity.ToTable("PublicacionRedSocial");
+
+                entity.HasKey(pr => new
+                {
+                    pr.IdPublicacion,
+                    pr.IdRedSocial
+                });
+
+                entity.Property(pr => pr.IdPublicacion)
+                    .HasColumnName("id_publicacion");
+
+                entity.Property(pr => pr.IdRedSocial)
+                    .HasColumnName("id_red_social");
+            });
+
+            // =================================================
             // RELACIÓN USUARIO -> ROL
             // =================================================
 
@@ -180,6 +323,54 @@ namespace Backend.Data
                 .HasOne(c => c.Usuario)
                 .WithMany()
                 .HasForeignKey(c => c.IdUsuario)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // =================================================
+            // RELACIÓN PUBLICACIÓN -> CAMPAÑA
+            // =================================================
+
+            modelBuilder.Entity<Publicacion>()
+                .HasOne(p => p.Campana)
+                .WithMany()
+                .HasForeignKey(p => p.IdCampana)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // =================================================
+            // RELACIÓN PUBLICACIÓN -> USUARIO
+            // =================================================
+
+            modelBuilder.Entity<Publicacion>()
+                .HasOne(p => p.Usuario)
+                .WithMany()
+                .HasForeignKey(p => p.IdUsuario)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // =================================================
+            // RELACIÓN PUBLICACIÓN -> PUBLICACIÓN RED SOCIAL
+            // =================================================
+
+            modelBuilder.Entity<PublicacionRedSocial>()
+                .HasOne(pr => pr.Publicacion)
+                .WithMany(
+                    p => p.PublicacionRedesSociales
+                )
+                .HasForeignKey(
+                    pr => pr.IdPublicacion
+                )
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // =================================================
+            // RELACIÓN RED SOCIAL -> PUBLICACIÓN RED SOCIAL
+            // =================================================
+
+            modelBuilder.Entity<PublicacionRedSocial>()
+                .HasOne(pr => pr.RedSocial)
+                .WithMany(
+                    r => r.PublicacionRedesSociales
+                )
+                .HasForeignKey(
+                    pr => pr.IdRedSocial
+                )
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

@@ -19,16 +19,27 @@
     rel="stylesheet"
     href="Css/transiciones.css?v=2"
 >
+<!-- FLATPICKR -->
+
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+>
+
 
     <link
         rel="stylesheet"
-        href="Css/publicaciones.css?v=1"
+        href="Css/publicaciones.css?v=17"
     >
 
     <link
         rel="stylesheet"
         href="Css/permisos.css?v=1"
     >
+    <link
+    rel="stylesheet"
+    href="Css/notificaciones.css?v=2"
+>
 
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -615,13 +626,13 @@
                                     Todas las campañas
                                 </option>
 
-                                <option value="regreso-clases">
-                                    Regreso a clases
-                                </option>
+                               <option value="regreso-a-clases">
+    Regreso a clases
+</option>
 
-                                <option value="verano">
-                                    Promoción de verano
-                                </option>
+<option value="promocion-de-verano">
+    Promoción de verano
+</option>
 
                                 <option value="black-friday">
                                     Black Friday
@@ -1305,40 +1316,96 @@
 
                     <div class="publication-form-grid">
 
-                        <div class="publication-form-group publication-form-full">
+                       <div class="publication-form-group publication-form-full">
 
-                            <label for="publicationCampaign">
-                                Campaña relacionada
-                            </label>
+    <label for="publicationCampaignTrigger">
+        Campaña relacionada
+    </label>
 
-                            <div class="publication-input-wrapper">
+    <div
+        class="publication-campaign-selector"
+        id="publicationCampaignSelector"
+    >
 
-                                <i data-lucide="radio-tower"></i>
+        <!--
+            Aquí se guarda el ID real de la campaña.
+            El resto del sistema continuará leyendo
+            publicationCampaign.value.
+        -->
 
-                                <select
-                                    id="publicationCampaign"
-                                    required
-                                >
-                                    <option value="">
-                                        Seleccione una campaña
-                                    </option>
+        <input
+            type="hidden"
+            id="publicationCampaign"
+            value=""
+        >
 
-                                    <option value="Regreso a clases">
-                                        Regreso a clases
-                                    </option>
+        <button
+            class="campaign-selector-trigger"
+            id="publicationCampaignTrigger"
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+        >
 
-                                    <option value="Promoción de verano">
-                                        Promoción de verano
-                                    </option>
+            <span class="campaign-selector-main-icon">
+                <i data-lucide="radio-tower"></i>
+            </span>
 
-                                    <option value="Black Friday">
-                                        Black Friday
-                                    </option>
-                                </select>
+            <span class="campaign-selector-information">
 
-                            </div>
+                <small>Campaña seleccionada</small>
 
-                        </div>
+                <strong id="publicationCampaignSelectedText">
+                    Selecciona una campaña
+                </strong>
+
+            </span>
+
+            <span class="campaign-selector-chevron">
+                <i data-lucide="chevron-down"></i>
+            </span>
+
+        </button>
+
+        <div
+            class="campaign-selector-menu"
+            id="publicationCampaignMenu"
+            hidden
+        >
+
+            <div class="campaign-selector-menu-header">
+
+                <div class="campaign-selector-search">
+
+                    <i data-lucide="search"></i>
+
+                    <input
+                        type="search"
+                        id="publicationCampaignSearch"
+                        placeholder="Buscar una campaña"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+            </div>
+
+            <div
+                class="campaign-selector-options"
+                id="publicationCampaignOptions"
+                role="listbox"
+                aria-label="Campañas disponibles"
+            ></div>
+
+        </div>
+
+    </div>
+
+    <small class="campaign-selector-help">
+        Vincula esta publicación con una campaña activa.
+    </small>
+
+</div>
 
                         <div class="publication-form-group publication-form-full">
 
@@ -1420,14 +1487,15 @@
 
                         <div class="publication-form-group publication-form-full">
 
-                            <label>
-                                Plataforma
-                            </label>
+                           <label>
+    Redes sociales
+</label>
 
-                            <input
-                                type="hidden"
-                                id="publicationPlatform"
-                            >
+<input
+    type="hidden"
+    id="publicationPlatform"
+    value="[]"
+>
 
                             <div class="platform-selector">
 
@@ -1484,46 +1552,95 @@
                                 </button>
 
                             </div>
+                           <small class="platform-selection-help">
+    Puedes seleccionar una o varias redes sociales.
+</small>
 
-                        </div>
+</div>
 
-                        <div class="publication-form-group">
+<div class="publication-form-group">
 
-                            <label for="publicationDate">
-                                Fecha
-                            </label>
+    <label for="publicationDate">
+        Fecha
+    </label>
 
-                            <div class="publication-input-wrapper">
+    <div class="publication-picker-control date-picker-control">
 
-                                <i data-lucide="calendar-days"></i>
+      <input
+    type="text"
+    id="publicationDate"
+    class="publication-native-picker"
+    autocomplete="off"
+    aria-label="Seleccionar fecha de publicación"
+>
 
-                                <input
-                                    type="date"
-                                    id="publicationDate"
-                                >
+        <div class="publication-picker-visual">
 
-                            </div>
+            <span class="publication-picker-icon">
+                <i data-lucide="calendar-days"></i>
+            </span>
 
-                        </div>
+            <div class="publication-picker-information">
 
-                        <div class="publication-form-group">
+                <small>Fecha de publicación</small>
 
-                            <label for="publicationTime">
-                                Hora
-                            </label>
+                <strong id="publicationDateDisplay">
+                    Selecciona una fecha
+                </strong>
 
-                            <div class="publication-input-wrapper">
+            </div>
 
-                                <i data-lucide="clock"></i>
+            <span class="publication-picker-action">
+                <i data-lucide="chevron-down"></i>
+            </span>
 
-                                <input
-                                    type="time"
-                                    id="publicationTime"
-                                >
+        </div>
 
-                            </div>
+    </div>
 
-                        </div>
+</div>
+
+<div class="publication-form-group">
+
+    <label for="publicationTime">
+        Hora
+    </label>
+
+    <div class="publication-picker-control time-picker-control">
+
+       <input
+    type="text"
+    id="publicationTime"
+    class="publication-native-picker"
+    autocomplete="off"
+    aria-label="Seleccionar hora de publicación"
+>
+
+        <div class="publication-picker-visual">
+
+            <span class="publication-picker-icon">
+                <i data-lucide="clock-3"></i>
+            </span>
+
+            <div class="publication-picker-information">
+
+                <small>Hora de publicación</small>
+
+                <strong id="publicationTimeDisplay">
+                    Selecciona una hora
+                </strong>
+
+            </div>
+
+            <span class="publication-picker-action">
+                <i data-lucide="chevron-down"></i>
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
 
                         <div class="publication-form-group publication-form-full">
 
@@ -1617,8 +1734,10 @@
 
 <script src="JS/api.js"></script>
 <script src="JS/permisos.js?v=3"></script>
-<script src="JS/notificaciones.js?v=2"></script>
-<script src="JS/publicaciones.js?v=2"></script>
+<script src="JS/notificaciones.js?v=4"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<script src="JS/publicaciones.js?v=16"></script>
 <script src="JS/transiciones.js?v=2"></script>
 
 </body>
