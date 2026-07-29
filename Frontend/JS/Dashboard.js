@@ -220,70 +220,51 @@ if (adminUsersModule) {
     }
 
     // =====================================================
-    // ESTADÍSTICA DE CAMPAÑAS
-    // =====================================================
+// DATOS REALES DEL DASHBOARD
+// =====================================================
 
-    const defaultCampaigns = [
-        {
-            id: "1",
-            status: "activa"
-        },
-        {
-            id: "2",
-            status: "pausada"
-        },
-        {
-            id: "3",
-            status: "finalizada"
-        }
-    ];
-
-    function loadDashboardCampaigns() {
-        const savedCampaigns =
-            localStorage.getItem(
-                "tecnosulaCampaignsDemo"
-            );
-
-        if (!savedCampaigns) {
-            return defaultCampaigns;
-        }
-
-        try {
-            const parsedCampaigns =
-                JSON.parse(savedCampaigns);
-
-            return Array.isArray(parsedCampaigns)
-                ? parsedCampaigns
-                : defaultCampaigns;
-        } catch (error) {
-            console.error(
-                "No se pudieron leer las campañas.",
-                error
-            );
-
-            return defaultCampaigns;
-        }
+async function cargarResumenDashboard() {
+    if (!activeCampaignsElement) {
+        return;
     }
 
-    function updateActiveCampaigns() {
-        if (!activeCampaignsElement) {
-            return;
+    try {
+        const respuesta = await fetch(
+            "http://localhost:5208/api/Dashboard/resumen",
+            {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) {
+            throw new Error(
+                `Error al cargar el dashboard: ${respuesta.status}`
+            );
         }
 
-        const campaigns =
-            loadDashboardCampaigns();
-
-        const activeCount =
-            campaigns.filter(campaign => {
-                return String(campaign.status)
-                    .toLowerCase() === "activa";
-            }).length;
+        const resumen = await respuesta.json();
 
         activeCampaignsElement.textContent =
-            String(activeCount).padStart(2, "0");
-    }
+            String(resumen.campanasActivas ?? 0)
+                .padStart(2, "0");
 
-    updateActiveCampaigns();
+    } catch (error) {
+        console.error(
+            "No se pudo cargar el resumen del dashboard:",
+            error
+        );
+
+        activeCampaignsElement.textContent = "00";
+    }
+}
+
+cargarResumenDashboard();
+
+    
 
     // =====================================================
     // BOTÓN CONOCER TECNOSULA
@@ -329,23 +310,13 @@ if (adminUsersModule) {
     );
 
     window.addEventListener(
-        "focus",
-        () => {
-            updateActiveCampaigns();
-        }
-    );
+    "focus",
+    () => {
+        cargarResumenDashboard();
+    }
+);
 
-    window.addEventListener(
-        "storage",
-        event => {
-            if (
-                event.key ===
-                "tecnosulaCampaignsDemo"
-            ) {
-                updateActiveCampaigns();
-            }
-        }
-    );
+    
 });
 // =====================================================
 // MOSTRAR GESTIÓN DE USUARIOS SOLO AL ADMINISTRADOR
