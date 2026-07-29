@@ -6,9 +6,12 @@ namespace Backend.Models
     [Table("Publicaciones")]
     public class Publicacion
     {
+        
         [Key]
         [Column("id_publicacion")]
         public int IdPublicacion { get; set; }
+        [Column("imagen_url")]
+         public string? ImagenUrl { get; set; }
 
         [Required]
         [MaxLength(150)]

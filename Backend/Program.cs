@@ -7,8 +7,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using System.Collections.Generic;
+using Microsoft.Extensions.FileProviders;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+QuestPDF.Settings.License = LicenseType.Community;
 
 
 // ============================
@@ -121,13 +124,34 @@ builder.Services.Configure<EmailSettings>(
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
+builder.Services.AddScoped<IReporteService, ReporteService>();
 
 // ============================
 // APP
 // ============================
 
 var app = builder.Build();
+app.UseStaticFiles();
+var uploadsPath = Path.Combine(
+    builder.Environment.ContentRootPath,
+    "Uploads"
+);
+
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
+app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
+
 
 
 if (app.Environment.IsDevelopment())

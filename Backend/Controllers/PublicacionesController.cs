@@ -14,13 +14,17 @@ namespace Backend.Controllers
     public class PublicacionesController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public PublicacionesController(
-            AppDbContext context
-        )
-        {
-            _context = context;
-        }
+    public PublicacionesController(
+        
+    AppDbContext context,
+    IWebHostEnvironment environment
+    )
+    {
+    _context = context;
+    _environment = environment;
+    }
 
         // =====================================================
         // CONSULTAR TODAS LAS PUBLICACIONES
@@ -1043,6 +1047,96 @@ public async Task<IActionResult> DuplicarPublicacion(
         }
     );
 }
+// =====================================================
+// SUBIR IMAGEN DE UNA PUBLICACIÓN
+//
+// POST: api/Publicaciones/subir-multimedia
+// =====================================================
+
+[HttpPost("subir-multimedia")]
+[Consumes("multipart/form-data")]
+public async Task<IActionResult> SubirMultimedia(
+    IFormFile archivo
+)
+{
+    if (archivo == null || archivo.Length == 0)
+    {
+        return BadRequest(new
+        {
+            mensaje = "Debes seleccionar una imagen."
+        });
+    }
+
+    const long tamanoMaximo = 5 * 1024 * 1024;
+
+    if (archivo.Length > tamanoMaximo)
+    {
+        return BadRequest(new
+        {
+            mensaje = "La imagen no puede superar los 5 MB."
+        });
+    }
+
+    string extension = Path
+        .GetExtension(archivo.FileName)
+        .ToLowerInvariant();
+
+    string[] extensionesPermitidas =
+    {
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".webp",
+        ".gif"
+    };
+
+    if (!extensionesPermitidas.Contains(extension))
+    {
+        return BadRequest(new
+        {
+            mensaje = "El formato de la imagen no es válido."
+        });
+    }
+
+    string carpetaUploads = Path.Combine(
+        _environment.WebRootPath ??
+        Path.Combine(_environment.ContentRootPath, "wwwroot"),
+
+        "uploads",
+        "publicaciones"
+    );
+
+    Directory.CreateDirectory(carpetaUploads);
+
+    string nombreArchivo =
+        $"{Guid.NewGuid()}{extension}";
+
+    string rutaArchivo = Path.Combine(
+        carpetaUploads,
+        nombreArchivo
+    );
+
+    await using FileStream stream = new(
+        rutaArchivo,
+        FileMode.Create
+    );
+
+    await archivo.CopyToAsync(stream);
+
+    string urlRelativa =
+        $"/uploads/publicaciones/{nombreArchivo}";
+
+    string urlCompleta =
+        $"{Request.Scheme}://{Request.Host}{urlRelativa}";
+
+    return Ok(new
+    {
+        mensaje = "Imagen subida correctamente.",
+        urlMultimedia = urlCompleta,
+        tipoMultimedia = "Imagen"
+    });
+}
+
         // =====================================================
         // OBTENER ID DEL USUARIO DESDE EL JWT
         // =====================================================
