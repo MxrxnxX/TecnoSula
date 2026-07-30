@@ -229,9 +229,8 @@ public async Task<IActionResult> Recuperar(
     await _context.SaveChangesAsync();
 
 
-    var enlace =
-        $"http://localhost:5500/nueva-contrasena.html?token={token}";
-
+   var enlace =
+    $"http://192.168.100.35:5500/TecnoSula/Frontend/contrasenaNueva.html?token={token}";
 
     var cuerpo = $@"
     <html>
@@ -326,6 +325,117 @@ public async Task<IActionResult> CambiarPassword(
     return Ok(new
     {
         mensaje = "Contraseña actualizada correctamente"
+    });
+}
+// =====================================================
+// CAMBIAR CONTRASEÑA DESDE CONFIGURACIÓN
+// POST: api/Auth/cambiar-password-perfil
+// =====================================================
+
+[Authorize]
+[HttpPost("cambiar-password-perfil")]
+public async Task<IActionResult> CambiarPasswordPerfil(
+    [FromBody] CambiarPasswordPerfilRequest request)
+{
+    var idUsuarioClaim = User.FindFirstValue(
+        ClaimTypes.NameIdentifier
+    );
+
+    if (
+        string.IsNullOrWhiteSpace(idUsuarioClaim) ||
+        !int.TryParse(idUsuarioClaim, out var idUsuario)
+    )
+    {
+        return Unauthorized(new
+        {
+            mensaje = "No se pudo identificar al usuario."
+        });
+    }
+
+    if (
+        string.IsNullOrWhiteSpace(request.ContrasenaActual) ||
+        string.IsNullOrWhiteSpace(request.NuevaContrasena) ||
+        string.IsNullOrWhiteSpace(request.ConfirmarContrasena)
+    )
+    {
+        return BadRequest(new
+        {
+            mensaje = "Debes completar todos los campos."
+        });
+    }
+
+    if (request.NuevaContrasena.Length < 8)
+    {
+        return BadRequest(new
+        {
+            mensaje =
+                "La nueva contraseña debe tener al menos 8 caracteres."
+        });
+    }
+
+    if (
+        request.NuevaContrasena !=
+        request.ConfirmarContrasena
+    )
+    {
+        return BadRequest(new
+        {
+            mensaje =
+                "La confirmación no coincide con la nueva contraseña."
+        });
+    }
+
+    if (
+        request.ContrasenaActual ==
+        request.NuevaContrasena
+    )
+    {
+        return BadRequest(new
+        {
+            mensaje =
+                "La nueva contraseña debe ser diferente a la actual."
+        });
+    }
+
+    var usuario = await _context.Usuarios
+        .FirstOrDefaultAsync(
+            u => u.IdUsuario == idUsuario
+        );
+
+    if (usuario == null)
+    {
+        return NotFound(new
+        {
+            mensaje = "No se encontró el usuario."
+        });
+    }
+
+    var contrasenaActualCorrecta =
+        BCrypt.Net.BCrypt.Verify(
+            request.ContrasenaActual,
+            usuario.Contrasena
+        );
+
+    if (!contrasenaActualCorrecta)
+    {
+        // Se devuelve 400 y no 401 para no cerrar la sesión
+        // cuando el usuario escribe mal su contraseña.
+        return BadRequest(new
+        {
+            mensaje = "La contraseña actual es incorrecta."
+        });
+    }
+
+    usuario.Contrasena =
+        BCrypt.Net.BCrypt.HashPassword(
+            request.NuevaContrasena
+        );
+
+    await _context.SaveChangesAsync();
+
+    return Ok(new
+    {
+        mensaje = "Contraseña actualizada correctamente."
     });
 }
 

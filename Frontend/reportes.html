@@ -30,6 +30,7 @@
     >
 
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/permisos.css">
 </head>
 
 <body>
@@ -109,18 +110,19 @@
                         <span>Publicación y programación</span>
                     </a>
 
-                    <a
-                        href="usuarios.html"
-                        class="navigation-link admin-only"
-                        id="adminUsersModule"
-                    >
-                        <div class="navigation-icon">
-                            <i data-lucide="users"></i>
-                        </div>
 
-                        <span>Gestión de usuarios</span>
-                    </a>
+<!-- GESTIÓN DE USUARIOS - SOLO ADMINISTRADOR -->
+<a
+    href="usuarios.html"
+    class="navigation-link admin-only"
+    id="adminUsersModule"
+>
+    <div class="navigation-icon">
+        <i data-lucide="users-round"></i>
+    </div>
 
+    <span>Gestión de usuarios</span>
+</a>
                     <a
                         href="reportes.html"
                         class="navigation-link active"
@@ -520,8 +522,8 @@
 ></script>
 
 <script src="JS/reportes.js?v=5"></script>
-
 <script src="JS/transiciones.js?v=2"></script>
+<script src="JS/preferencias.js?v=1"></script>
 
 </body>
 

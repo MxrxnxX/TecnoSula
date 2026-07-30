@@ -3141,3 +3141,22 @@ flex-direction: column;
 .navigation-group {
     flex: 0 0 auto;
 }
+/* =====================================================
+   PREFERENCIAS GLOBALES DEL USUARIO
+===================================================== */
+
+/* Desactivar animaciones y transiciones */
+body.sin-animaciones *,
+body.sin-animaciones *::before,
+body.sin-animaciones *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+}
+
+/* Ocultar la tarjeta informativa lateral */
+body.sin-mensajes-laterales
+.sidebar-advertisement {
+    display: none !important;
+}

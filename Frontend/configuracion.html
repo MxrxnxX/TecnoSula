@@ -20,7 +20,7 @@
     <!-- ESTILOS DEL MÓDULO -->
     <link
         rel="stylesheet"
-        href="Css/configuracion.css?v=3"
+        href="Css/configuracion.css?v=7"
     >
 
     <!-- TRANSICIONES -->
@@ -31,6 +31,7 @@
 
     <!-- ICONOS -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/permisos.css">
 </head>
 
 <body>
@@ -121,19 +122,18 @@
                         </span>
                     </a>
 
-                    <!-- USUARIOS - SOLO ADMINISTRADOR -->
-                    <a
-                        href="usuarios.html"
-                        class="navigation-link admin-only"
-                        id="adminUsersModule"
-                    >
-                        <div class="navigation-icon">
-                            <i data-lucide="users"></i>
-                        </div>
+<!-- GESTIÓN DE USUARIOS - SOLO ADMINISTRADOR -->
+<a
+    href="usuarios.html"
+    class="navigation-link admin-only"
+    id="adminUsersModule"
+>
+    <div class="navigation-icon">
+        <i data-lucide="users-round"></i>
+    </div>
 
-                        <span>Gestión de usuarios</span>
-                    </a>
-
+    <span>Gestión de usuarios</span>
+</a>
                     <!-- REPORTES -->
                     <a
                         href="reportes.html"
@@ -756,24 +756,201 @@
 
                             </div>
 
-                            <div class="settings-placeholder">
+                           <form
+    class="settings-form security-form"
+    id="securityForm"
+    autocomplete="off"
+>
 
-                                <div class="settings-placeholder-icon">
-                                    <i data-lucide="key-round"></i>
-                                </div>
+    <!-- INFORMACIÓN DE SEGURIDAD -->
+    <div class="security-notice">
 
-                                <div>
-                                    <strong>
-                                        Seguridad preparada
-                                    </strong>
+        <div class="security-notice-icon">
+            <i data-lucide="shield-check"></i>
+        </div>
 
-                                    <p>
-                                        Aquí implementaremos el cambio
-                                        seguro de contraseña.
-                                    </p>
-                                </div>
+        <div>
+            <strong>
+                Protege el acceso a tu cuenta
+            </strong>
 
-                            </div>
+            <p>
+                La nueva contraseña debe tener al menos
+                8 caracteres y ser diferente a la actual.
+            </p>
+
+            <ul>
+                <li>Mínimo 8 caracteres.</li>
+                <li>Debe ser diferente a la contraseña actual.</li>
+                <li>No compartas tu contraseña con otras personas.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- CONTRASEÑA ACTUAL -->
+    <div class="settings-field full-width">
+
+        <label for="contrasenaActual">
+            Contraseña actual
+        </label>
+
+        <div class="settings-input-wrapper password-input-wrapper">
+
+            <i
+                data-lucide="lock-keyhole"
+                class="settings-input-icon"
+            ></i>
+
+            <input
+                type="password"
+                id="contrasenaActual"
+                name="contrasenaActual"
+                placeholder="Ingresa tu contraseña actual"
+                autocomplete="current-password"
+                maxlength="100"
+                required
+            >
+
+            <button
+                type="button"
+                class="password-visibility-button"
+                data-password-target="contrasenaActual"
+                aria-label="Mostrar contraseña actual"
+                title="Mostrar contraseña"
+            >
+                <i data-lucide="eye"></i>
+            </button>
+
+        </div>
+
+        <small
+            class="settings-field-error"
+            id="errorContrasenaActual"
+        ></small>
+
+    </div>
+
+    <!-- NUEVA CONTRASEÑA -->
+    <div class="settings-field">
+
+        <label for="nuevaContrasena">
+            Nueva contraseña
+        </label>
+
+        <div class="settings-input-wrapper password-input-wrapper">
+
+            <i
+                data-lucide="key-round"
+                class="settings-input-icon"
+            ></i>
+
+            <input
+                type="password"
+                id="nuevaContrasena"
+                name="nuevaContrasena"
+                placeholder="Crea una nueva contraseña"
+                autocomplete="new-password"
+                minlength="8"
+                maxlength="100"
+                required
+            >
+
+            <button
+                type="button"
+                class="password-visibility-button"
+                data-password-target="nuevaContrasena"
+                aria-label="Mostrar nueva contraseña"
+                title="Mostrar contraseña"
+            >
+                <i data-lucide="eye"></i>
+            </button>
+
+        </div>
+
+        <small
+            class="settings-field-error"
+            id="errorNuevaContrasena"
+        ></small>
+
+    </div>
+
+    <!-- CONFIRMAR CONTRASEÑA -->
+    <div class="settings-field">
+
+        <label for="confirmarContrasena">
+            Confirmar contraseña
+        </label>
+
+        <div class="settings-input-wrapper password-input-wrapper">
+
+            <i
+                data-lucide="badge-check"
+                class="settings-input-icon"
+            ></i>
+
+            <input
+                type="password"
+                id="confirmarContrasena"
+                name="confirmarContrasena"
+                placeholder="Repite la nueva contraseña"
+                autocomplete="new-password"
+                minlength="8"
+                maxlength="100"
+                required
+            >
+
+            <button
+                type="button"
+                class="password-visibility-button"
+                data-password-target="confirmarContrasena"
+                aria-label="Mostrar confirmación"
+                title="Mostrar contraseña"
+            >
+                <i data-lucide="eye"></i>
+            </button>
+
+        </div>
+
+        <small
+            class="settings-field-error"
+            id="errorConfirmarContrasena"
+        ></small>
+
+    </div>
+
+    <!-- ACCIONES -->
+    <div class="settings-actions full-width">
+
+        <div
+            class="security-save-status"
+            id="securitySaveStatus"
+            aria-live="polite"
+        ></div>
+
+        <button
+            type="reset"
+            class="settings-secondary-button"
+            id="limpiarSeguridad"
+        >
+            <i data-lucide="rotate-ccw"></i>
+            Limpiar
+        </button>
+
+        <button
+            type="submit"
+            class="settings-primary-button"
+            id="guardarSeguridad"
+        >
+            <i data-lucide="shield-check"></i>
+            Actualizar contraseña
+        </button>
+
+    </div>
+
+</form>
+
+                              
 
                         </section>
 
@@ -807,78 +984,523 @@
 
                             </div>
 
-                            <div class="settings-placeholder">
+                       <form
+    class="notifications-form"
+    id="notificationsForm"
+>
 
-                                <div class="settings-placeholder-icon">
-                                    <i data-lucide="bell-dot"></i>
-                                </div>
+    <div class="settings-options-list">
 
-                                <div>
-                                    <strong>
-                                        Notificaciones preparadas
-                                    </strong>
+        <!-- CAMPAÑAS -->
+        <div class="settings-option">
 
-                                    <p>
-                                        Aquí agregaremos los interruptores
-                                        para administrar tus alertas.
-                                    </p>
-                                </div>
+            <div class="settings-option-information">
 
-                            </div>
+                <div class="settings-option-icon">
+                    <i data-lucide="radio-tower"></i>
+                </div>
+
+                <div>
+                    <strong>
+                        Actividad de campañas
+                    </strong>
+
+                    <p>
+                        Recibe avisos cuando una campaña sea creada,
+                        actualizada, pausada o finalizada.
+                    </p>
+                </div>
+
+            </div>
+
+            <label class="settings-switch">
+
+                <input
+                    type="checkbox"
+                    id="notificarCampanas"
+                >
+
+                <span class="settings-switch-slider"></span>
+
+            </label>
+
+        </div>
+
+        <!-- PUBLICACIONES -->
+        <div class="settings-option">
+
+            <div class="settings-option-information">
+
+                <div class="settings-option-icon">
+                    <i data-lucide="calendar-clock"></i>
+                </div>
+
+                <div>
+                    <strong>
+                        Publicaciones programadas
+                    </strong>
+
+                    <p>
+                        Recibe recordatorios sobre publicaciones
+                        pendientes o próximas a publicarse.
+                    </p>
+                </div>
+
+            </div>
+
+            <label class="settings-switch">
+
+                <input
+                    type="checkbox"
+                    id="notificarPublicaciones"
+                >
+
+                <span class="settings-switch-slider"></span>
+
+            </label>
+
+        </div>
+
+        <!-- REPORTES -->
+        <div class="settings-option">
+
+            <div class="settings-option-information">
+
+                <div class="settings-option-icon">
+                    <i data-lucide="chart-no-axes-combined"></i>
+                </div>
+
+                <div>
+                    <strong>
+                        Actualizaciones de reportes
+                    </strong>
+
+                    <p>
+                        Recibe avisos cuando existan nuevos datos
+                        disponibles para analizar.
+                    </p>
+                </div>
+
+            </div>
+
+            <label class="settings-switch">
+
+                <input
+                    type="checkbox"
+                    id="notificarReportes"
+                >
+
+                <span class="settings-switch-slider"></span>
+
+            </label>
+
+        </div>
+
+        <!-- SISTEMA -->
+        <div class="settings-option">
+
+            <div class="settings-option-information">
+
+                <div class="settings-option-icon">
+                    <i data-lucide="shield-alert"></i>
+                </div>
+
+                <div>
+                    <strong>
+                        Avisos importantes del sistema
+                    </strong>
+
+                    <p>
+                        Muestra alertas relacionadas con seguridad,
+                        errores y cambios importantes del sistema.
+                    </p>
+                </div>
+
+            </div>
+
+            <label class="settings-switch">
+
+                <input
+                    type="checkbox"
+                    id="notificarSistema"
+                >
+
+                <span class="settings-switch-slider"></span>
+
+            </label>
+
+        </div>
+
+    </div>
+
+    <!-- ACCIONES -->
+    <div class="settings-actions notifications-actions">
+
+        <div
+            class="notifications-save-status"
+            id="notificationsSaveStatus"
+            aria-live="polite"
+        ></div>
+
+        <button
+            type="button"
+            class="settings-secondary-button"
+            id="restaurarNotificaciones"
+        >
+            <i data-lucide="rotate-ccw"></i>
+            Restaurar
+        </button>
+
+        <button
+            type="submit"
+            class="settings-primary-button"
+            id="guardarNotificaciones"
+        >
+            <i data-lucide="save"></i>
+            Guardar preferencias
+        </button>
+
+    </div>
+
+</form>
 
                         </section>
+<!-- =============================================
+     PREFERENCIAS
+============================================== -->
 
-                        <!-- =============================================
-                             PREFERENCIAS
-                        ============================================== -->
+<section
+    class="settings-panel"
+    id="settingsPreferencias"
+    data-panel="preferencias"
+    hidden
+>
 
-                        <section
-                            class="settings-panel"
-                            id="settingsPreferencias"
-                            data-panel="preferencias"
-                            hidden
-                        >
+    <div class="settings-panel-header">
 
-                            <div class="settings-panel-header">
+        <div class="settings-panel-icon">
+            <i data-lucide="sliders-horizontal"></i>
+        </div>
 
-                                <div class="settings-panel-icon">
-                                    <i data-lucide="sliders-horizontal"></i>
-                                </div>
+        <div>
+            <span>Experiencia</span>
 
-                                <div>
-                                    <span>Experiencia</span>
+            <h3>Preferencias</h3>
 
-                                    <h3>Preferencias</h3>
+            <p>
+                Personaliza el comportamiento y la experiencia
+                general dentro de TecnoSula.
+            </p>
+        </div>
 
-                                    <p>
-                                        Personaliza el comportamiento
-                                        general de TecnoSula.
-                                    </p>
-                                </div>
+    </div>
 
-                            </div>
+    <form
+        class="preferences-form"
+        id="preferencesForm"
+    >
 
-                            <div class="settings-placeholder">
+        <!-- OPCIONES GENERALES -->
+        <div class="settings-options-list">
 
-                                <div class="settings-placeholder-icon">
-                                    <i data-lucide="panel-top"></i>
-                                </div>
+            <!-- ANIMACIONES -->
+            <div class="settings-option">
 
-                                <div>
-                                    <strong>
-                                        Preferencias preparadas
-                                    </strong>
+                <div class="settings-option-information">
 
-                                    <p>
-                                        Aquí configuraremos las animaciones,
-                                        mensajes y página de inicio.
-                                    </p>
-                                </div>
+                    <div class="settings-option-icon">
+                        <i data-lucide="sparkles"></i>
+                    </div>
 
-                            </div>
+                    <div>
+                        <strong>
+                            Animaciones del sistema
+                        </strong>
 
-                        </section>
+                        <p>
+                            Activa las transiciones, movimientos y efectos
+                            visuales disponibles en TecnoSula.
+                        </p>
+                    </div>
 
+                </div>
+
+                <label class="settings-switch">
+
+                    <input
+                        type="checkbox"
+                        id="preferenciaAnimaciones"
+                    >
+
+                    <span class="settings-switch-slider"></span>
+
+                </label>
+
+            </div>
+
+            <!-- MENSAJES LATERALES -->
+            <div class="settings-option">
+
+                <div class="settings-option-information">
+
+                    <div class="settings-option-icon">
+                        <i data-lucide="message-square-heart"></i>
+                    </div>
+
+                    <div>
+                        <strong>
+                            Mensajes laterales
+                        </strong>
+
+                        <p>
+                            Muestra las tarjetas informativas y motivacionales
+                            ubicadas en la barra lateral.
+                        </p>
+                    </div>
+
+                </div>
+
+                <label class="settings-switch">
+
+                    <input
+                        type="checkbox"
+                        id="preferenciaMensajes"
+                    >
+
+                    <span class="settings-switch-slider"></span>
+
+                </label>
+
+            </div>
+
+        </div>
+
+        <!-- PÁGINA INICIAL -->
+        <div class="preferences-home-card">
+
+            <div class="preferences-home-header">
+
+                <div class="preferences-home-icon">
+                    <i data-lucide="panel-top-open"></i>
+                </div>
+
+                <div>
+                    <strong>
+                        Página de inicio
+                    </strong>
+
+                    <p>
+                        Selecciona el módulo que se abrirá
+                        después de iniciar sesión.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="settings-field full-width">
+
+                <label for="paginaInicioPreferida">
+                    Módulo inicial
+                </label>
+
+               <div
+    class="module-select"
+    id="paginaInicioCustom"
+>
+
+    <!-- SELECT REAL: SE MANTIENE PARA TU LÓGICA -->
+    <select
+        id="paginaInicioPreferida"
+        class="module-select-native"
+        tabindex="-1"
+        aria-hidden="true"
+    >
+        <option value="Dashboard.html">
+            Inicio
+        </option>
+
+        <option value="campanas.html">
+            Campañas
+        </option>
+
+        <option value="publicaciones.html">
+            Publicación y programación
+        </option>
+
+        <option value="reportes.html">
+            Reportes
+        </option>
+
+        <option value="configuracion.html">
+            Configuración
+        </option>
+    </select>
+
+    <!-- BOTÓN PRINCIPAL -->
+    <button
+        type="button"
+        class="module-select-trigger"
+        id="paginaInicioTrigger"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+    >
+        <span class="module-select-trigger-icon">
+            <i data-lucide="layout-dashboard"></i>
+        </span>
+
+        <span class="module-select-trigger-information">
+
+            <small>
+                Módulo seleccionado
+            </small>
+
+            <strong id="paginaInicioTexto">
+                Inicio
+            </strong>
+
+        </span>
+
+        <i
+            data-lucide="chevron-down"
+            class="module-select-chevron"
+        ></i>
+    </button>
+
+    <!-- OPCIONES PERSONALIZADAS -->
+    <div
+        class="module-select-menu"
+        id="paginaInicioMenu"
+        role="listbox"
+        aria-label="Seleccionar página de inicio"
+    >
+
+        <button
+            type="button"
+            class="module-select-option selected"
+            data-value="Dashboard.html"
+            data-label="Inicio"
+            data-icon="layout-dashboard"
+            role="option"
+            aria-selected="true"
+        >
+            <span class="module-select-option-icon">
+                <i data-lucide="layout-dashboard"></i>
+            </span>
+
+            <span class="module-select-option-information">
+                <strong>Inicio</strong>
+                <small>Resumen general del sistema</small>
+            </span>
+
+            <i
+                data-lucide="check"
+                class="module-select-check"
+            ></i>
+        </button>
+
+        <button
+            type="button"
+            class="module-select-option"
+            data-value="campanas.html"
+            data-label="Campañas"
+            data-icon="radio-tower"
+            role="option"
+            aria-selected="false"
+        >
+            <span class="module-select-option-icon">
+                <i data-lucide="radio-tower"></i>
+            </span>
+
+            <span class="module-select-option-information">
+                <strong>Campañas</strong>
+                <small>Gestión y seguimiento de campañas</small>
+            </span>
+
+            <i
+                data-lucide="check"
+                class="module-select-check"
+            ></i>
+        </button>
+
+        <button
+            type="button"
+            class="module-select-option"
+            data-value="publicaciones.html"
+            data-label="Publicación y programación"
+            data-icon="calendar-clock"
+            role="option"
+            aria-selected="false"
+        >
+            <span class="module-select-option-icon">
+                <i data-lucide="calendar-clock"></i>
+            </span>
+
+            <span class="module-select-option-information">
+                <strong>Publicación y programación</strong>
+                <small>Contenido y calendario digital</small>
+            </span>
+
+            <i
+                data-lucide="check"
+                class="module-select-check"
+            ></i>
+        </button>
+
+        <button
+            type="button"
+            class="module-select-option"
+            data-value="reportes.html"
+            data-label="Reportes"
+            data-icon="chart-no-axes-combined"
+            role="option"
+            aria-selected="false"
+        >
+            <span class="module-select-option-icon">
+                <i data-lucide="chart-no-axes-combined"></i>
+            </span>
+
+            <span class="module-select-option-information">
+                <strong>Reportes</strong>
+                <small>Análisis e indicadores del sistema</small>
+            </span>
+
+            <i
+                data-lucide="check"
+                class="module-select-check"
+            ></i>
+        </button>
+
+        <button
+            type="button"
+            class="module-select-option"
+            data-value="configuracion.html"
+            data-label="Configuración"
+            data-icon="settings"
+            role="option"
+            aria-selected="false"
+        >
+            <span class="module-select-option-icon">
+                <i data-lucide="settings"></i>
+            </span>
+
+            <span class="module-select-option-information">
+                <strong>Configuración</strong>
+                <small>Cuenta, seguridad y preferencias</small>
+            </span>
+
+            <i
+                data-lucide="check"
+                class="module-select-check"
+            ></i>
+        </button>
+
+    </div>
+
+</div>
+
+    </form>
+
+</section>
                         <!-- =============================================
                              SISTEMA - SOLO ADMINISTRADOR
                         ============================================== -->
@@ -946,10 +1568,11 @@
          SCRIPTS
     ====================================================== -->
 
-    <script src="JS/permisos.js?v=3"></script>
-    <script src="JS/configuracion.js?v=3"></script>
-    <script src="JS/transiciones.js?v=2"></script>
-
+  <script src="JS/permisos.js?v=3"></script>
+  <script src="JS/preferencias.js?v=1"></script>
+<script src="JS/configuracion.js?v=4"></script>
+<script src="JS/transiciones.js?v=2"></script>
 </body>
+
 
 </html>

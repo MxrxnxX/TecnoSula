@@ -12,3 +12,12 @@
 body.pagina-admin-protegida {
     visibility: hidden;
 }
+/* Oculto inicialmente para evitar que aparezca por un instante */
+.admin-only {
+    display: none !important;
+}
+
+/* Solo se muestra cuando JavaScript confirma que es administrador */
+body.usuario-administrador .admin-only {
+    display: list-item !important;
+}

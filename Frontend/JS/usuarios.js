@@ -148,14 +148,60 @@ const roleOptionButtons =
 
 const statusOptionButtons =
     document.querySelectorAll(".status-option");
+// =====================================================
+// ELEMENTOS DEL MODAL DE DESACTIVACIÓN
+// =====================================================
 
+const deactivateUserModal =
+    document.getElementById(
+        "deactivateUserModal"
+    );
+
+const closeDeactivateUserModalButton =
+    document.getElementById(
+        "closeDeactivateUserModal"
+    );
+
+const cancelDeactivateUserButton =
+    document.getElementById(
+        "cancelDeactivateUserButton"
+    );
+
+const confirmDeactivateUserButton =
+    document.getElementById(
+        "confirmDeactivateUserButton"
+    );
+
+const deactivateUserName =
+    document.getElementById(
+        "deactivateUserName"
+    );
+
+const deactivateUserEmail =
+    document.getElementById(
+        "deactivateUserEmail"
+    );
+
+const deactivateUserInitials =
+    document.getElementById(
+        "deactivateUserInitials"
+    );
+
+const deactivateUserMessage =
+    document.getElementById(
+        "deactivateUserMessage"
+    );
     let users = [];
     let userFormMode = "edit";
+    let pendingDeactivateUser = null;
 
     // Ocultar el modal al cargar la página
     if (editUserModal) {
         editUserModal.hidden = true;
     }
+    if (deactivateUserModal) {
+    deactivateUserModal.hidden = true;
+}
 
     // =====================================================
     // ICONOS
@@ -1394,55 +1440,298 @@ async function createUser(event) {
     // DESACTIVAR USUARIO
     // =====================================================
 
-    async function deactivateUser(idUsuario) {
-        const confirmed = window.confirm(
-            "¿Deseas desactivar este usuario?"
+   // =====================================================
+// MENSAJES DEL MODAL DE DESACTIVACIÓN
+// =====================================================
+
+function showDeactivateMessage(
+    message,
+    type = ""
+) {
+    if (!deactivateUserMessage) {
+        return;
+    }
+
+    deactivateUserMessage.textContent =
+        message;
+
+    deactivateUserMessage.className =
+        "deactivate-user-message";
+
+    if (type) {
+        deactivateUserMessage.classList.add(
+            type
+        );
+    }
+}
+
+// =====================================================
+// ESTADO DE CARGA DEL BOTÓN
+// =====================================================
+
+function setDeactivateLoading(isLoading) {
+    if (!confirmDeactivateUserButton) {
+        return;
+    }
+
+    confirmDeactivateUserButton.disabled =
+        isLoading;
+
+    cancelDeactivateUserButton.disabled =
+        isLoading;
+
+    closeDeactivateUserModalButton.disabled =
+        isLoading;
+
+    confirmDeactivateUserButton.innerHTML =
+        isLoading
+            ? `
+                <i data-lucide="loader-circle"></i>
+                Desactivando...
+            `
+            : `
+                <i data-lucide="user-x"></i>
+                Desactivar usuario
+            `;
+
+    renderIcons();
+}
+
+// =====================================================
+// ABRIR MODAL DE DESACTIVACIÓN
+// =====================================================
+
+function openDeactivateUserModal(idUsuario) {
+    const selectedUser =
+        users.find(user => {
+            const userId =
+                getUserProperty(
+                    user,
+                    "idUsuario",
+                    "IdUsuario"
+                );
+
+            return String(userId) ===
+                String(idUsuario);
+        });
+
+    if (!selectedUser) {
+        console.error(
+            "No se encontró el usuario seleccionado."
         );
 
-        if (!confirmed) {
+        return;
+    }
+
+    const nombre =
+        getUserProperty(
+            selectedUser,
+            "nombre",
+            "Nombre"
+        );
+
+    const apellido =
+        getUserProperty(
+            selectedUser,
+            "apellido",
+            "Apellido"
+        );
+
+    const correo =
+        getUserProperty(
+            selectedUser,
+            "correo",
+            "Correo"
+        );
+
+    const nombreCompleto =
+        `${nombre} ${apellido}`.trim() ||
+        "Usuario TecnoSula";
+
+    pendingDeactivateUser = {
+        idUsuario,
+        nombre: nombreCompleto,
+        correo
+    };
+
+    if (deactivateUserName) {
+        deactivateUserName.textContent =
+            nombreCompleto;
+    }
+
+    if (deactivateUserEmail) {
+        deactivateUserEmail.textContent =
+            correo || "Sin correo registrado";
+    }
+
+    if (deactivateUserInitials) {
+        deactivateUserInitials.textContent =
+            getInitials(nombreCompleto);
+    }
+
+    showDeactivateMessage("");
+    setDeactivateLoading(false);
+
+    deactivateUserModal.hidden = false;
+
+    deactivateUserModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    requestAnimationFrame(() => {
+        deactivateUserModal.classList.add(
+            "show"
+        );
+    });
+
+    document.body.style.overflow =
+        "hidden";
+
+    renderIcons();
+
+    window.setTimeout(() => {
+        cancelDeactivateUserButton?.focus();
+    }, 100);
+}
+
+// =====================================================
+// CERRAR MODAL DE DESACTIVACIÓN
+// =====================================================
+
+function closeDeactivateModal() {
+    if (
+        !deactivateUserModal ||
+        confirmDeactivateUserButton?.disabled
+    ) {
+        return;
+    }
+
+    deactivateUserModal.classList.remove(
+        "show"
+    );
+
+    deactivateUserModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    window.setTimeout(() => {
+        deactivateUserModal.hidden = true;
+        pendingDeactivateUser = null;
+        showDeactivateMessage("");
+    }, 220);
+
+    document.body.style.overflow =
+        sidebar?.classList.contains("open")
+            ? "hidden"
+            : "";
+}
+
+// =====================================================
+// CONFIRMAR DESACTIVACIÓN
+// =====================================================
+
+async function deactivateUser() {
+    if (!pendingDeactivateUser?.idUsuario) {
+        return;
+    }
+
+    const {
+        idUsuario,
+        nombre,
+        correo
+    } = pendingDeactivateUser;
+
+    showDeactivateMessage(
+        "Procesando la desactivación..."
+    );
+
+    setDeactivateLoading(true);
+
+    try {
+        const response = await fetch(
+            `${USERS_API}/${idUsuario}`,
+            {
+                method: "DELETE",
+
+                headers: {
+                    Accept: "application/json",
+                    Authorization:
+                        `Bearer ${token}`
+                }
+            }
+        );
+
+        if (handleAuthorizationError(response)) {
             return;
         }
 
-        try {
-            const response = await fetch(
-                `${USERS_API}/${idUsuario}`,
-                {
-                    method: "DELETE",
-                    headers: {
-                        Accept: "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
+        const result =
+            await readResponse(response);
 
-            if (handleAuthorizationError(response)) {
-                return;
-            }
-
-            const result = await readResponse(response);
-
-            if (!response.ok) {
-                throw new Error(
-                    result.mensaje ||
-                    "No fue posible desactivar el usuario."
-                );
-            }
-
-            alert(
+        if (!response.ok) {
+            throw new Error(
                 result.mensaje ||
-                "Usuario desactivado correctamente."
+                "No fue posible desactivar el usuario."
             );
-
-            await loadUsers();
-        } catch (error) {
-            console.error(
-                "Error al desactivar usuario:",
-                error
-            );
-
-            alert(error.message);
         }
+
+        showDeactivateMessage(
+            result.mensaje ||
+            "Usuario desactivado correctamente.",
+            "success"
+        );
+
+        window.TecnoSulaNotifications
+            ?.agregar({
+                titulo:
+                    "Usuario desactivado",
+
+                mensaje:
+                    `El acceso de "${nombre}" fue desactivado correctamente.`,
+
+                tipo:
+                    "warning",
+
+                icono:
+                    "user-x",
+
+                categoria:
+                    "Gestión de usuarios",
+
+                iconoCategoria:
+                    "users",
+
+                accion:
+                    "Ver usuarios",
+
+                enlace:
+                    "usuarios.html"
+            });
+
+        await loadUsers();
+
+        window.setTimeout(() => {
+            setDeactivateLoading(false);
+            closeDeactivateModal();
+        }, 900);
+
+    } catch (error) {
+        console.error(
+            "Error al desactivar usuario:",
+            error
+        );
+
+        showDeactivateMessage(
+            error.message ||
+            "No fue posible desactivar el usuario.",
+            "error"
+        );
+
+        setDeactivateLoading(false);
     }
+}
 
     // =====================================================
     // SIDEBAR
@@ -1576,9 +1865,9 @@ document.addEventListener(
                 return;
             }
 
-            if (action === "deactivate") {
-                deactivateUser(userId);
-            }
+           if (action === "deactivate") {
+    openDeactivateUserModal(userId);
+}
         }
     );
 function saveUser(event) {
@@ -1640,6 +1929,36 @@ newUserButton?.addEventListener(
             }
         }
     );
+    // =====================================================
+// EVENTOS DEL MODAL DE DESACTIVACIÓN
+// =====================================================
+
+confirmDeactivateUserButton?.addEventListener(
+    "click",
+    deactivateUser
+);
+
+cancelDeactivateUserButton?.addEventListener(
+    "click",
+    closeDeactivateModal
+);
+
+closeDeactivateUserModalButton?.addEventListener(
+    "click",
+    closeDeactivateModal
+);
+
+deactivateUserModal?.addEventListener(
+    "click",
+    event => {
+        if (
+            event.target ===
+            deactivateUserModal
+        ) {
+            closeDeactivateModal();
+        }
+    }
+);
 
     // =====================================================
     // CERRAR SESIÓN
@@ -1673,6 +1992,13 @@ newUserButton?.addEventListener(
     )
 ) {
     closeUserStatusFilter();
+    return;
+}
+if (
+    deactivateUserModal &&
+    deactivateUserModal.hidden === false
+) {
+    closeDeactivateModal();
     return;
 }
 

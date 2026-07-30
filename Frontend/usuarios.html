@@ -22,7 +22,7 @@
 
 <link
     rel="stylesheet"
-    href="Css/usuarios.css?v=9"
+    href="Css/usuarios.css?v=10"
 >
 <link
     rel="stylesheet"
@@ -975,14 +975,153 @@
             </div>
 
         </div>
+<!-- =====================================================
+     MODAL PARA DESACTIVAR USUARIO
+====================================================== -->
 
+<div
+    class="deactivate-user-overlay"
+    id="deactivateUserModal"
+    aria-hidden="true"
+    hidden
+>
+    <div
+        class="deactivate-user-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="deactivateUserTitle"
+        aria-describedby="deactivateUserDescription"
+    >
+        <!-- ENCABEZADO -->
+
+        <div class="deactivate-user-header">
+
+            <div class="deactivate-user-warning-icon">
+                <i data-lucide="user-x"></i>
+            </div>
+
+            <button
+                class="deactivate-user-close"
+                id="closeDeactivateUserModal"
+                type="button"
+                aria-label="Cerrar confirmación"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
+        <!-- CONTENIDO -->
+
+        <div class="deactivate-user-content">
+
+            <span class="deactivate-user-eyebrow">
+                Confirmación administrativa
+            </span>
+
+            <h2 id="deactivateUserTitle">
+                Desactivar usuario
+            </h2>
+
+            <p id="deactivateUserDescription">
+                Esta acción impedirá que el usuario pueda iniciar
+                sesión y acceder a TecnoSula.
+            </p>
+
+            <!-- USUARIO SELECCIONADO -->
+
+            <div class="deactivate-user-profile">
+
+                <div
+                    class="deactivate-user-avatar"
+                    id="deactivateUserInitials"
+                >
+                    US
+                </div>
+
+                <div class="deactivate-user-information">
+
+                    <span>
+                        Usuario seleccionado
+                    </span>
+
+                    <strong id="deactivateUserName">
+                        Cargando usuario...
+                    </strong>
+
+                    <small id="deactivateUserEmail">
+                        Cargando correo...
+                    </small>
+
+                </div>
+
+                <div class="deactivate-user-status">
+                    <span></span>
+                    Activo
+                </div>
+
+            </div>
+
+            <!-- ADVERTENCIA -->
+
+            <div class="deactivate-user-notice">
+
+                <div>
+                    <i data-lucide="triangle-alert"></i>
+                </div>
+
+                <p>
+                    El usuario perderá el acceso inmediatamente,
+                    pero su información y actividad permanecerán
+                    almacenadas en el sistema.
+                </p>
+
+            </div>
+
+            <!-- MENSAJE DINÁMICO -->
+
+            <div
+                class="deactivate-user-message"
+                id="deactivateUserMessage"
+                aria-live="polite"
+            ></div>
+
+        </div>
+
+        <!-- ACCIONES -->
+
+        <div class="deactivate-user-actions">
+
+            <button
+                class="deactivate-cancel-button"
+                id="cancelDeactivateUserButton"
+                type="button"
+            >
+                <i data-lucide="arrow-left"></i>
+                Cancelar
+            </button>
+
+            <button
+                class="deactivate-confirm-button"
+                id="confirmDeactivateUserButton"
+                type="button"
+            >
+                <i data-lucide="user-x"></i>
+                Desactivar usuario
+            </button>
+
+        </div>
+
+    </div>
+</div>
     </div>
 
 <script src="JS/api.js"></script>
 <script src="JS/permisos.js?v=3"></script>
 <script src="JS/transiciones.js?v=2"></script>
 <script src="JS/notificaciones.js?v=2"></script>
-<script src="JS/usuarios.js?v=8"></script>
+<script src="JS/usuarios.js?v=9"></script>
+<script src="JS/preferencias.js?v=1"></script>
 </body>
 
 
