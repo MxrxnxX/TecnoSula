@@ -15,10 +15,13 @@
         rel="stylesheet"
         href="Css/Dashboard.css?v=4"
     >
-
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+>
     <link
         rel="stylesheet"
-        href="Css/reportes.css?v=1"
+        href="Css/reportes.css?v=6"
     >
 
     <link
@@ -145,17 +148,42 @@
                 </nav>
 
             </div>
+            <!-- TARJETA LATERAL DE REPORTES -->
+
+<article class="sidebar-advertisement">
+
+    <div class="advertisement-icon">
+        <i data-lucide="chart-no-axes-combined"></i>
+    </div>
+
+    <span>ANÁLISIS ESTRATÉGICO</span>
+
+    <h3>
+        Convierte datos en decisiones.
+    </h3>
+
+    <p>
+        Analiza campañas, publicaciones y presupuestos
+        para tomar decisiones con mayor claridad.
+    </p>
+
+    <div class="advertisement-decoration"></div>
+
+</article>
 
             <div class="sidebar-footer">
 
                 <div class="employee-profile">
 
-                    <div class="employee-avatar">
-                        <span id="employeeInitials">
-                            EM
-                        </span>
-                    </div>
+                   <div class="employee-avatar">
 
+    <span id="employeeInitials">
+        EM
+    </span>
+
+    <div class="online-point"></div>
+
+</div>
                     <div class="employee-data">
                         <strong id="employeeName">
                             Empleado
@@ -240,90 +268,139 @@
                     </div>
 
                 </section>
-<!-- FILTROS -->
+                <!-- FILTROS AUTOMÁTICOS -->
 <section class="reports-filters">
 
+    <!-- FECHA INICIAL -->
     <div class="filter-field">
+
         <label for="fechaInicio">
             Fecha inicial
         </label>
 
-        <input
-            type="date"
-            id="fechaInicio"
-        >
+        <div class="filter-control date-filter-control">
+
+            <i
+                data-lucide="calendar-days"
+                class="filter-control-icon"
+            ></i>
+
+            <input
+                type="text"
+                id="fechaInicio"
+                placeholder="Seleccionar fecha"
+                autocomplete="off"
+            >
+
+            <button
+                type="button"
+                id="limpiarFechaInicio"
+                class="date-clear-button"
+                aria-label="Borrar fecha inicial"
+                title="Borrar fecha"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
     </div>
 
+    <!-- FECHA FINAL -->
     <div class="filter-field">
+
         <label for="fechaFin">
             Fecha final
         </label>
 
-        <input
-            type="date"
-            id="fechaFin"
-        >
+        <div class="filter-control date-filter-control">
+
+            <i
+                data-lucide="calendar-days"
+                class="filter-control-icon"
+            ></i>
+
+            <input
+                type="text"
+                id="fechaFin"
+                placeholder="Seleccionar fecha"
+                autocomplete="off"
+            >
+
+            <button
+                type="button"
+                id="limpiarFechaFin"
+                class="date-clear-button"
+                aria-label="Borrar fecha final"
+                title="Borrar fecha"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
     </div>
 
-    <div class="filter-field">
-        <label for="estadoCampana">
-            Estado de campaña
-        </label>
+  <div
+    class="campaign-state-filter"
+    role="group"
+    aria-label="Filtrar por estado de campaña"
+>
+    <button
+        type="button"
+        class="state-filter-button active"
+        data-estado=""
+    >
+        Todos
+    </button>
 
-        <select id="estadoCampana">
-            <option value="">
-                Todos
-            </option>
+    <button
+        type="button"
+        class="state-filter-button"
+        data-estado="Activa"
+    >
+        Activas
+    </button>
 
-            <option value="Activa">
-                Activa
-            </option>
+    <button
+        type="button"
+        class="state-filter-button"
+        data-estado="Pausada"
+    >
+        Pausadas
+    </button>
 
-            <option value="Finalizada">
-                Finalizada
-            </option>
+    <button
+        type="button"
+        class="state-filter-button"
+        data-estado="Finalizada"
+    >
+        Finalizadas
+    </button>
+</div>
 
-            <option value="Cancelada">
-                Cancelada
-            </option>
-        </select>
-    </div>
+  
 
+    <!-- EXPORTACIONES -->
     <div class="filter-actions">
 
         <button
             type="button"
-            id="aplicarFiltros"
-            class="filter-primary-button"
+            id="exportarExcel"
+            class="filter-excel-button"
         >
-            <i data-lucide="filter"></i>
-            Aplicar
+            <i data-lucide="file-spreadsheet"></i>
+            Exportar Excel
         </button>
 
         <button
             type="button"
-            id="limpiarFiltros"
-            class="filter-secondary-button"
+            id="exportarPdf"
+            class="filter-pdf-button"
         >
-            <i data-lucide="rotate-ccw"></i>
-            Limpiar
+            <i data-lucide="file-text"></i>
+            Exportar PDF
         </button>
-        <button
-    type="button"
-    id="exportarExcel"
-    class="filter-excel-button"
->
-    <i data-lucide="file-spreadsheet"></i>
-    Exportar Excel
-</button>
-<button
-    type="button"
-    id="exportarPdf"
-    class="filter-pdf-button"
->
-    <i data-lucide="file-text"></i>
-    Exportar PDF
-</button>
 
     </div>
 
@@ -434,9 +511,17 @@
 
     </div>
 
-    <script src="JS/permisos.js?v=3"></script>
-    <script src="JS/reportes.js?v=1"></script>
-    <script src="JS/transiciones.js?v=2"></script>
+<script src="JS/permisos.js?v=3"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"
+></script>
+
+<script src="JS/reportes.js?v=5"></script>
+
+<script src="JS/transiciones.js?v=2"></script>
 
 </body>
 

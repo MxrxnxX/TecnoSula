@@ -2,9 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
     "use strict";
 
     // =====================================================
-    // PROTEGER LA PÁGINA
+    // CONFIGURACIÓN
     // =====================================================
 
+    const API_BASE_URL = "http://localhost:5208/api";
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -37,6 +38,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const publicacionesPorRedElement =
         document.getElementById("publicacionesPorRed");
 
+    const fechaInicioElement =
+        document.getElementById("fechaInicio");
+
+    const fechaFinElement =
+        document.getElementById("fechaFin");
+
+    const limpiarFechaInicioButton =
+    document.getElementById("limpiarFechaInicio");
+
+const limpiarFechaFinButton =
+    document.getElementById("limpiarFechaFin");
+
+const estadoCampanaButtons =
+    document.querySelectorAll(
+        ".state-filter-button"
+    );
+
+let estadoCampanaSeleccionado = "";
+
+let fechaInicioPicker = null;
+let fechaFinPicker = null;
+let temporizadorFiltros = null;
+
+    const exportarExcelButton =
+        document.getElementById("exportarExcel");
+
+    const exportarPdfButton =
+        document.getElementById("exportarPdf");
+
     const sidebar =
         document.getElementById("sidebar");
 
@@ -51,24 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const logoutButton =
         document.getElementById("logoutButton");
-        const fechaInicioElement =
-     document.getElementById("fechaInicio");
 
-    const fechaFinElement =
-     document.getElementById("fechaFin");
+    const employeeNameElement =
+        document.getElementById("employeeName");
 
-    const estadoCampanaElement =
-     document.getElementById("estadoCampana");
-
-    const aplicarFiltrosButton =
-     document.getElementById("aplicarFiltros");
-
-    const limpiarFiltrosButton =
-     document.getElementById("limpiarFiltros");
-     const exportarExcelButton =
-    document.getElementById("exportarExcel");
-    const exportarPdfButton =
-    document.getElementById("exportarPdf");
+    const employeeInitialsElement =
+        document.getElementById("employeeInitials");
 
     // =====================================================
     // ICONOS
@@ -84,6 +102,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     renderIcons();
+
+    // =====================================================
+    // INFORMACIÓN DEL USUARIO
+    // =====================================================
+
+    function cargarInformacionUsuario() {
+        const nombre =
+            localStorage.getItem("nombre") ||
+            localStorage.getItem("userName") ||
+            "Empleado";
+
+        if (employeeNameElement) {
+            employeeNameElement.textContent = nombre;
+        }
+
+        if (employeeInitialsElement) {
+            const iniciales = nombre
+                .trim()
+                .split(/\s+/)
+                .slice(0, 2)
+                .map(parte => parte.charAt(0).toUpperCase())
+                .join("");
+
+            employeeInitialsElement.textContent =
+                iniciales || "EM";
+        }
+    }
 
     // =====================================================
     // MENÚ LATERAL
@@ -121,57 +166,293 @@ document.addEventListener("DOMContentLoaded", () => {
     // =====================================================
 
     function formatearColones(valor) {
-        return new Intl.NumberFormat(
-            "es-CR",
-            {
-                style: "currency",
-                currency: "CRC",
-                minimumFractionDigits: 2
-            }
-        ).format(valor ?? 0);
+        return new Intl.NumberFormat("es-CR", {
+            style: "currency",
+            currency: "CRC",
+            minimumFractionDigits: 2
+        }).format(Number(valor) || 0);
     }
 
     // =====================================================
-    // CARGAR RESUMEN
+    // FILTROS
     // =====================================================
 
-    async function cargarResumen() {
-        try {
-            const respuesta = await fetch(
-                "http://localhost:5208/api/Dashboard/resumen",
-                {
-                    method: "GET",
-                    headers: {
-                        Accept: "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
+    function validarFechas() {
+        const fechaInicio =
+            fechaInicioElement?.value;
+
+        const fechaFin =
+            fechaFinElement?.value;
+
+        if (
+            fechaInicio &&
+            fechaFin &&
+            fechaInicio > fechaFin
+        ) {
+            alert(
+                "La fecha inicial no puede ser mayor que la fecha final."
+            );
+
+            return false;
+        }
+
+        return true;
+    }
+
+    function obtenerParametrosFiltros() {
+    const parametros =
+        new URLSearchParams();
+
+    const fechaInicio =
+        fechaInicioElement?.value;
+
+    const fechaFin =
+        fechaFinElement?.value;
+
+    if (fechaInicio) {
+        parametros.append(
+            "fechaInicio",
+            fechaInicio
+        );
+    }
+
+    if (fechaFin) {
+        parametros.append(
+            "fechaFin",
+            fechaFin
+        );
+    }
+
+    if (estadoCampanaSeleccionado) {
+        parametros.append(
+            "estadoCampana",
+            estadoCampanaSeleccionado
+        );
+    }
+
+    return parametros;
+}
+// =====================================================
+// APLICACIÓN AUTOMÁTICA DE FILTROS
+// =====================================================
+
+function programarAplicacionAutomatica() {
+    clearTimeout(temporizadorFiltros);
+
+    temporizadorFiltros = setTimeout(
+        () => {
+            cargarResumenFiltrado();
+        },
+        250
+    );
+}
+// =====================================================
+// CALENDARIOS PERSONALIZADOS
+// =====================================================
+
+function inicializarCalendarios() {
+    if (typeof flatpickr !== "function") {
+        console.error(
+            "Flatpickr no está disponible."
+        );
+
+        return;
+    }
+
+    const localeEspanol =
+        window.flatpickr?.l10ns?.es ||
+        "default";
+
+    const configuracionBase = {
+        locale: localeEspanol,
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "d/m/Y",
+        allowInput: false,
+        disableMobile: true,
+        monthSelectorType: "static",
+        animate: true
+    };
+
+    fechaInicioPicker = flatpickr(
+        fechaInicioElement,
+        {
+            ...configuracionBase,
+
+            onChange(fechasSeleccionadas) {
+                const fecha =
+                    fechasSeleccionadas[0] || null;
+
+                fechaFinPicker?.set(
+                    "minDate",
+                    fecha
+                );
+
+                actualizarBotonesLimpiarFecha();
+                programarAplicacionAutomatica();
+            }
+        }
+    );
+
+    fechaFinPicker = flatpickr(
+        fechaFinElement,
+        {
+            ...configuracionBase,
+
+            onChange(fechasSeleccionadas) {
+                const fecha =
+                    fechasSeleccionadas[0] || null;
+
+                fechaInicioPicker?.set(
+                    "maxDate",
+                    fecha
+                );
+
+                actualizarBotonesLimpiarFecha();
+                programarAplicacionAutomatica();
+            }
+        }
+    );
+}
+function actualizarBotonesLimpiarFecha() {
+    limpiarFechaInicioButton?.classList.toggle(
+        "visible",
+        Boolean(fechaInicioElement?.value)
+    );
+
+    limpiarFechaFinButton?.classList.toggle(
+        "visible",
+        Boolean(fechaFinElement?.value)
+    );
+}
+
+limpiarFechaInicioButton?.addEventListener(
+    "click",
+    () => {
+        fechaInicioPicker?.clear();
+
+        fechaFinPicker?.set(
+            "minDate",
+            null
+        );
+
+        actualizarBotonesLimpiarFecha();
+        programarAplicacionAutomatica();
+    }
+);
+
+limpiarFechaFinButton?.addEventListener(
+    "click",
+    () => {
+        fechaFinPicker?.clear();
+
+        fechaInicioPicker?.set(
+            "maxDate",
+            null
+        );
+
+        actualizarBotonesLimpiarFecha();
+        programarAplicacionAutomatica();
+    }
+);
+
+// =====================================================
+// ESTADOS DE CAMPAÑA
+// =====================================================
+
+estadoCampanaButtons.forEach(button => {
+    button.addEventListener(
+        "click",
+        () => {
+            estadoCampanaButtons.forEach(
+                item => {
+                    item.classList.remove("active");
                 }
             );
 
-            if (!respuesta.ok) {
-                throw new Error(
-                    `Error al cargar resumen: ${respuesta.status}`
-                );
+            button.classList.add("active");
+
+            estadoCampanaSeleccionado =
+                button.dataset.estado || "";
+
+            programarAplicacionAutomatica();
+        }
+    );
+});
+    // =====================================================
+    // PETICIONES
+    // =====================================================
+
+    async function realizarPeticionJson(url) {
+        const respuesta = await fetch(url, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`
             }
+        });
 
-            const resumen = await respuesta.json();
+        if (!respuesta.ok) {
+            const mensaje =
+                await respuesta.text();
 
+            throw new Error(
+                mensaje ||
+                `Error HTTP ${respuesta.status}`
+            );
+        }
+
+        return respuesta.json();
+    }
+
+    // =====================================================
+    // ACTUALIZAR TARJETAS
+    // =====================================================
+
+    function actualizarResumen(resumen) {
+        if (totalCampanasElement) {
             totalCampanasElement.textContent =
                 resumen.totalCampanas ?? 0;
+        }
 
+        if (totalPublicacionesElement) {
             totalPublicacionesElement.textContent =
                 resumen.totalPublicaciones ?? 0;
+        }
 
+        if (publicacionesProgramadasElement) {
             publicacionesProgramadasElement.textContent =
                 resumen.publicacionesProgramadas ?? 0;
+        }
 
+        if (presupuestoTotalElement) {
             presupuestoTotalElement.textContent =
                 formatearColones(
                     resumen.presupuestoTotal
                 );
+        }
+
+        if (progresoPromedioElement) {
+            const progreso =
+                Number(resumen.progresoPromedio) || 0;
 
             progresoPromedioElement.textContent =
-                `${resumen.progresoPromedio ?? 0}%`;
+                `${progreso.toFixed(0)}%`;
+        }
+    }
+
+    // =====================================================
+    // CARGAR RESUMEN GENERAL
+    // =====================================================
+
+    async function cargarResumen() {
+        try {
+            const resumen =
+                await realizarPeticionJson(
+                    `${API_BASE_URL}/Dashboard/resumen`
+                );
+
+            actualizarResumen(resumen);
 
         } catch (error) {
             console.error(
@@ -180,101 +461,45 @@ document.addEventListener("DOMContentLoaded", () => {
             );
         }
     }
+
+    // =====================================================
+    // CARGAR RESUMEN FILTRADO
+    // =====================================================
+
     async function cargarResumenFiltrado() {
-    try {
-        const parametros =
-            new URLSearchParams();
-
-        const fechaInicio =
-            fechaInicioElement?.value;
-
-        const fechaFin =
-            fechaFinElement?.value;
-
-        const estadoCampana =
-            estadoCampanaElement?.value;
-
-        if (fechaInicio) {
-            parametros.append(
-                "fechaInicio",
-                fechaInicio
-            );
+        if (!validarFechas()) {
+            return;
         }
 
-        if (fechaFin) {
-            parametros.append(
-                "fechaFin",
-                fechaFin
+        try {
+            const parametros =
+                obtenerParametrosFiltros();
+
+            const url =
+                `${API_BASE_URL}/Dashboard/resumen-filtrado` +
+                (
+                    parametros.toString()
+                        ? `?${parametros.toString()}`
+                        : ""
+                );
+
+            const resumen =
+                await realizarPeticionJson(url);
+
+            actualizarResumen(resumen);
+
+        } catch (error) {
+            console.error(
+                "No se pudieron aplicar los filtros:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "No se pudieron aplicar los filtros."
             );
         }
-
-        if (estadoCampana) {
-            parametros.append(
-                "estadoCampana",
-                estadoCampana
-            );
-        }
-
-        const url =
-            "http://localhost:5208/api/Dashboard/resumen-filtrado" +
-            (
-                parametros.toString()
-                    ? `?${parametros.toString()}`
-                    : ""
-            );
-
-        const respuesta = await fetch(
-            url,
-            {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        if (!respuesta.ok) {
-            const mensaje =
-                await respuesta.text();
-
-            throw new Error(
-                mensaje ||
-                `Error al aplicar filtros: ${respuesta.status}`
-            );
-        }
-
-        const resumen =
-            await respuesta.json();
-
-        totalCampanasElement.textContent =
-            resumen.totalCampanas ?? 0;
-
-        totalPublicacionesElement.textContent =
-            resumen.totalPublicaciones ?? 0;
-
-        publicacionesProgramadasElement.textContent =
-            resumen.publicacionesProgramadas ?? 0;
-
-        presupuestoTotalElement.textContent =
-            formatearColones(
-                resumen.presupuestoTotal
-            );
-
-        progresoPromedioElement.textContent =
-            `${resumen.progresoPromedio ?? 0}%`;
-
-    } catch (error) {
-        console.error(
-            "No se pudieron aplicar los filtros:",
-            error
-        );
-
-        alert(
-            "No se pudieron aplicar los filtros. Revisa las fechas seleccionadas."
-        );
     }
-}
 
     // =====================================================
     // CAMPAÑAS POR ESTADO
@@ -282,49 +507,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function cargarCampanasPorEstado() {
         try {
-            const respuesta = await fetch(
-                "http://localhost:5208/api/Dashboard/campanas-por-estado",
-                {
-                    method: "GET",
-                    headers: {
-                        Accept: "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-
-            if (!respuesta.ok) {
-                throw new Error(
-                    `Error al cargar campañas: ${respuesta.status}`
+            const datos =
+                await realizarPeticionJson(
+                    `${API_BASE_URL}/Dashboard/campanas-por-estado`
                 );
-            }
 
-            const datos = await respuesta.json();
-
-            if (!datos.length) {
+            if (
+                !Array.isArray(datos) ||
+                datos.length === 0
+            ) {
                 campanasPorEstadoElement.innerHTML =
                     "<p>No hay campañas registradas.</p>";
 
                 return;
             }
 
+            const cantidadMaxima = Math.max(
+                ...datos.map(
+                    item => Number(item.cantidad) || 0
+                ),
+                1
+            );
+
             campanasPorEstadoElement.innerHTML =
                 datos
                     .map(item => {
+                        const cantidad =
+                            Number(item.cantidad) || 0;
+
+                        const porcentaje =
+                            Math.max(
+                                (cantidad / cantidadMaxima) * 100,
+                                cantidad > 0 ? 4 : 0
+                            );
+
                         return `
                             <div class="chart-item">
                                 <div class="chart-item-info">
                                     <span>${item.estado}</span>
-                                    <strong>${item.cantidad}</strong>
+                                    <strong>${cantidad}</strong>
                                 </div>
 
                                 <div class="chart-bar">
                                     <div
                                         class="chart-bar-fill"
-                                        style="width: ${Math.min(
-                                            item.cantidad * 20,
-                                            100
-                                        )}%"
+                                        style="width: ${porcentaje}%"
                                     ></div>
                                 </div>
                             </div>
@@ -338,8 +565,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 error
             );
 
-            campanasPorEstadoElement.innerHTML =
-                "<p>No se pudo cargar la información.</p>";
+            if (campanasPorEstadoElement) {
+                campanasPorEstadoElement.innerHTML =
+                    "<p>No se pudo cargar la información.</p>";
+            }
         }
     }
 
@@ -349,49 +578,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function cargarPublicacionesPorRed() {
         try {
-            const respuesta = await fetch(
-                "http://localhost:5208/api/Dashboard/publicaciones-por-red",
-                {
-                    method: "GET",
-                    headers: {
-                        Accept: "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-
-            if (!respuesta.ok) {
-                throw new Error(
-                    `Error al cargar publicaciones: ${respuesta.status}`
+            const datos =
+                await realizarPeticionJson(
+                    `${API_BASE_URL}/Dashboard/publicaciones-por-red`
                 );
-            }
 
-            const datos = await respuesta.json();
-
-            if (!datos.length) {
+            if (
+                !Array.isArray(datos) ||
+                datos.length === 0
+            ) {
                 publicacionesPorRedElement.innerHTML =
                     "<p>No hay publicaciones registradas.</p>";
 
                 return;
             }
 
+            const cantidadMaxima = Math.max(
+                ...datos.map(
+                    item =>
+                        Number(
+                            item.cantidadPublicaciones
+                        ) || 0
+                ),
+                1
+            );
+
             publicacionesPorRedElement.innerHTML =
                 datos
                     .map(item => {
+                        const cantidad =
+                            Number(
+                                item.cantidadPublicaciones
+                            ) || 0;
+
+                        const porcentaje =
+                            Math.max(
+                                (cantidad / cantidadMaxima) * 100,
+                                cantidad > 0 ? 4 : 0
+                            );
+
                         return `
                             <div class="chart-item">
                                 <div class="chart-item-info">
                                     <span>${item.nombreRedSocial}</span>
-                                    <strong>${item.cantidadPublicaciones}</strong>
+                                    <strong>${cantidad}</strong>
                                 </div>
 
                                 <div class="chart-bar">
                                     <div
                                         class="chart-bar-fill"
-                                        style="width: ${Math.min(
-                                            item.cantidadPublicaciones * 20,
-                                            100
-                                        )}%"
+                                        style="width: ${porcentaje}%"
                                     ></div>
                                 </div>
                             </div>
@@ -405,321 +641,155 @@ document.addEventListener("DOMContentLoaded", () => {
                 error
             );
 
-            publicacionesPorRedElement.innerHTML =
-                "<p>No se pudo cargar la información.</p>";
+            if (publicacionesPorRedElement) {
+                publicacionesPorRedElement.innerHTML =
+                    "<p>No se pudo cargar la información.</p>";
+            }
         }
     }
-// =====================================================
-// EVENTOS DE FILTROS
-// =====================================================
-exportarExcelButton?.addEventListener(
-    "click",
-    exportarExcel
-);
 
-aplicarFiltrosButton?.addEventListener(
-    "click",
-    () => {
-        const fechaInicio =
-            fechaInicioElement?.value;
+    // =====================================================
+    // DESCARGAR ARCHIVOS
+    // =====================================================
 
-        const fechaFin =
-            fechaFinElement?.value;
-
-        if (
-            fechaInicio &&
-            fechaFin &&
-            fechaInicio > fechaFin
-        ) {
-            alert(
-                "La fecha inicial no puede ser mayor que la fecha final."
-            );
-
+    async function descargarReporte({
+        tipo,
+        boton,
+        textoGenerando,
+        icono,
+        textoBoton
+    }) {
+        if (!validarFechas()) {
             return;
         }
 
-        cargarResumenFiltrado();
+        const parametros =
+            obtenerParametrosFiltros();
+
+        const url =
+            `${API_BASE_URL}/Reportes/${tipo}` +
+            (
+                parametros.toString()
+                    ? `?${parametros.toString()}`
+                    : ""
+            );
+
+        try {
+            boton.disabled = true;
+            boton.textContent = textoGenerando;
+
+            const respuesta = await fetch(url, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (!respuesta.ok) {
+                const mensaje =
+                    await respuesta.text();
+
+                throw new Error(
+                    mensaje ||
+                    `No se pudo generar el archivo ${tipo.toUpperCase()}.`
+                );
+            }
+
+            const archivo =
+                await respuesta.blob();
+
+            const urlArchivo =
+                window.URL.createObjectURL(archivo);
+
+            const enlace =
+                document.createElement("a");
+
+            const fecha =
+                new Date()
+                    .toISOString()
+                    .slice(0, 10);
+
+            enlace.href = urlArchivo;
+            enlace.download =
+                `Reporte_Campanas_${fecha}.${tipo}`;
+
+            document.body.appendChild(enlace);
+            enlace.click();
+            enlace.remove();
+
+            window.URL.revokeObjectURL(
+                urlArchivo
+            );
+
+        } catch (error) {
+            console.error(
+                `No se pudo exportar el ${tipo.toUpperCase()}:`,
+                error
+            );
+
+            alert(
+                error.message ||
+                `No se pudo generar el archivo ${tipo.toUpperCase()}.`
+            );
+
+        } finally {
+            boton.disabled = false;
+
+            boton.innerHTML = `
+                <i data-lucide="${icono}"></i>
+                ${textoBoton}
+            `;
+
+            renderIcons();
+        }
     }
-);
 
-limpiarFiltrosButton?.addEventListener(
-    "click",
-    () => {
-        if (fechaInicioElement) {
-            fechaInicioElement.value = "";
-        }
+    // =====================================================
+    // EXPORTAR EXCEL
+    // =====================================================
 
-        if (fechaFinElement) {
-            fechaFinElement.value = "";
-        }
-
-        if (estadoCampanaElement) {
-            estadoCampanaElement.value = "";
-        }
-
-        cargarResumen();
+    async function exportarExcel() {
+        await descargarReporte({
+            tipo: "excel",
+            boton: exportarExcelButton,
+            textoGenerando: "Generando Excel...",
+            icono: "file-spreadsheet",
+            textoBoton: "Exportar Excel"
+        });
     }
-);
+
+    // =====================================================
+    // EXPORTAR PDF
+    // =====================================================
+
+    async function exportarPdf() {
+        await descargarReporte({
+            tipo: "pdf",
+            boton: exportarPdfButton,
+            textoGenerando: "Generando PDF...",
+            icono: "file-text",
+            textoBoton: "Exportar PDF"
+        });
+    }
+
+    // =====================================================
+    // EVENTOS DE LOS FILTROS
+    // =====================================================
+
+
+    exportarExcelButton?.addEventListener(
+        "click",
+        exportarExcel
+    );
+
+    exportarPdfButton?.addEventListener(
+        "click",
+        exportarPdf
+    );
+
     // =====================================================
     // CERRAR SESIÓN
     // =====================================================
-    async function exportarExcel() {
-        async function exportarPdf() {
-    try {
-        const parametros =
-            new URLSearchParams();
-
-        const fechaInicio =
-            fechaInicioElement?.value;
-
-        const fechaFin =
-            fechaFinElement?.value;
-
-        const estadoCampana =
-            estadoCampanaElement?.value;
-
-        if (
-            fechaInicio &&
-            fechaFin &&
-            fechaInicio > fechaFin
-        ) {
-            alert(
-                "La fecha inicial no puede ser mayor que la fecha final."
-            );
-
-            return;
-        }
-
-        if (fechaInicio) {
-            parametros.append(
-                "fechaInicio",
-                fechaInicio
-            );
-        }
-
-        if (fechaFin) {
-            parametros.append(
-                "fechaFin",
-                fechaFin
-            );
-        }
-
-        if (estadoCampana) {
-            parametros.append(
-                "estadoCampana",
-                estadoCampana
-            );
-        }
-
-        const url =
-            "http://localhost:5208/api/Reportes/pdf" +
-            (
-                parametros.toString()
-                    ? `?${parametros.toString()}`
-                    : ""
-            );
-
-        exportarPdfButton.disabled = true;
-
-        exportarPdfButton.textContent =
-            "Generando...";
-
-        const respuesta = await fetch(
-            url,
-            {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        if (!respuesta.ok) {
-            const mensaje =
-                await respuesta.text();
-
-            throw new Error(
-                mensaje ||
-                `Error al generar PDF: ${respuesta.status}`
-            );
-        }
-
-        const archivo =
-            await respuesta.blob();
-
-        const urlArchivo =
-            window.URL.createObjectURL(archivo);
-
-        const enlace =
-            document.createElement("a");
-
-        enlace.href = urlArchivo;
-
-        enlace.download =
-            `Reporte_Campanas_${new Date()
-                .toISOString()
-                .slice(0, 10)}.pdf`;
-
-        document.body.appendChild(enlace);
-
-        enlace.click();
-
-        enlace.remove();
-
-        window.URL.revokeObjectURL(
-            urlArchivo
-        );
-
-    } catch (error) {
-        console.error(
-            "No se pudo exportar el PDF:",
-            error
-        );
-
-        alert(
-            "No se pudo generar el archivo PDF."
-        );
-
-    } finally {
-        exportarPdfButton.disabled = false;
-
-        exportarPdfButton.innerHTML = `
-            <i data-lucide="file-text"></i>
-            Exportar PDF
-        `;
-
-        renderIcons();
-    }
-}
-    try {
-        const parametros =
-            new URLSearchParams();
-
-        const fechaInicio =
-            fechaInicioElement?.value;
-
-        const fechaFin =
-            fechaFinElement?.value;
-
-        const estadoCampana =
-            estadoCampanaElement?.value;
-
-        if (
-            fechaInicio &&
-            fechaFin &&
-            fechaInicio > fechaFin
-        ) {
-            alert(
-                "La fecha inicial no puede ser mayor que la fecha final."
-            );
-
-            return;
-        }
-
-        if (fechaInicio) {
-            parametros.append(
-                "fechaInicio",
-                fechaInicio
-            );
-        }
-
-        if (fechaFin) {
-            parametros.append(
-                "fechaFin",
-                fechaFin
-            );
-        }
-
-        if (estadoCampana) {
-            parametros.append(
-                "estadoCampana",
-                estadoCampana
-            );
-        }
-
-        const url =
-            "http://localhost:5208/api/Reportes/excel" +
-            (
-                parametros.toString()
-                    ? `?${parametros.toString()}`
-                    : ""
-            );
-
-        exportarExcelButton.disabled = true;
-        exportarExcelButton.textContent =
-            "Generando...";
-        exportarPdfButton?.addEventListener(
-            "click",
-            exportarPdf
-);  
-
-        const respuesta = await fetch(
-            url,
-            {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        if (!respuesta.ok) {
-            const mensaje =
-                await respuesta.text();
-
-            throw new Error(
-                mensaje ||
-                `Error al generar Excel: ${respuesta.status}`
-            );
-        }
-
-        const archivo =
-            await respuesta.blob();
-
-        const urlArchivo =
-            window.URL.createObjectURL(archivo);
-
-        const enlace =
-            document.createElement("a");
-
-        enlace.href = urlArchivo;
-
-        enlace.download =
-            `Reporte_Campanas_${new Date()
-                .toISOString()
-                .slice(0, 10)}.xlsx`;
-
-        document.body.appendChild(enlace);
-
-        enlace.click();
-
-        enlace.remove();
-
-        window.URL.revokeObjectURL(
-            urlArchivo
-        );
-
-    } catch (error) {
-        console.error(
-            "No se pudo exportar el Excel:",
-            error
-        );
-
-        alert(
-            "No se pudo generar el archivo Excel."
-        );
-
-    } finally {
-        exportarExcelButton.disabled = false;
-
-        exportarExcelButton.innerHTML = `
-            <i data-lucide="file-spreadsheet"></i>
-            Exportar Excel
-        `;
-
-        renderIcons();
-    }
-}
 
     logoutButton?.addEventListener(
         "click",
@@ -728,18 +798,24 @@ limpiarFiltrosButton?.addEventListener(
             localStorage.removeItem("rol");
             localStorage.removeItem("nombre");
             localStorage.removeItem("userName");
+            localStorage.removeItem("idUsuario");
+            localStorage.removeItem("correo");
 
             window.location.href = "index.html";
         }
     );
 
     // =====================================================
-    // CARGAR TODO
+    // CARGAR EL MÓDULO
     // =====================================================
 
-    Promise.all([
-        cargarResumen(),
-        cargarCampanasPorEstado(),
-        cargarPublicacionesPorRed()
-    ]);
+cargarInformacionUsuario();
+inicializarCalendarios();
+actualizarBotonesLimpiarFecha();
+
+Promise.all([
+    cargarResumen(),
+    cargarCampanasPorEstado(),
+    cargarPublicacionesPorRed()
+]);
 });

@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TecnoSula | Configuración</title>
+
+    <!-- ESTILOS GENERALES -->
+    <link
+        rel="stylesheet"
+        href="Css/Dashboard.css?v=4"
+    >
+
+    <!-- ESTILOS DEL MÓDULO -->
+    <link
+        rel="stylesheet"
+        href="Css/configuracion.css?v=3"
+    >
+
+    <!-- TRANSICIONES -->
+    <link
+        rel="stylesheet"
+        href="Css/transiciones.css?v=2"
+    >
+
+    <!-- ICONOS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- =====================================================
+             BARRA LATERAL
+        ====================================================== -->
+
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <!-- ENCABEZADO DE LA BARRA -->
+            <div class="sidebar-header">
+
+                <a
+                    href="Dashboard.html"
+                    class="brand"
+                >
+                    <div class="brand-logo">
+                        <i data-lucide="orbit"></i>
+                    </div>
+
+                    <div class="brand-text">
+                        <strong>TecnoSula</strong>
+                        <span>Campaign System</span>
+                    </div>
+                </a>
+
+                <button
+                    class="close-sidebar"
+                    id="closeSidebar"
+                    type="button"
+                    aria-label="Cerrar menú"
+                >
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <!-- NAVEGACIÓN PRINCIPAL -->
+            <div class="navigation-group">
+
+                <span class="navigation-label">
+                    Plataforma
+                </span>
+
+                <nav class="navigation">
+
+                    <!-- INICIO -->
+                    <a
+                        href="Dashboard.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="layout-dashboard"></i>
+                        </div>
+
+                        <span>Inicio</span>
+                    </a>
+
+                    <!-- CAMPAÑAS -->
+                    <a
+                        href="campanas.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="radio-tower"></i>
+                        </div>
+
+                        <span>Campañas</span>
+                    </a>
+
+                    <!-- PUBLICACIONES -->
+                    <a
+                        href="publicaciones.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="calendar-clock"></i>
+                        </div>
+
+                        <span>
+                            Publicación y programación
+                        </span>
+                    </a>
+
+                    <!-- USUARIOS - SOLO ADMINISTRADOR -->
+                    <a
+                        href="usuarios.html"
+                        class="navigation-link admin-only"
+                        id="adminUsersModule"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="users"></i>
+                        </div>
+
+                        <span>Gestión de usuarios</span>
+                    </a>
+
+                    <!-- REPORTES -->
+                    <a
+                        href="reportes.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="chart-no-axes-combined"></i>
+                        </div>
+
+                        <span>Reportes</span>
+                    </a>
+
+                    <!-- CONFIGURACIÓN -->
+                    <a
+                        href="configuracion.html"
+                        class="navigation-link active"
+                        aria-current="page"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="settings"></i>
+                        </div>
+
+                        <span>Configuración</span>
+
+                        <div class="active-line"></div>
+                    </a>
+
+                </nav>
+
+            </div>
+
+            <!-- TARJETA LATERAL -->
+            <article class="sidebar-advertisement">
+
+                <div class="advertisement-icon">
+                    <i data-lucide="sliders-horizontal"></i>
+                </div>
+
+                <span>CONTROL PERSONAL</span>
+
+                <h3>
+                    Tu espacio, a tu manera.
+                </h3>
+
+                <p>
+                    Administra tu cuenta, seguridad y preferencias
+                    desde un solo lugar.
+                </p>
+
+                <div class="advertisement-decoration"></div>
+
+            </article>
+
+            <!-- PERFIL DEL USUARIO -->
+            <div class="sidebar-footer">
+
+                <div class="employee-profile">
+
+                    <div class="employee-avatar">
+
+                        <span id="employeeInitials">
+                            EM
+                        </span>
+
+                        <div class="online-point"></div>
+
+                    </div>
+
+                    <div class="employee-data">
+
+                        <strong id="employeeName">
+                            Empleado
+                        </strong>
+
+                        <span>
+                            Gestor de campañas
+                        </span>
+
+                    </div>
+
+                    <button
+                        class="logout-button"
+                        id="logoutButton"
+                        type="button"
+                        aria-label="Cerrar sesión"
+                        title="Cerrar sesión"
+                    >
+                        <i data-lucide="log-out"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- FONDO DEL MENÚ RESPONSIVE -->
+        <div
+            class="sidebar-overlay"
+            id="sidebarOverlay"
+        ></div>
+
+        <!-- =====================================================
+             CONTENIDO PRINCIPAL
+        ====================================================== -->
+
+        <main class="main-content">
+
+            <!-- EFECTOS DE FONDO -->
+            <div class="background-effects">
+                <div class="background-grid"></div>
+                <div class="glow glow-one"></div>
+                <div class="glow glow-two"></div>
+            </div>
+
+            <!-- BARRA SUPERIOR -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        class="menu-button"
+                        id="openSidebar"
+                        type="button"
+                        aria-label="Abrir menú"
+                    >
+                        <i data-lucide="menu"></i>
+                    </button>
+
+                    <div>
+                        <span>
+                            Cuenta y preferencias
+                        </span>
+
+                        <h1>
+                            Configuración
+                        </h1>
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- CONTENIDO DE CONFIGURACIÓN -->
+            <div class="page-content">
+
+                <!-- ENCABEZADO DEL MÓDULO -->
+                <section class="settings-header">
+
+                    <div class="settings-header-content">
+
+                        <span class="settings-eyebrow">
+                            Personalización
+                        </span>
+
+                        <h2>
+                            Configuración de la cuenta
+                        </h2>
+
+                        <p>
+                            Administra tu información personal, seguridad
+                            y preferencias dentro de TecnoSula.
+                        </p>
+
+                    </div>
+
+                    <div class="settings-header-icon">
+                        <i data-lucide="settings-2"></i>
+                    </div>
+
+                </section>
+
+                <!-- DISTRIBUCIÓN DEL MÓDULO -->
+                <section class="settings-layout">
+
+                    <!-- =================================================
+                         NAVEGACIÓN INTERNA
+                    ================================================== -->
+
+                    <aside class="settings-navigation">
+
+                        <span class="settings-navigation-label">
+                            Configuración
+                        </span>
+
+                        <!-- MI PERFIL -->
+                        <button
+                            type="button"
+                            class="settings-tab active"
+                            data-section="perfil"
+                        >
+                            <div class="settings-tab-icon">
+                                <i data-lucide="user-round"></i>
+                            </div>
+
+                            <span>
+                                <strong>Mi perfil</strong>
+                                <small>Información personal</small>
+                            </span>
+
+                            <i
+                                data-lucide="chevron-right"
+                                class="settings-tab-arrow"
+                            ></i>
+                        </button>
+
+                        <!-- SEGURIDAD -->
+                        <button
+                            type="button"
+                            class="settings-tab"
+                            data-section="seguridad"
+                        >
+                            <div class="settings-tab-icon">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+
+                            <span>
+                                <strong>Seguridad</strong>
+                                <small>Contraseña y acceso</small>
+                            </span>
+
+                            <i
+                                data-lucide="chevron-right"
+                                class="settings-tab-arrow"
+                            ></i>
+                        </button>
+
+                        <!-- NOTIFICACIONES -->
+                        <button
+                            type="button"
+                            class="settings-tab"
+                            data-section="notificaciones"
+                        >
+                            <div class="settings-tab-icon">
+                                <i data-lucide="bell-ring"></i>
+                            </div>
+
+                            <span>
+                                <strong>Notificaciones</strong>
+                                <small>Alertas del sistema</small>
+                            </span>
+
+                            <i
+                                data-lucide="chevron-right"
+                                class="settings-tab-arrow"
+                            ></i>
+                        </button>
+
+                        <!-- PREFERENCIAS -->
+                        <button
+                            type="button"
+                            class="settings-tab"
+                            data-section="preferencias"
+                        >
+                            <div class="settings-tab-icon">
+                                <i data-lucide="sliders-horizontal"></i>
+                            </div>
+
+                            <span>
+                                <strong>Preferencias</strong>
+                                <small>Experiencia del sistema</small>
+                            </span>
+
+                            <i
+                                data-lucide="chevron-right"
+                                class="settings-tab-arrow"
+                            ></i>
+                        </button>
+
+                        <!-- SISTEMA - SOLO ADMINISTRADOR -->
+                        <button
+                            type="button"
+                            class="settings-tab admin-only"
+                            data-section="sistema"
+                            id="systemSettingsTab"
+                        >
+                            <div class="settings-tab-icon">
+                                <i data-lucide="server-cog"></i>
+                            </div>
+
+                            <span>
+                                <strong>Sistema</strong>
+                                <small>Administración general</small>
+                            </span>
+
+                            <i
+                                data-lucide="chevron-right"
+                                class="settings-tab-arrow"
+                            ></i>
+                        </button>
+
+                    </aside>
+
+                    <!-- =================================================
+                         CONTENIDO DE LAS SECCIONES
+                    ================================================== -->
+
+                    <div class="settings-content">
+
+                        <!-- =============================================
+                             MI PERFIL
+                        ============================================== -->
+
+                        <section
+                            class="settings-panel active"
+                            id="settingsPerfil"
+                            data-panel="perfil"
+                        >
+
+                            <div class="settings-panel-header">
+
+                                <div class="settings-panel-icon">
+                                    <i data-lucide="user-round"></i>
+                                </div>
+
+                                <div>
+                                    <span>Cuenta personal</span>
+
+                                    <h3>Mi perfil</h3>
+
+                                    <p>
+                                        Consulta y actualiza tu información
+                                        personal.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                      <!-- RESUMEN DEL USUARIO -->
+<div class="profile-overview">
+
+    <div class="profile-overview-avatar">
+        <span id="profileInitials">
+            EM
+        </span>
+
+        <div class="profile-status-point"></div>
+    </div>
+
+    <div class="profile-overview-information">
+
+        <span class="profile-overview-label">
+            Perfil activo
+        </span>
+
+        <h4 id="profileFullName">
+            Cargando usuario...
+        </h4>
+
+        <p id="profileEmail">
+            Cargando correo...
+        </p>
+
+    </div>
+
+    <div class="profile-overview-badge">
+
+        <i data-lucide="badge-check"></i>
+
+        <span id="profileRole">
+            Usuario
+        </span>
+
+    </div>
+
+</div>
+
+<!-- FORMULARIO DEL PERFIL -->
+<form
+    class="settings-form profile-form"
+    id="profileForm"
+    autocomplete="off"
+>
+
+    <!-- NOMBRE -->
+    <div class="settings-field">
+
+        <label for="perfilNombre">
+            Nombre
+        </label>
+
+        <div class="settings-input-wrapper">
+
+            <i
+                data-lucide="user-round"
+                class="settings-input-icon"
+            ></i>
+
+            <input
+                type="text"
+                id="perfilNombre"
+                name="nombre"
+                maxlength="50"
+                placeholder="Ingresa tu nombre"
+                required
+            >
+
+        </div>
+
+        <small
+            class="settings-field-error"
+            id="errorPerfilNombre"
+        ></small>
+
+    </div>
+
+    <!-- APELLIDO -->
+    <div class="settings-field">
+
+        <label for="perfilApellido">
+            Apellido
+        </label>
+
+        <div class="settings-input-wrapper">
+
+            <i
+                data-lucide="user-round"
+                class="settings-input-icon"
+            ></i>
+
+            <input
+                type="text"
+                id="perfilApellido"
+                name="apellido"
+                maxlength="70"
+                placeholder="Ingresa tu apellido"
+                required
+            >
+
+        </div>
+
+        <small
+            class="settings-field-error"
+            id="errorPerfilApellido"
+        ></small>
+
+    </div>
+
+    <!-- CORREO -->
+    <div class="settings-field">
+
+        <label for="perfilCorreo">
+            Correo electrónico
+        </label>
+
+        <div class="settings-input-wrapper">
+
+            <i
+                data-lucide="mail"
+                class="settings-input-icon"
+            ></i>
+
+            <input
+                type="email"
+                id="perfilCorreo"
+                name="correo"
+                placeholder="correo@ejemplo.com"
+                disabled
+            >
+
+        </div>
+
+        <small class="settings-field-helper">
+            El correo no puede modificarse desde esta sección.
+        </small>
+
+    </div>
+
+    <!-- TELÉFONO -->
+    <div class="settings-field">
+
+        <label for="perfilTelefono">
+            Teléfono
+        </label>
+
+        <div class="settings-input-wrapper">
+
+            <i
+                data-lucide="phone"
+                class="settings-input-icon"
+            ></i>
+
+            <input
+                type="tel"
+                id="perfilTelefono"
+                name="telefono"
+                maxlength="20"
+                placeholder="Ejemplo: 6429 4903"
+            >
+
+        </div>
+
+        <small
+            class="settings-field-error"
+            id="errorPerfilTelefono"
+        ></small>
+
+    </div>
+
+    <!-- ROL -->
+    <div class="settings-field">
+
+        <label for="perfilRol">
+            Rol
+        </label>
+
+        <div class="settings-input-wrapper">
+
+            <i
+                data-lucide="shield-check"
+                class="settings-input-icon"
+            ></i>
+
+            <input
+                type="text"
+                id="perfilRol"
+                name="rol"
+                value="Usuario"
+                disabled
+            >
+
+        </div>
+
+        <small class="settings-field-helper">
+            El rol solo puede ser modificado por un administrador.
+        </small>
+
+    </div>
+
+    <!-- ESTADO -->
+    <div class="settings-field">
+
+        <label for="perfilEstado">
+            Estado de la cuenta
+        </label>
+
+        <div class="settings-input-wrapper">
+
+            <i
+                data-lucide="circle-check-big"
+                class="settings-input-icon"
+            ></i>
+
+            <input
+                type="text"
+                id="perfilEstado"
+                name="estado"
+                value="Activo"
+                disabled
+            >
+
+        </div>
+
+        <small class="settings-field-helper">
+            Indica si tu cuenta tiene acceso al sistema.
+        </small>
+
+    </div>
+
+    <!-- ACCIONES -->
+    <div class="settings-actions full-width">
+
+        <div
+            class="profile-save-status"
+            id="profileSaveStatus"
+            aria-live="polite"
+        ></div>
+
+        <button
+            type="button"
+            class="settings-secondary-button"
+            id="restaurarPerfil"
+        >
+            <i data-lucide="rotate-ccw"></i>
+            Restaurar
+        </button>
+
+        <button
+            type="submit"
+            class="settings-primary-button"
+            id="guardarPerfil"
+        >
+            <i data-lucide="save"></i>
+            Guardar cambios
+        </button>
+
+    </div>
+
+</form>
+
+                        </section>
+
+                        <!-- =============================================
+                             SEGURIDAD
+                        ============================================== -->
+
+                        <section
+                            class="settings-panel"
+                            id="settingsSeguridad"
+                            data-panel="seguridad"
+                            hidden
+                        >
+
+                            <div class="settings-panel-header">
+
+                                <div class="settings-panel-icon">
+                                    <i data-lucide="shield-check"></i>
+                                </div>
+
+                                <div>
+                                    <span>Protección de cuenta</span>
+
+                                    <h3>Seguridad</h3>
+
+                                    <p>
+                                        Cambia tu contraseña y protege
+                                        el acceso a tu cuenta.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="settings-placeholder">
+
+                                <div class="settings-placeholder-icon">
+                                    <i data-lucide="key-round"></i>
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        Seguridad preparada
+                                    </strong>
+
+                                    <p>
+                                        Aquí implementaremos el cambio
+                                        seguro de contraseña.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                        <!-- =============================================
+                             NOTIFICACIONES
+                        ============================================== -->
+
+                        <section
+                            class="settings-panel"
+                            id="settingsNotificaciones"
+                            data-panel="notificaciones"
+                            hidden
+                        >
+
+                            <div class="settings-panel-header">
+
+                                <div class="settings-panel-icon">
+                                    <i data-lucide="bell-ring"></i>
+                                </div>
+
+                                <div>
+                                    <span>Alertas</span>
+
+                                    <h3>Notificaciones</h3>
+
+                                    <p>
+                                        Decide qué avisos deseas recibir
+                                        dentro del sistema.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="settings-placeholder">
+
+                                <div class="settings-placeholder-icon">
+                                    <i data-lucide="bell-dot"></i>
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        Notificaciones preparadas
+                                    </strong>
+
+                                    <p>
+                                        Aquí agregaremos los interruptores
+                                        para administrar tus alertas.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                        <!-- =============================================
+                             PREFERENCIAS
+                        ============================================== -->
+
+                        <section
+                            class="settings-panel"
+                            id="settingsPreferencias"
+                            data-panel="preferencias"
+                            hidden
+                        >
+
+                            <div class="settings-panel-header">
+
+                                <div class="settings-panel-icon">
+                                    <i data-lucide="sliders-horizontal"></i>
+                                </div>
+
+                                <div>
+                                    <span>Experiencia</span>
+
+                                    <h3>Preferencias</h3>
+
+                                    <p>
+                                        Personaliza el comportamiento
+                                        general de TecnoSula.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="settings-placeholder">
+
+                                <div class="settings-placeholder-icon">
+                                    <i data-lucide="panel-top"></i>
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        Preferencias preparadas
+                                    </strong>
+
+                                    <p>
+                                        Aquí configuraremos las animaciones,
+                                        mensajes y página de inicio.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                        <!-- =============================================
+                             SISTEMA - SOLO ADMINISTRADOR
+                        ============================================== -->
+
+                        <section
+                            class="settings-panel"
+                            id="settingsSistema"
+                            data-panel="sistema"
+                            hidden
+                        >
+
+                            <div class="settings-panel-header">
+
+                                <div class="settings-panel-icon">
+                                    <i data-lucide="server-cog"></i>
+                                </div>
+
+                                <div>
+                                    <span>Administración</span>
+
+                                    <h3>
+                                        Configuración del sistema
+                                    </h3>
+
+                                    <p>
+                                        Administra las opciones generales
+                                        disponibles en TecnoSula.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="settings-placeholder">
+
+                                <div class="settings-placeholder-icon">
+                                    <i data-lucide="share-2"></i>
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        Sistema preparado
+                                    </strong>
+
+                                    <p>
+                                        Aquí administraremos las redes
+                                        sociales disponibles.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- =====================================================
+         SCRIPTS
+    ====================================================== -->
+
+    <script src="JS/permisos.js?v=3"></script>
+    <script src="JS/configuracion.js?v=3"></script>
+    <script src="JS/transiciones.js?v=2"></script>
+
+</body>
+
+</html>
