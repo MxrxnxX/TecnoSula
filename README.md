@@ -1,413 +1,272 @@
+# TecnoSula
+
+<p align="center">
+  Plataforma web para la gestión centralizada de campañas de marketing, publicaciones, usuarios, reportes y actividades administrativas.
+</p>
+
+---
+
+## Descripción del proyecto
+
+**TecnoSula** es una plataforma web diseñada para facilitar la planificación, administración y seguimiento de campañas de marketing dentro de una organización.
+
+El sistema centraliza en un solo entorno la gestión de campañas, publicaciones digitales, usuarios, notificaciones, reportes y configuraciones personales. Su propósito es mejorar el control de la información, reducir procesos manuales y ofrecer una experiencia organizada para los diferentes perfiles que participan en la operación.
+
+La plataforma fue desarrollada bajo una arquitectura separada de frontend y backend, utilizando tecnologías web modernas, autenticación segura y una base de datos relacional.
+
+---
+
+## Problema que resuelve
+
+En muchas organizaciones, la información relacionada con campañas, publicaciones, responsables, presupuestos y avances se administra mediante documentos independientes o herramientas no conectadas entre sí.
+
+Esto puede provocar:
+
+- Pérdida o duplicación de información.
+- Falta de control sobre el progreso de las campañas.
+- Dificultad para identificar responsables.
+- Problemas para administrar usuarios y permisos.
+- Poca visibilidad sobre resultados y actividades recientes.
+- Falta de organización en la programación de publicaciones.
+
+TecnoSula reúne estos procesos en una plataforma centralizada, permitiendo que cada usuario acceda únicamente a las herramientas correspondientes a su rol.
+
+---
+
+## Objetivo general
+
+Desarrollar una plataforma web segura, organizada y fácil de utilizar que permita administrar campañas de marketing, publicaciones digitales, usuarios y reportes desde un sistema centralizado.
+
+---
+
+## Objetivos específicos
+
+- Centralizar la información relacionada con campañas de marketing.
+- Permitir el seguimiento del progreso, presupuesto y estado de cada campaña.
+- Facilitar la creación y programación de publicaciones digitales.
+- Administrar usuarios, roles y estados de cuenta.
+- Proteger el acceso mediante autenticación y autorización por roles.
+- Generar información útil para el análisis y la toma de decisiones.
+- Ofrecer una interfaz moderna, responsive y consistente.
+- Mantener informado al usuario mediante un centro de notificaciones.
+
+---
+
+## Módulos principales
+
+### Autenticación y acceso
+
+El sistema cuenta con un módulo de autenticación encargado de validar las credenciales y controlar el acceso a la plataforma.
+
+Incluye:
+
+- Inicio de sesión.
+- Registro de usuarios.
+- Autenticación mediante JWT.
+- Contraseñas protegidas con BCrypt.
+- Recuperación de contraseña por correo electrónico.
+- Enlaces temporales de recuperación.
+- Cambio de contraseña desde la configuración de la cuenta.
+- Control de acceso según el rol del usuario.
+
+---
+
+### Panel principal
+
+El dashboard funciona como punto de entrada al sistema y presenta una vista general de la actividad disponible para el usuario.
+
+Permite acceder rápidamente a:
+
+- Campañas.
+- Publicaciones.
+- Gestión de usuarios.
+- Reportes.
+- Notificaciones.
+- Configuración personal.
+
+La navegación y los módulos visibles cambian según los permisos del usuario autenticado.
+
+---
+
+### Gestión de campañas
+
+Este módulo permite registrar y administrar las campañas de marketing de la organización.
+
+Cada campaña puede incluir información como:
+
+- Nombre.
+- Descripción.
+- Fecha de inicio.
+- Fecha de finalización.
+- Presupuesto.
+- Responsable.
+- Progreso.
+- Estado.
+
+El sistema permite crear, consultar, editar, filtrar y eliminar campañas.
+
+También incorpora reglas de negocio, como la actualización automática del estado cuando una campaña alcanza el cien por ciento de progreso.
+
+---
+
+### Publicación y programación
+
+El módulo de publicaciones permite organizar el contenido relacionado con las campañas de marketing.
+
+Incluye funciones para:
+
+- Crear publicaciones.
+- Editar información.
+- Asociar publicaciones con campañas.
+- Seleccionar redes sociales.
+- Programar fecha y hora de publicación.
+- Administrar estados.
+- Reagendar publicaciones.
+- Cancelar programaciones.
+- Duplicar contenido.
+
+Este módulo busca facilitar la planificación digital y mantener organizada la estrategia de contenido.
+
+---
+
+### Gestión de usuarios
+
+La gestión de usuarios está disponible únicamente para administradores.
+
+Desde este módulo es posible:
+
+- Consultar los usuarios registrados.
+- Buscar usuarios por nombre o correo.
+- Filtrar cuentas por estado.
+- Registrar nuevos usuarios.
+- Editar información personal.
+- Asignar roles.
+- Cambiar el estado de una cuenta.
+- Desactivar usuarios.
+- Visualizar el acceso disponible para cada perfil.
+
+Las desactivaciones no eliminan la información del usuario. La cuenta permanece almacenada, pero pierde el acceso al sistema.
+
+---
+
+### Reportes
+
+El módulo de reportes reúne información relevante para el análisis de las actividades registradas en TecnoSula.
+
+Su propósito es facilitar la interpretación de datos relacionados con:
+
+- Campañas.
+- Presupuestos.
+- Progreso.
+- Estados.
+- Publicaciones.
+- Usuarios.
+- Actividad general del sistema.
+
+La información puede representarse mediante indicadores, tablas y elementos visuales orientados a la toma de decisiones.
+
+---
+
+### Centro de notificaciones
+
+TecnoSula incorpora un sistema de notificaciones para informar al usuario sobre acciones importantes dentro de la plataforma.
+
+Entre las actividades notificadas se encuentran:
+
+- Creación de campañas.
+- Actualización de información.
+- Finalización de campañas.
+- Registro de usuarios.
+- Desactivación de cuentas.
+- Creación o programación de publicaciones.
+- Cambios administrativos.
+
+Las notificaciones pueden marcarse como leídas y administrarse desde un panel integrado en la interfaz.
+
+---
+
+### Configuración
+
+El módulo de configuración permite que cada usuario administre su experiencia dentro de TecnoSula.
+
+Está dividido en las siguientes secciones:
+
+- Mi perfil.
+- Seguridad.
+- Notificaciones.
+- Preferencias.
+- Sistema.
+
+Desde esta área se puede actualizar información personal, cambiar la contraseña, seleccionar los avisos que se desean recibir y personalizar aspectos de la interfaz.
+
+Las opciones administrativas del sistema se muestran únicamente a usuarios con el rol correspondiente.
+
+---
+
+## Roles del sistema
+
+TecnoSula utiliza autorización basada en roles para definir las acciones disponibles para cada usuario.
+
+### Administrador
+
+Tiene control completo sobre la plataforma.
+
+Puede:
+
+- Gestionar campañas.
+- Administrar publicaciones.
+- Consultar reportes.
+- Registrar y editar usuarios.
+- Asignar roles.
+- Activar o desactivar cuentas.
+- Acceder a opciones administrativas.
+
+### Empleado
+
+Participa en la gestión operativa del sistema.
+
+Puede acceder a los módulos necesarios para administrar campañas, publicaciones y actividades relacionadas con su trabajo.
+
+### Cliente
+
+Cuenta con un acceso más limitado, orientado a la consulta de información y a las funciones habilitadas para su perfil.
+
+---
+
+## Arquitectura del sistema
+
+TecnoSula utiliza una arquitectura cliente-servidor.
+
+### Frontend
+
+La interfaz fue desarrollada con:
+
+- HTML5.
+- CSS3.
+- JavaScript.
+- Lucide Icons.
+- Flatpickr.
+
+El frontend se encarga de presentar la información, validar interacciones y comunicarse con la API.
+
+### Backend
+
+La lógica del sistema fue desarrollada con:
+
+- ASP.NET Core.
+- C#.
+- Entity Framework Core.
+- API REST.
+- JWT Bearer Authentication.
+- BCrypt.
+- MailKit.
+- Swagger.
+
+El backend procesa las solicitudes, aplica las reglas de negocio, controla la seguridad y administra la comunicación con la base de datos.
+
+### Base de datos
+
+El sistema utiliza SQL Server y una base de datos llamada:
+
+```text
 TecnoSula
-
-Sistema web para la gestión de campañas de marketing, publicaciones, usuarios, reportes y configuraciones internas.
-
-TecnoSula fue desarrollado como una plataforma administrativa que permite centralizar el trabajo de campañas, controlar el acceso por roles, programar publicaciones, consultar métricas y administrar la cuenta de cada usuario desde una interfaz moderna y responsive.
-
-Funcionalidades principales
-
-Inicio de sesión con autenticación mediante JWT.
-
-Registro de nuevos usuarios.
-
-Recuperación de contraseña por correo electrónico.
-
-Cambio de contraseña desde el módulo de configuración.
-
-Gestión de campañas de marketing.
-
-Control de progreso, presupuesto, estado y responsable de cada campaña.
-
-Publicación y programación de contenido digital.
-
-Gestión de usuarios disponible únicamente para administradores.
-
-Asignación de roles: Administrador, Empleado y Cliente.
-
-Activación y desactivación de cuentas.
-
-Reportes y visualización de métricas.
-
-Centro de notificaciones.
-
-Preferencias de interfaz por usuario.
-
-Diseño responsive para computadoras, tablets y teléfonos.
-
-Tecnologías utilizadas
-
-Backend
-
-ASP.NET Core 10
-
-C#
-
-Entity Framework Core
-
-SQL Server
-
-JWT Bearer Authentication
-
-BCrypt.Net-Next
-
-MailKit
-
-Swagger / OpenAPI
-
-Frontend
-
-HTML5
-
-CSS3
-
-JavaScript
-
-Lucide Icons
-
-Flatpickr
-
-Herramientas
-
-Visual Studio Code
-
-SQL Server Management Studio
-
-Git
-
-GitHub
-
-Arquitectura general
-
-TecnoSula
-├── Backend
-│   ├── Controllers
-│   ├── Data
-│   ├── DTOs
-│   ├── Models
-│   ├── Services
-│   ├── Program.cs
-│   └── appsettings.json
-│
-└── Frontend
-    ├── Css
-    ├── JS
-    ├── index.html
-    ├── Registro.html
-    ├── Dashboard.html
-    ├── campanas.html
-    ├── publicaciones.html
-    ├── usuarios.html
-    ├── reportes.html
-    ├── configuracion.html
-    ├── recuperar.html
-    └── contrasenaNueva.html
-
-Requisitos previos
-
-Antes de ejecutar el proyecto debes tener instalado:
-
-.NET SDK 10
-
-SQL Server
-
-SQL Server Management Studio
-
-Visual Studio Code o Visual Studio
-
-Extensión Live Server para Visual Studio Code
-
-Git
-
-Configuración de la base de datos
-
-La base de datos utilizada por el proyecto se llama:
-
-TecnoSula
-
-Las tablas principales son:
-
-Usuarios
-
-Roles
-
-Campanas
-
-RecuperacionPassword
-
-Tablas relacionadas con publicaciones, redes sociales y reportes
-
-Los roles requeridos por el sistema son:
-
-Administrador
-Empleado
-Cliente
-
-Después de crear la base de datos, configura la cadena de conexión en:
-
-Backend/appsettings.json
-
-Ejemplo:
-
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=TU_SERVIDOR;Database=TecnoSula;Trusted_Connection=True;TrustServerCertificate=True;"
-  }
-}
-
-Cambia TU_SERVIDOR por el nombre de tu instancia de SQL Server.
-
-Configuración de JWT
-
-En Backend/appsettings.json agrega o verifica la configuración de JWT:
-
-{
-  "Jwt": {
-    "Key": "TU_CLAVE_SECRETA_SEGURA",
-    "Issuer": "TecnoSulaAPI",
-    "Audience": "TecnoSulaUsers"
-  }
-}
-
-La clave debe ser privada y suficientemente larga.
-
-Configuración del correo electrónico
-
-La recuperación de contraseña utiliza MailKit para enviar el enlace de recuperación.
-
-Debes configurar las credenciales SMTP en appsettings.json según la estructura utilizada por tu servicio de correo.
-
-Ejemplo:
-
-{
-  "EmailSettings": {
-    "SmtpServer": "smtp.gmail.com",
-    "Port": 587,
-    "SenderName": "TecnoSula",
-    "SenderEmail": "tu-correo@gmail.com",
-    "Username": "tu-correo@gmail.com",
-    "Password": "TU_CONTRASENA_DE_APLICACION"
-  }
-}
-
-No publiques contraseñas, tokens ni claves privadas en GitHub.
-
-Para Gmail se recomienda utilizar una contraseña de aplicación.
-
-Ejecución del backend
-
-Abre una terminal dentro de la carpeta Backend y ejecuta:
-
-dotnet restore
-dotnet run
-
-Por defecto, la API se ejecuta en:
-
-http://localhost:5208
-
-Swagger estará disponible en:
-
-http://localhost:5208/swagger
-
-Ejecución del frontend
-
-Abre la carpeta del proyecto en Visual Studio Code.
-
-Localiza Frontend/index.html.
-
-Haz clic derecho sobre el archivo.
-
-Selecciona Open with Live Server.
-
-La dirección puede verse similar a:
-
-http://127.0.0.1:5500/TecnoSula/Frontend/index.html
-
-El backend debe permanecer ejecutándose mientras utilizas el frontend.
-
-Recuperación de contraseña
-
-El flujo funciona de la siguiente manera:
-
-El usuario ingresa su correo en recuperar.html.
-
-El backend genera un token temporal.
-
-El token se guarda en la base de datos con una expiración de 30 minutos.
-
-Se envía un enlace al correo del usuario.
-
-El enlace abre contrasenaNueva.html.
-
-El usuario establece una nueva contraseña.
-
-La contraseña se cifra con BCrypt.
-
-El token queda marcado como utilizado.
-
-La ruta generada en AuthController.cs debe coincidir con la dirección real utilizada por Live Server.
-
-Ejemplo:
-
-var enlace =
-    $"http://127.0.0.1:5500/TecnoSula/Frontend/contrasenaNueva.html?token={token}";
-
-Si cambia la estructura de carpetas o el puerto de Live Server, también debes actualizar esta dirección.
-
-Roles y permisos
-
-Administrador
-
-Acceso completo al sistema.
-
-Gestión de usuarios.
-
-Creación y edición de usuarios.
-
-Cambio de roles y estados.
-
-Acceso a configuración del sistema.
-
-Consulta de campañas, publicaciones y reportes.
-
-Empleado
-
-Gestión de campañas y publicaciones según los permisos asignados.
-
-Acceso a reportes y configuración personal.
-
-Sin acceso al módulo de gestión de usuarios.
-
-Cliente
-
-Acceso limitado a las funciones habilitadas para su rol.
-
-Sin acceso a las funciones administrativas.
-
-Los permisos se validan tanto en el backend como en la interfaz.
-
-Endpoints principales
-
-Autenticación
-
-POST /api/Auth/login
-POST /api/Auth/register
-POST /api/Auth/recuperar
-POST /api/Auth/cambiar-password
-POST /api/Auth/cambiar-password-perfil
-GET  /api/Auth/perfil
-
-Usuarios
-
-GET    /api/Usuarios
-GET    /api/Usuarios/{id}
-POST   /api/Usuarios
-PUT    /api/Usuarios/{id}
-DELETE /api/Usuarios/{id}
-
-Campañas
-
-GET    /api/Campanas
-GET    /api/Campanas/{id}
-POST   /api/Campanas
-PUT    /api/Campanas/{id}
-DELETE /api/Campanas/{id}
-
-Publicaciones
-
-GET    /api/Publicaciones
-GET    /api/Publicaciones/{id}
-POST   /api/Publicaciones
-PUT    /api/Publicaciones/{id}
-DELETE /api/Publicaciones/{id}
-PATCH  /api/Publicaciones/{id}/programar
-PATCH  /api/Publicaciones/{id}/cancelar
-PATCH  /api/Publicaciones/{id}/reagendar
-POST   /api/Publicaciones/{id}/duplicar
-
-Seguridad
-
-TecnoSula implementa las siguientes medidas:
-
-Contraseñas cifradas mediante BCrypt.
-
-Tokens JWT para autenticación.
-
-Autorización por roles.
-
-Protección de endpoints administrativos.
-
-Tokens temporales de recuperación.
-
-Expiración y uso único de enlaces de recuperación.
-
-Validaciones en frontend y backend.
-
-Ocultamiento de módulos no autorizados.
-
-Uso con Git
-
-Para clonar el proyecto:
-
-git clone URL_DEL_REPOSITORIO
-cd TecnoSula
-
-Para descargar cambios recientes:
-
-git pull origin master
-
-Para guardar cambios:
-
-git add .
-git commit -m "Descripción de los cambios"
-git push origin master
-
-Antes de publicar el repositorio, verifica que no se incluyan:
-
-Contraseñas de correo.
-
-Authtokens.
-
-Claves JWT reales.
-
-Credenciales de SQL Server.
-
-Archivos con información sensible.
-
-Estado del proyecto
-
-El proyecto cuenta con los módulos principales integrados y funcionales:
-
-Autenticación
-
-Recuperación de contraseña
-
-Campañas
-
-Publicaciones
-
-Gestión de usuarios
-
-Reportes
-
-Configuración
-
-Notificaciones
-
-Roles y permisos
-
-Actualmente está preparado para ejecución local y puede adaptarse posteriormente para su publicación en un servidor.
-
-Autor
-
-Oscar Estiff Moreno ZúñigaEstudiante de Ingeniería en SistemasUniversidad Latina, Sede Santa Cruz
-
-GitHub: MxrxnxX
-
-Proyecto: TecnoSula
-
-Licencia
-
-Este proyecto fue desarrollado con fines académicos y de portafolio.
-
-El uso, modificación o distribución debe contar con la autorización de su autor y respetar las condiciones definidas para el proyecto.
-
