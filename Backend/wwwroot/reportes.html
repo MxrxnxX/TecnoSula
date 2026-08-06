@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TecnoSula | Reportes</title>
+
+    <link
+        rel="stylesheet"
+        href="Css/Dashboard.css?v=4"
+    >
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+>
+    <link
+        rel="stylesheet"
+        href="Css/reportes.css?v=6"
+    >
+
+    <link
+        rel="stylesheet"
+        href="Css/transiciones.css?v=2"
+    >
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/permisos.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- BARRA LATERAL -->
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <div class="sidebar-header">
+
+                <a
+                    href="Dashboard.html"
+                    class="brand"
+                >
+                    <div class="brand-logo">
+                        <i data-lucide="orbit"></i>
+                    </div>
+
+                    <div class="brand-text">
+                        <strong>TecnoSula</strong>
+                        <span>Campaign System</span>
+                    </div>
+                </a>
+
+                <button
+                    class="close-sidebar"
+                    id="closeSidebar"
+                    type="button"
+                >
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <div class="navigation-group">
+
+                <span class="navigation-label">
+                    Plataforma
+                </span>
+
+                <nav class="navigation">
+
+                    <a
+                        href="Dashboard.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="layout-dashboard"></i>
+                        </div>
+
+                        <span>Inicio</span>
+                    </a>
+
+                    <a
+                        href="campanas.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="radio-tower"></i>
+                        </div>
+
+                        <span>Campañas</span>
+                    </a>
+
+                    <a
+                        href="publicaciones.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="calendar-clock"></i>
+                        </div>
+
+                        <span>Publicación y programación</span>
+                    </a>
+
+
+<!-- GESTIÓN DE USUARIOS - SOLO ADMINISTRADOR -->
+<a
+    href="usuarios.html"
+    class="navigation-link admin-only"
+    id="adminUsersModule"
+>
+    <div class="navigation-icon">
+        <i data-lucide="users-round"></i>
+    </div>
+
+    <span>Gestión de usuarios</span>
+</a>
+                    <a
+                        href="reportes.html"
+                        class="navigation-link active"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="chart-no-axes-combined"></i>
+                        </div>
+
+                        <span>Reportes</span>
+
+                        <div class="active-line"></div>
+                    </a>
+
+                    <a
+                        href="configuracion.html"
+                        class="navigation-link"
+                    >
+                        <div class="navigation-icon">
+                            <i data-lucide="settings"></i>
+                        </div>
+
+                        <span>Configuración</span>
+                    </a>
+
+                </nav>
+
+            </div>
+            <!-- TARJETA LATERAL DE REPORTES -->
+
+<article class="sidebar-advertisement">
+
+    <div class="advertisement-icon">
+        <i data-lucide="chart-no-axes-combined"></i>
+    </div>
+
+    <span>ANÁLISIS ESTRATÉGICO</span>
+
+    <h3>
+        Convierte datos en decisiones.
+    </h3>
+
+    <p>
+        Analiza campañas, publicaciones y presupuestos
+        para tomar decisiones con mayor claridad.
+    </p>
+
+    <div class="advertisement-decoration"></div>
+
+</article>
+
+            <div class="sidebar-footer">
+
+                <div class="employee-profile">
+
+                   <div class="employee-avatar">
+
+    <span id="employeeInitials">
+        EM
+    </span>
+
+    <div class="online-point"></div>
+
+</div>
+                    <div class="employee-data">
+                        <strong id="employeeName">
+                            Empleado
+                        </strong>
+
+                        <span>
+                            Gestor de campañas
+                        </span>
+                    </div>
+
+                    <button
+                        class="logout-button"
+                        id="logoutButton"
+                        type="button"
+                    >
+                        <i data-lucide="log-out"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <div
+            class="sidebar-overlay"
+            id="sidebarOverlay"
+        ></div>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+
+            <div class="background-effects">
+                <div class="background-grid"></div>
+                <div class="glow glow-one"></div>
+                <div class="glow glow-two"></div>
+            </div>
+
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        class="menu-button"
+                        id="openSidebar"
+                        type="button"
+                    >
+                        <i data-lucide="menu"></i>
+                    </button>
+
+                    <div>
+                        <span>
+                            Análisis y resultados
+                        </span>
+
+                        <h1>
+                            Reportes
+                        </h1>
+                    </div>
+
+                </div>
+
+            </header>
+
+            <div class="page-content">
+
+                <section class="reports-header">
+
+                    <div>
+                        <span class="reports-eyebrow">
+                            Resumen general
+                        </span>
+
+                        <h2>
+                            Indicadores del sistema
+                        </h2>
+
+                        <p>
+                            Consulta el estado actual de las campañas,
+                            publicaciones y presupuesto registrado.
+                        </p>
+                    </div>
+
+                </section>
+                <!-- FILTROS AUTOMÁTICOS -->
+<section class="reports-filters">
+
+    <!-- FECHA INICIAL -->
+    <div class="filter-field">
+
+        <label for="fechaInicio">
+            Fecha inicial
+        </label>
+
+        <div class="filter-control date-filter-control">
+
+            <i
+                data-lucide="calendar-days"
+                class="filter-control-icon"
+            ></i>
+
+            <input
+                type="text"
+                id="fechaInicio"
+                placeholder="Seleccionar fecha"
+                autocomplete="off"
+            >
+
+            <button
+                type="button"
+                id="limpiarFechaInicio"
+                class="date-clear-button"
+                aria-label="Borrar fecha inicial"
+                title="Borrar fecha"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- FECHA FINAL -->
+    <div class="filter-field">
+
+        <label for="fechaFin">
+            Fecha final
+        </label>
+
+        <div class="filter-control date-filter-control">
+
+            <i
+                data-lucide="calendar-days"
+                class="filter-control-icon"
+            ></i>
+
+            <input
+                type="text"
+                id="fechaFin"
+                placeholder="Seleccionar fecha"
+                autocomplete="off"
+            >
+
+            <button
+                type="button"
+                id="limpiarFechaFin"
+                class="date-clear-button"
+                aria-label="Borrar fecha final"
+                title="Borrar fecha"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+  <div
+    class="campaign-state-filter"
+    role="group"
+    aria-label="Filtrar por estado de campaña"
+>
+    <button
+        type="button"
+        class="state-filter-button active"
+        data-estado=""
+    >
+        Todos
+    </button>
+
+    <button
+        type="button"
+        class="state-filter-button"
+        data-estado="Activa"
+    >
+        Activas
+    </button>
+
+    <button
+        type="button"
+        class="state-filter-button"
+        data-estado="Pausada"
+    >
+        Pausadas
+    </button>
+
+    <button
+        type="button"
+        class="state-filter-button"
+        data-estado="Finalizada"
+    >
+        Finalizadas
+    </button>
+</div>
+
+  
+
+    <!-- EXPORTACIONES -->
+    <div class="filter-actions">
+
+        <button
+            type="button"
+            id="exportarExcel"
+            class="filter-excel-button"
+        >
+            <i data-lucide="file-spreadsheet"></i>
+            Exportar Excel
+        </button>
+
+        <button
+            type="button"
+            id="exportarPdf"
+            class="filter-pdf-button"
+        >
+            <i data-lucide="file-text"></i>
+            Exportar PDF
+        </button>
+
+    </div>
+
+</section>
+                <!-- KPI -->
+                <section class="reports-grid">
+
+                    <article class="report-card">
+                        <div class="report-icon">
+                            <i data-lucide="radio-tower"></i>
+                        </div>
+
+                        <span>Total de campañas</span>
+
+                        <strong id="totalCampanas">
+                            0
+                        </strong>
+                    </article>
+
+                    <article class="report-card">
+                        <div class="report-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+
+                        <span>Total de publicaciones</span>
+
+                        <strong id="totalPublicaciones">
+                            0
+                        </strong>
+                    </article>
+
+                    <article class="report-card">
+                        <div class="report-icon">
+                            <i data-lucide="calendar-clock"></i>
+                        </div>
+
+                        <span>Publicaciones programadas</span>
+
+                        <strong id="publicacionesProgramadas">
+                            0
+                        </strong>
+                    </article>
+
+                    <article class="report-card">
+                        <div class="report-icon">
+                            <i data-lucide="wallet-cards"></i>
+                        </div>
+
+                        <span>Presupuesto total</span>
+
+                        <strong id="presupuestoTotal">
+                            ₡0
+                        </strong>
+                    </article>
+
+                    <article class="report-card">
+                        <div class="report-icon">
+                            <i data-lucide="percent"></i>
+                        </div>
+
+                        <span>Progreso promedio</span>
+
+                        <strong id="progresoPromedio">
+                            0%
+                        </strong>
+                    </article>
+
+                </section>
+
+                <!-- GRÁFICOS -->
+                <section class="charts-grid">
+
+                    <article class="chart-card">
+
+                        <div class="chart-header">
+                            <div>
+                                <span>Distribución</span>
+                                <h3>Campañas por estado</h3>
+                            </div>
+                        </div>
+
+                        <div id="campanasPorEstado">
+                            Cargando información...
+                        </div>
+
+                    </article>
+
+                    <article class="chart-card">
+
+                        <div class="chart-header">
+                            <div>
+                                <span>Plataformas</span>
+                                <h3>Publicaciones por red social</h3>
+                            </div>
+                        </div>
+
+                        <div id="publicacionesPorRed">
+                            Cargando información...
+                        </div>
+
+                    </article>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+<script src="JS/permisos.js?v=3"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"
+></script>
+
+<script src="JS/reportes.js?v=5"></script>
+<script src="JS/transiciones.js?v=2"></script>
+<script src="JS/preferencias.js?v=1"></script>
+
+</body>
+
+</html>

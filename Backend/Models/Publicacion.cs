@@ -6,12 +6,9 @@ namespace Backend.Models
     [Table("Publicaciones")]
     public class Publicacion
     {
-        
         [Key]
         [Column("id_publicacion")]
         public int IdPublicacion { get; set; }
-        [Column("imagen_url")]
-         public string? ImagenUrl { get; set; }
 
         [Required]
         [MaxLength(150)]
@@ -23,13 +20,21 @@ namespace Backend.Models
         [Column("descripcion")]
         public string Descripcion { get; set; } = string.Empty;
 
+        // Indica si el archivo es una imagen o un video.
         [MaxLength(30)]
         [Column("tipo_multimedia")]
         public string? TipoMultimedia { get; set; }
 
+        // Guarda la dirección del archivo dentro del servidor.
         [MaxLength(500)]
         [Column("url_multimedia")]
         public string? UrlMultimedia { get; set; }
+
+        // Campo antiguo. Lo conservamos temporalmente para no romper
+        // código existente que todavía pueda utilizar ImagenUrl.
+        [MaxLength(500)]
+        [Column("imagen_url")]
+        public string? ImagenUrl { get; set; }
 
         [Column("fecha_programacion")]
         public DateTime? FechaProgramacion { get; set; }
@@ -59,8 +64,7 @@ namespace Backend.Models
         [ForeignKey(nameof(IdUsuario))]
         public Usuario? Usuario { get; set; }
 
-        public ICollection<PublicacionRedSocial>
-            PublicacionRedesSociales { get; set; }
-                = new List<PublicacionRedSocial>();
+        public ICollection<PublicacionRedSocial> PublicacionRedesSociales { get; set; }
+            = new List<PublicacionRedSocial>();
     }
 }

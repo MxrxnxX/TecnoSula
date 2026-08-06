@@ -29,7 +29,7 @@
 
     <link
         rel="stylesheet"
-        href="Css/publicaciones.css?v=19"
+        href="Css/publicaciones.css?v=17"
     >
 
     <link
@@ -1323,522 +1323,417 @@
 
                 <form id="publicationForm">
 
-    <div class="publication-form-grid">
+                    <div class="publication-form-grid">
 
-        <!-- =====================================================
-             CAMPAÑA RELACIONADA
-        ====================================================== -->
+                       <div class="publication-form-group publication-form-full">
 
-        <div class="publication-form-group publication-form-full">
+    <label for="publicationCampaignTrigger">
+        Campaña relacionada
+    </label>
 
-            <label for="publicationCampaignTrigger">
-                Campaña relacionada
-            </label>
+    <div
+        class="publication-campaign-selector"
+        id="publicationCampaignSelector"
+    >
+
+        <!--
+            Aquí se guarda el ID real de la campaña.
+            El resto del sistema continuará leyendo
+            publicationCampaign.value.
+        -->
+
+        <input
+            type="hidden"
+            id="publicationCampaign"
+            value=""
+        >
+
+        <button
+            class="campaign-selector-trigger"
+            id="publicationCampaignTrigger"
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+        >
+
+            <span class="campaign-selector-main-icon">
+                <i data-lucide="radio-tower"></i>
+            </span>
+
+            <span class="campaign-selector-information">
+
+                <small>Campaña seleccionada</small>
+
+                <strong id="publicationCampaignSelectedText">
+                    Selecciona una campaña
+                </strong>
+
+            </span>
+
+            <span class="campaign-selector-chevron">
+                <i data-lucide="chevron-down"></i>
+            </span>
+
+        </button>
+
+        <div
+            class="campaign-selector-menu"
+            id="publicationCampaignMenu"
+            hidden
+        >
+
+            <div class="campaign-selector-menu-header">
+
+                <div class="campaign-selector-search">
+
+                    <i data-lucide="search"></i>
+
+                    <input
+                        type="search"
+                        id="publicationCampaignSearch"
+                        placeholder="Buscar una campaña"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+            </div>
 
             <div
-                class="publication-campaign-selector"
-                id="publicationCampaignSelector"
-            >
+                class="campaign-selector-options"
+                id="publicationCampaignOptions"
+                role="listbox"
+                aria-label="Campañas disponibles"
+            ></div>
 
-                <!-- Guarda el ID real de la campaña -->
-                <input
-                    type="hidden"
-                    id="publicationCampaign"
-                    value=""
-                >
+        </div>
 
-                <button
-                    class="campaign-selector-trigger"
-                    id="publicationCampaignTrigger"
-                    type="button"
-                    aria-haspopup="listbox"
-                    aria-expanded="false"
-                >
+    </div>
 
-                    <span class="campaign-selector-main-icon">
-                        <i data-lucide="radio-tower"></i>
-                    </span>
+    <small class="campaign-selector-help">
+        Vincula esta publicación con una campaña activa.
+    </small>
 
-                    <span class="campaign-selector-information">
+</div>
 
-                        <small>
-                            Campaña seleccionada
-                        </small>
+                        <div class="publication-form-group publication-form-full">
 
-                        <strong id="publicationCampaignSelectedText">
-                            Selecciona una campaña
-                        </strong>
+                            <label for="publicationTitle">
+                                Título de la publicación
+                            </label>
 
-                    </span>
+                            <div class="publication-input-wrapper">
 
-                    <span class="campaign-selector-chevron">
-                        <i data-lucide="chevron-down"></i>
-                    </span>
+                                <i data-lucide="type"></i>
 
-                </button>
+                                <input
+                                    type="text"
+                                    id="publicationTitle"
+                                    maxlength="120"
+                                    placeholder="Ejemplo: Promoción de verano"
+                                    required
+                                >
 
-                <div
-                    class="campaign-selector-menu"
-                    id="publicationCampaignMenu"
-                    hidden
-                >
+                            </div>
 
-                    <div class="campaign-selector-menu-header">
+                        </div>
 
-                        <div class="campaign-selector-search">
+                        <div class="publication-form-group publication-form-full">
 
-                            <i data-lucide="search"></i>
+                            <label for="publicationDescription">
+                                Contenido o descripción
+                            </label>
+
+                            <div class="publication-textarea-wrapper">
+
+                                <textarea
+                                    id="publicationDescription"
+                                    maxlength="500"
+                                    rows="5"
+                                    placeholder="Escribe el contenido que tendrá la publicación..."
+                                    required
+                                ></textarea>
+
+                                <div class="character-counter">
+                                    <span id="descriptionCounter">0</span>
+                                    / 500
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="publication-form-group publication-form-full">
+
+                            <label>
+                                Archivo multimedia
+                            </label>
+
+                            <button
+                                class="media-upload-area"
+                                id="mediaUploadArea"
+                                type="button"
+                            >
+
+                                <span class="media-upload-icon">
+                                    <i data-lucide="image-up"></i>
+                                </span>
+
+                                <span>
+                                    <strong>Seleccionar imagen o video</strong>
+                                    <small>
+                                        PNG, JPG o MP4 · Máximo 20 MB
+                                    </small>
+                                </span>
+
+                                <span class="media-upload-button">
+                                    Examinar
+                                </span>
+
+                            </button>
+
+                        </div>
+
+                        <div class="publication-form-group publication-form-full">
+
+                           <label>
+    Redes sociales
+</label>
+
+<input
+    type="hidden"
+    id="publicationPlatform"
+    value="[]"
+>
+
+                            <div class="platform-selector">
+
+                                <button
+                                    class="platform-option instagram"
+                                    type="button"
+                                    data-platform="Instagram"
+                                >
+                                    <i data-lucide="instagram"></i>
+                                    <span>Instagram</span>
+                                    <i
+                                        class="platform-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                                <button
+                                    class="platform-option facebook"
+                                    type="button"
+                                    data-platform="Facebook"
+                                >
+                                    <i data-lucide="facebook"></i>
+                                    <span>Facebook</span>
+                                    <i
+                                        class="platform-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                                <button
+                                    class="platform-option tiktok"
+                                    type="button"
+                                    data-platform="TikTok"
+                                >
+                                    <i data-lucide="music-2"></i>
+                                    <span>TikTok</span>
+                                    <i
+                                        class="platform-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                                <button
+                                    class="platform-option x"
+                                    type="button"
+                                    data-platform="X"
+                                >
+                                    <i data-lucide="at-sign"></i>
+                                    <span>X</span>
+                                    <i
+                                        class="platform-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                            </div>
+                           <small class="platform-selection-help">
+    Puedes seleccionar una o varias redes sociales.
+</small>
+
+</div>
+
+<div class="publication-form-group">
+
+    <label for="publicationDate">
+        Fecha
+    </label>
+
+    <div class="publication-picker-control date-picker-control">
+
+      <input
+    type="text"
+    id="publicationDate"
+    class="publication-native-picker"
+    autocomplete="off"
+    aria-label="Seleccionar fecha de publicación"
+>
+
+        <div class="publication-picker-visual">
+
+            <span class="publication-picker-icon">
+                <i data-lucide="calendar-days"></i>
+            </span>
+
+            <div class="publication-picker-information">
+
+                <small>Fecha de publicación</small>
+
+                <strong id="publicationDateDisplay">
+                    Selecciona una fecha
+                </strong>
+
+            </div>
+
+            <span class="publication-picker-action">
+                <i data-lucide="chevron-down"></i>
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="publication-form-group">
+
+    <label for="publicationTime">
+        Hora
+    </label>
+
+    <div class="publication-picker-control time-picker-control">
+
+       <input
+    type="text"
+    id="publicationTime"
+    class="publication-native-picker"
+    autocomplete="off"
+    aria-label="Seleccionar hora de publicación"
+>
+
+        <div class="publication-picker-visual">
+
+            <span class="publication-picker-icon">
+                <i data-lucide="clock-3"></i>
+            </span>
+
+            <div class="publication-picker-information">
+
+                <small>Hora de publicación</small>
+
+                <strong id="publicationTimeDisplay">
+                    Selecciona una hora
+                </strong>
+
+            </div>
+
+            <span class="publication-picker-action">
+                <i data-lucide="chevron-down"></i>
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+                        <div class="publication-form-group publication-form-full">
+
+                            <label>
+                                Estado de la publicación
+                            </label>
 
                             <input
-                                type="search"
-                                id="publicationCampaignSearch"
-                                placeholder="Buscar una campaña"
-                                autocomplete="off"
+                                type="hidden"
+                                id="publicationStatus"
+                                value="Borrador"
                             >
+
+                            <div class="publication-status-selector">
+
+                                <button
+                                    class="publication-status-option selected"
+                                    type="button"
+                                    data-status="Borrador"
+                                >
+                                    <i data-lucide="file-pen-line"></i>
+
+                                    <span>
+                                        <strong>Borrador</strong>
+                                        <small>Guardar sin programar</small>
+                                    </span>
+
+                                    <i
+                                        class="status-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                                <button
+                                    class="publication-status-option"
+                                    type="button"
+                                    data-status="Programada"
+                                >
+                                    <i data-lucide="calendar-check"></i>
+
+                                    <span>
+                                        <strong>Programada</strong>
+                                        <small>Asignar fecha y hora</small>
+                                    </span>
+
+                                    <i
+                                        class="status-check"
+                                        data-lucide="check"
+                                    ></i>
+                                </button>
+
+                            </div>
 
                         </div>
 
                     </div>
 
                     <div
-                        class="campaign-selector-options"
-                        id="publicationCampaignOptions"
-                        role="listbox"
-                        aria-label="Campañas disponibles"
+                        class="publication-form-message"
+                        id="publicationFormMessage"
                     ></div>
 
-                </div>
-
-            </div>
-
-            <small class="campaign-selector-help">
-                Vincula esta publicación con una campaña activa.
-            </small>
-
-        </div>
-
-
-        <!-- =====================================================
-             TÍTULO
-        ====================================================== -->
-
-        <div class="publication-form-group publication-form-full">
-
-            <label for="publicationTitle">
-                Título de la publicación
-            </label>
-
-            <div class="publication-input-wrapper">
-
-                <i data-lucide="type"></i>
-
-                <input
-                    type="text"
-                    id="publicationTitle"
-                    maxlength="120"
-                    placeholder="Ejemplo: Promoción de verano"
-                    required
-                >
-
-            </div>
-
-        </div>
-
-
-        <!-- =====================================================
-             DESCRIPCIÓN
-        ====================================================== -->
-
-        <div class="publication-form-group publication-form-full">
-
-            <label for="publicationDescription">
-                Contenido o descripción
-            </label>
-
-            <div class="publication-textarea-wrapper">
-
-                <textarea
-                    id="publicationDescription"
-                    maxlength="500"
-                    rows="5"
-                    placeholder="Escribe el contenido que tendrá la publicación..."
-                    required
-                ></textarea>
-
-                <div class="character-counter">
-
-                    <span id="descriptionCounter">
-                        0
-                    </span>
-
-                    / 500
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =====================================================
-             ARCHIVO MULTIMEDIA
-        ====================================================== -->
-
-        <div class="publication-form-group publication-form-full">
-
-            <label for="archivoMultimedia">
-                Archivo multimedia
-            </label>
-
-            <!-- Input real oculto -->
-            <input
-                type="file"
-                id="archivoMultimedia"
-                name="archivoMultimedia"
-                accept=".jpg,.jpeg,.png,.webp,.gif,.mp4,.webm,.mov"
-                hidden
-            >
-
-            <!-- Botón visual para seleccionar -->
-            <button
-                class="media-upload-area"
-                id="mediaUploadArea"
-                type="button"
-            >
-
-                <span class="media-upload-icon">
-                    <i data-lucide="image-up"></i>
-                </span>
-
-                <span>
-
-                    <strong id="mediaUploadTitle">
-                        Seleccionar imagen o video
-                    </strong>
-
-                    <small id="mediaUploadDescription">
-                        Imágenes hasta 10 MB · Videos hasta 50 MB
-                    </small>
-
-                </span>
-
-                <span class="media-upload-button">
-                    Examinar
-                </span>
-
-            </button>
-
-            <!-- Vista previa de imagen o video -->
-            <div
-                class="media-preview-container"
-                id="mediaPreviewContainer"
-                hidden
-            >
-
-                <img
-                    id="mediaImagePreview"
-                    class="media-preview"
-                    alt="Vista previa de la imagen"
-                    hidden
-                >
-
-                <video
-                    id="mediaVideoPreview"
-                    class="media-preview"
-                    controls
-                    preload="metadata"
-                    hidden
-                ></video>
-
-                <button
-                    type="button"
-                    class="media-remove-button"
-                    id="removeMediaButton"
-                >
-
-                    <i data-lucide="trash-2"></i>
-
-                    Quitar archivo
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- =====================================================
-             REDES SOCIALES
-        ====================================================== -->
-
-        <div class="publication-form-group publication-form-full">
-
-            <label>
-                Redes sociales
-            </label>
-
-            <input
-                type="hidden"
-                id="publicationPlatform"
-                value="[]"
-            >
-
-            <div class="platform-selector">
-
-                <button
-                    class="platform-option instagram"
-                    type="button"
-                    data-platform="Instagram"
-                >
-
-                    <i data-lucide="instagram"></i>
-
-                    <span>
-                        Instagram
-                    </span>
-
-                    <i
-                        class="platform-check"
-                        data-lucide="check"
-                    ></i>
-
-                </button>
-
-                <button
-                    class="platform-option facebook"
-                    type="button"
-                    data-platform="Facebook"
-                >
-
-                    <i data-lucide="facebook"></i>
-
-                    <span>
-                        Facebook
-                    </span>
-
-                    <i
-                        class="platform-check"
-                        data-lucide="check"
-                    ></i>
-
-                </button>
-
-                <button
-                    class="platform-option tiktok"
-                    type="button"
-                    data-platform="TikTok"
-                >
-
-                    <i data-lucide="music-2"></i>
-
-                    <span>
-                        TikTok
-                    </span>
-
-                    <i
-                        class="platform-check"
-                        data-lucide="check"
-                    ></i>
-
-                </button>
-
-                <button
-                    class="platform-option x"
-                    type="button"
-                    data-platform="X"
-                >
-
-                    <i data-lucide="at-sign"></i>
-
-                    <span>
-                        X
-                    </span>
-
-                    <i
-                        class="platform-check"
-                        data-lucide="check"
-                    ></i>
-
-                </button>
-
-            </div>
-
-            <small class="platform-selection-help">
-                Puedes seleccionar una o varias redes sociales.
-            </small>
-
-        </div>
-
-
-        <!-- =====================================================
-             FECHA
-        ====================================================== -->
-
-        <div class="publication-form-group">
-
-            <label for="publicationDate">
-                Fecha
-            </label>
-
-            <div class="publication-picker-control date-picker-control">
-
-                <input
-                    type="text"
-                    id="publicationDate"
-                    class="publication-native-picker"
-                    autocomplete="off"
-                    aria-label="Seleccionar fecha de publicación"
-                >
-
-                <div class="publication-picker-visual">
-
-                    <span class="publication-picker-icon">
-                        <i data-lucide="calendar-days"></i>
-                    </span>
-
-                    <div class="publication-picker-information">
-
-                        <small>
-                            Fecha de publicación
-                        </small>
-
-                        <strong id="publicationDateDisplay">
-                            Selecciona una fecha
-                        </strong>
+                    <div class="publication-modal-actions">
+
+                        <button
+                            class="secondary-button"
+                            id="cancelPublicationButton"
+                            type="button"
+                        >
+                            Cancelar
+                        </button>
+
+                        <button
+                            class="primary-button"
+                            id="savePublicationButton"
+                            type="submit"
+                        >
+                            <i data-lucide="save"></i>
+                            Guardar publicación
+                        </button>
 
                     </div>
 
-                    <span class="publication-picker-action">
-                        <i data-lucide="chevron-down"></i>
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =====================================================
-             HORA
-        ====================================================== -->
-
-        <div class="publication-form-group">
-
-            <label for="publicationTime">
-                Hora
-            </label>
-
-            <div class="publication-picker-control time-picker-control">
-
-                <input
-                    type="text"
-                    id="publicationTime"
-                    class="publication-native-picker"
-                    autocomplete="off"
-                    aria-label="Seleccionar hora de publicación"
-                >
-
-                <div class="publication-picker-visual">
-
-                    <span class="publication-picker-icon">
-                        <i data-lucide="clock-3"></i>
-                    </span>
-
-                    <div class="publication-picker-information">
-
-                        <small>
-                            Hora de publicación
-                        </small>
-
-                        <strong id="publicationTimeDisplay">
-                            Selecciona una hora
-                        </strong>
-
-                    </div>
-
-                    <span class="publication-picker-action">
-                        <i data-lucide="chevron-down"></i>
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =====================================================
-             ESTADO
-        ====================================================== -->
-
-        <div class="publication-form-group publication-form-full">
-
-            <label>
-                Estado de la publicación
-            </label>
-
-            <input
-                type="hidden"
-                id="publicationStatus"
-                value="Borrador"
-            >
-
-            <div class="publication-status-selector">
-
-                <button
-                    class="publication-status-option selected"
-                    type="button"
-                    data-status="Borrador"
-                >
-
-                    <i data-lucide="file-pen-line"></i>
-
-                    <span>
-
-                        <strong>
-                            Borrador
-                        </strong>
-
-                        <small>
-                            Guardar sin programar
-                        </small>
-
-                    </span>
-
-                    <i
-                        class="status-check"
-                        data-lucide="check"
-                    ></i>
-
-                </button>
-
-                <button
-                    class="publication-status-option"
-                    type="button"
-                    data-status="Programada"
-                >
-
-                    <i data-lucide="calendar-check"></i>
-
-                    <span>
-
-                        <strong>
-                            Programada
-                        </strong>
-
-                        <small>
-                            Asignar fecha y hora
-                        </small>
-
-                    </span>
-
-                    <i
-                        class="status-check"
-                        data-lucide="check"
-                    ></i>
-
-                </button>
+                </form>
 
             </div>
 
@@ -1846,59 +1741,12 @@
 
     </div>
 
-
-    <!-- =====================================================
-         MENSAJES DEL FORMULARIO
-    ====================================================== -->
-
-    <div
-        class="publication-form-message"
-        id="publicationFormMessage"
-    ></div>
-
-
-    <!-- =====================================================
-         BOTONES DEL FORMULARIO
-    ====================================================== -->
-
-    <div class="publication-modal-actions">
-
-        <button
-            class="secondary-button"
-            id="cancelPublicationButton"
-            type="button"
-        >
-            Cancelar
-        </button>
-
-        <button
-            class="primary-button"
-            id="savePublicationButton"
-            type="submit"
-        >
-
-            <i data-lucide="save"></i>
-
-            Guardar publicación
-
-        </button>
-
-    </div>
-
-</form>
-
-            </div>
-
-        </div>
-
-    </div>
-
-<script src="JS/api.js?v=3"></script>
+<script src="JS/api.js"></script>
 <script src="JS/permisos.js?v=3"></script>
 <script src="JS/notificaciones.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-<script src="JS/publicaciones.js?v=19"></script>
+<script src="JS/publicaciones.js?v=16"></script>
 <script src="JS/transiciones.js?v=2"></script>
 <script src="JS/preferencias.js?v=1"></script>
 

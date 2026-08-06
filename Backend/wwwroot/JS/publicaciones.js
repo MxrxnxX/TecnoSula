@@ -143,26 +143,6 @@ const publicationTimeDisplay =
 
     const mediaUploadArea =
         document.getElementById("mediaUploadArea");
-        const archivoMultimedia =
-    document.getElementById("archivoMultimedia");
-
-const mediaUploadTitle =
-    document.getElementById("mediaUploadTitle");
-
-const mediaUploadDescription =
-    document.getElementById("mediaUploadDescription");
-
-const mediaPreviewContainer =
-    document.getElementById("mediaPreviewContainer");
-
-const mediaImagePreview =
-    document.getElementById("mediaImagePreview");
-
-const mediaVideoPreview =
-    document.getElementById("mediaVideoPreview");
-
-const removeMediaButton =
-    document.getElementById("removeMediaButton");
 
     const platformOptions =
         document.querySelectorAll(".platform-option");
@@ -212,13 +192,7 @@ const removeMediaButton =
 // =====================================================
 
 let editingPublicationId = null;
-let selectedMediaFile = null;
 let selectedMediaName = "";
-
-let currentMediaUrl = "";
-let currentMediaType = "";
-
-let mediaPreviewObjectUrl = "";
 
 let publications = [];
 let campaigns = [];
@@ -2884,57 +2858,7 @@ function openPublicationToolsModal({
             employeeRole.textContent = role;
         }
     }
-   function createPublicationMedia(publication) {
-    const mediaUrl =
-        String(
-            publication?.mediaUrl || ""
-        ).trim();
 
-    const mediaType =
-        normalizeText(
-            publication?.mediaType || ""
-        );
-
-    if (!mediaUrl) {
-        return `
-            <div class="publication-media-placeholder">
-                <i data-lucide="image"></i>
-            </div>
-        `;
-    }
-
-    if (mediaType.includes("video")) {
-        return `
-            <video
-                class="publication-preview-media"
-                src="${escapeHtml(mediaUrl)}"
-                controls
-                preload="metadata"
-                playsinline
-            ></video>
-        `;
-    }
-
-    return `
-        <a
-            class="publication-preview-link"
-            href="${escapeHtml(mediaUrl)}"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Abrir imagen completa"
-        >
-            <img
-                class="publication-preview-media"
-                src="${escapeHtml(mediaUrl)}"
-                alt="${escapeHtml(
-                    publication.title ||
-                    "Imagen de la publicación"
-                )}"
-                loading="lazy"
-            >
-        </a>
-    `;
-}
     // =====================================================
     // MOSTRAR PUBLICACIONES
     // =====================================================
@@ -3011,30 +2935,27 @@ const scheduleTitle =
 )}"
             >
 
-              <div class="publication-preview ${
-    publication.previewClass
-}">
+                <div class="publication-preview ${
+                    publication.previewClass
+                }">
 
-    ${createPublicationMedia(publication)}
+                    <div class="preview-overlay"></div>
 
-    <div class="preview-overlay"></div>
+                    <span class="preview-type">
+                        <i data-lucide="${getMediaIcon(
+                            publication.mediaType
+                        )}"></i>
 
-    <span class="preview-type">
-        <i data-lucide="${getMediaIcon(
-            publication.mediaType
-        )}"></i>
+                        ${escapeHtml(
+                            publication.mediaType
+                        )}
+                    </span>
 
-        ${escapeHtml(
-            publication.mediaType ||
-            "Sin multimedia"
-        )}
-    </span>
+                    <div class="preview-campaign">
+                        ${escapeHtml(publication.campaign)}
+                    </div>
 
-    <div class="preview-campaign">
-        ${escapeHtml(publication.campaign)}
-    </div>
-
-</div>
+                </div>
 
                 <div class="publication-card-content">
 
@@ -3814,313 +3735,101 @@ function togglePlatform(platform) {
         showFormMessage("");
     }
 
-   // =====================================================
-// MULTIMEDIA: SELECCIÓN Y VISTA PREVIA
-// =====================================================
+    // =====================================================
+    // MULTIMEDIA VISUAL
+    // =====================================================
 
-function revokeMediaPreviewObjectUrl() {
-    if (!mediaPreviewObjectUrl) {
-        return;
-    }
+    function resetMediaArea() {
+        selectedMediaName = "";
 
-    URL.revokeObjectURL(mediaPreviewObjectUrl);
-    mediaPreviewObjectUrl = "";
-}
-
-
-function clearImagePreview() {
-    if (!mediaImagePreview) {
-        return;
-    }
-
-    mediaImagePreview.removeAttribute("src");
-    mediaImagePreview.hidden = true;
-}
-
-
-function clearVideoPreview() {
-    if (!mediaVideoPreview) {
-        return;
-    }
-
-    mediaVideoPreview.pause();
-    mediaVideoPreview.removeAttribute("src");
-    mediaVideoPreview.load();
-    mediaVideoPreview.hidden = true;
-}
-
-
-function resetMediaArea() {
-    selectedMediaFile = null;
-    selectedMediaName = "";
-
-    currentMediaUrl = "";
-    currentMediaType = "";
-
-    if (archivoMultimedia) {
-        archivoMultimedia.value = "";
-    }
-
-    revokeMediaPreviewObjectUrl();
-
-    clearImagePreview();
-    clearVideoPreview();
-
-    if (mediaPreviewContainer) {
-        mediaPreviewContainer.hidden = true;
-    }
-
-    if (mediaUploadTitle) {
-        mediaUploadTitle.textContent =
-            "Seleccionar imagen o video";
-    }
-
-    if (mediaUploadDescription) {
-        mediaUploadDescription.textContent =
-            "Imágenes hasta 10 MB · Videos hasta 50 MB";
-    }
-
-    mediaUploadArea?.classList.remove("has-file");
-
-    renderIcons();
-}
-
-
-function getMediaTypeFromFile(file) {
-    if (file?.type?.startsWith("video/")) {
-        return "Video";
-    }
-
-    return "Imagen";
-}
-
-
-function validateMediaFile(file) {
-    if (!file) {
-        return "No se seleccionó ningún archivo.";
-    }
-
-    const fileName =
-        String(file.name || "").toLowerCase();
-
-    const imageExtensions = [
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".webp",
-        ".gif"
-    ];
-
-    const videoExtensions = [
-        ".mp4",
-        ".webm",
-        ".mov"
-    ];
-
-    const isImage =
-        file.type.startsWith("image/") ||
-        imageExtensions.some(extension =>
-            fileName.endsWith(extension)
-        );
-
-    const isVideo =
-        file.type.startsWith("video/") ||
-        videoExtensions.some(extension =>
-            fileName.endsWith(extension)
-        );
-
-    if (!isImage && !isVideo) {
-        return (
-            "El formato seleccionado no es válido. " +
-            "Utiliza JPG, JPEG, PNG, WEBP, GIF, MP4, WEBM o MOV."
-        );
-    }
-
-    const maxImageSize =
-        10 * 1024 * 1024;
-
-    const maxVideoSize =
-        50 * 1024 * 1024;
-
-    if (isImage && file.size > maxImageSize) {
-        return "La imagen no puede superar los 10 MB.";
-    }
-
-    if (isVideo && file.size > maxVideoSize) {
-        return "El video no puede superar los 50 MB.";
-    }
-
-    return "";
-}
-
-
-function showMediaPreview(
-    url,
-    mediaType,
-    fileName,
-    isExistingFile = false
-) {
-    if (!url) {
-        resetMediaArea();
-        return;
-    }
-
-    const isVideo =
-        normalizeText(mediaType).includes("video");
-
-    if (isVideo) {
-        clearImagePreview();
-
-        if (mediaVideoPreview) {
-            mediaVideoPreview.src = url;
-            mediaVideoPreview.hidden = false;
-            mediaVideoPreview.load();
+        if (!mediaUploadArea) {
+            return;
         }
-    } else {
-        clearVideoPreview();
 
-        if (mediaImagePreview) {
-            mediaImagePreview.src = url;
-            mediaImagePreview.hidden = false;
+        mediaUploadArea.innerHTML = `
+            <span class="media-upload-icon">
+                <i data-lucide="image-up"></i>
+            </span>
+
+            <span>
+                <strong>
+                    Seleccionar imagen o video
+                </strong>
+
+                <small>
+                    PNG, JPG o MP4 · Máximo 20 MB
+                </small>
+            </span>
+
+            <span class="media-upload-button">
+                Examinar
+            </span>
+        `;
+
+        renderIcons();
+    }
+
+    function showSelectedMedia(fileName) {
+        selectedMediaName = fileName;
+
+        if (!mediaUploadArea) {
+            return;
         }
+
+        mediaUploadArea.innerHTML = `
+            <span class="media-upload-icon">
+                <i data-lucide="file-check-2"></i>
+            </span>
+
+            <span>
+                <strong>
+                    ${escapeHtml(fileName)}
+                </strong>
+
+                <small>
+                    Archivo seleccionado para demostración
+                </small>
+            </span>
+
+            <span class="media-upload-button">
+                Cambiar
+            </span>
+        `;
+
+        renderIcons();
     }
 
-    if (mediaPreviewContainer) {
-        mediaPreviewContainer.hidden = false;
-    }
+    function openMediaSelector() {
+        const fileInput =
+            document.createElement("input");
 
-    if (mediaUploadTitle) {
-        mediaUploadTitle.textContent =
-            fileName ||
-            (
-                isVideo
-                    ? "Video seleccionado"
-                    : "Imagen seleccionada"
-            );
-    }
+        fileInput.type = "file";
+        fileInput.accept =
+            "image/png,image/jpeg,video/mp4";
 
-    if (mediaUploadDescription) {
-        mediaUploadDescription.textContent =
-            isExistingFile
-                ? "Archivo multimedia actual de la publicación"
-                : "Archivo listo para subir al servidor";
-    }
+        fileInput.addEventListener(
+            "change",
+            () => {
+                const file = fileInput.files?.[0];
 
-    mediaUploadArea?.classList.add("has-file");
+                if (!file) {
+                    return;
+                }
 
-    renderIcons();
-}
+                showSelectedMedia(file.name);
+                
 
-
-function showExistingMedia(publication) {
-    selectedMediaFile = null;
-
-    selectedMediaName =
-        publication?.mediaName || "";
-
-    currentMediaUrl =
-        publication?.mediaUrl || "";
-
-    currentMediaType =
-        publication?.mediaType || "Imagen";
-
-    if (!currentMediaUrl) {
-        resetMediaArea();
-        return;
-    }
-
-    showMediaPreview(
-        currentMediaUrl,
-        currentMediaType,
-        selectedMediaName,
-        true
-    );
-}
-
-
-function handleMediaFileChange() {
-    const file =
-        archivoMultimedia?.files?.[0];
-
-    if (!file) {
-        return;
-    }
-
-    const validationError =
-        validateMediaFile(file);
-
-    if (validationError) {
-        archivoMultimedia.value = "";
-
-        showFormMessage(
-            validationError,
-            "error"
+                showToast(
+                    "Archivo seleccionado",
+                    "El archivo se utilizará únicamente como demostración visual.",
+                    "success"
+                );
+            }
         );
 
-        showToast(
-            "Archivo no válido",
-            validationError,
-            "error"
-        );
-
-        return;
+        fileInput.click();
     }
 
-    revokeMediaPreviewObjectUrl();
-
-    selectedMediaFile = file;
-    selectedMediaName = file.name;
-
-    currentMediaType =
-        getMediaTypeFromFile(file);
-
-    // Todavía no tiene URL del servidor.
-    currentMediaUrl = "";
-
-    mediaPreviewObjectUrl =
-        URL.createObjectURL(file);
-
-    showMediaPreview(
-        mediaPreviewObjectUrl,
-        currentMediaType,
-        selectedMediaName,
-        false
-    );
-
-    clearFormMessage();
-
-    showToast(
-        "Archivo seleccionado",
-        `${currentMediaType} listo para guardar.`,
-        "success"
-    );
-}
-
-
-function openMediaSelector() {
-    archivoMultimedia?.click();
-}
-
-
-function removeSelectedMedia() {
-    const hadMedia =
-        Boolean(
-            selectedMediaFile ||
-            currentMediaUrl ||
-            selectedMediaName
-        );
-
-    resetMediaArea();
-    clearFormMessage();
-
-    if (hadMedia) {
-        showToast(
-            "Archivo eliminado",
-            "La publicación quedará sin imagen ni video.",
-            "information"
-        );
-    }
-}
     // =====================================================
     // ABRIR Y CERRAR MODAL
     // =====================================================
@@ -4235,9 +3944,12 @@ function openPublicationModal(
             publication.time || ""
         );
 
-       if (publication.mediaUrl) {
-    showExistingMedia(publication);
-}
+        if (publication.mediaName) {
+            showSelectedMedia(
+                publication.mediaName
+            );
+        }
+
         if (descriptionCounter) {
             descriptionCounter.textContent =
                 String(
@@ -4336,7 +4048,7 @@ function openPublicationModal(
         return "preview-black-friday";
     }
 
-async function savePublication(event) {
+   async function savePublication(event) {
     event.preventDefault();
 
     const campaignId =
@@ -4365,10 +4077,6 @@ async function savePublication(event) {
     const time =
         publicationTime?.value || "";
 
-    // =====================================================
-    // VALIDACIONES GENERALES
-    // =====================================================
-
     if (
         !Number.isFinite(campaignId) ||
         campaignId <= 0 ||
@@ -4385,10 +4093,6 @@ async function savePublication(event) {
 
         return;
     }
-
-    // =====================================================
-    // VALIDACIÓN DE PROGRAMACIÓN
-    // =====================================================
 
     if (
         status === "Programada" &&
@@ -4429,138 +4133,68 @@ async function savePublication(event) {
             `${date}T${time}:00`;
     }
 
-    // =====================================================
-    // PREPARAR BOTÓN
-    // =====================================================
+    const isVideo =
+        selectedMediaName
+            .toLowerCase()
+            .endsWith(".mp4");
+
+    const publicationData = {
+        titulo:
+            title,
+
+        descripcion:
+            description,
+
+        tipoMultimedia:
+            selectedMediaName
+                ? (
+                    isVideo
+                        ? "Video"
+                        : "Imagen"
+                )
+                : null,
+
+        /*
+            Todavía no tenemos endpoint para subir
+            el archivo físicamente. Guardamos una
+            ruta demostrativa en la base de datos.
+        */
+        urlMultimedia:
+            selectedMediaName
+                ? `/uploads/publicaciones/${selectedMediaName}`
+                : null,
+
+        idCampana:
+            campaignId,
+
+        idsRedesSociales:
+            socialNetworkIds,
+
+        fechaProgramacion:
+            programmingDate,
+
+        estado:
+            status
+    };
 
     const originalButtonContent =
         savePublicationButton?.innerHTML;
 
-    const wasEditing =
-        Boolean(editingPublicationId);
-
     if (savePublicationButton) {
-        savePublicationButton.disabled =
-            true;
+        savePublicationButton.disabled = true;
 
         savePublicationButton.innerHTML = `
             <i data-lucide="loader-circle"></i>
-            Procesando...
+            Guardando...
         `;
 
         renderIcons();
     }
 
     clearFormMessage();
-
+const wasEditing =
+    Boolean(editingPublicationId);
     try {
-        // =====================================================
-        // CONSERVAR O SUBIR MULTIMEDIA
-        // =====================================================
-
-        let finalMediaUrl =
-            currentMediaUrl || null;
-
-        let finalMediaType =
-            currentMediaType || null;
-
-        /*
-            Si el usuario seleccionó un archivo nuevo,
-            primero se sube físicamente al backend.
-        */
-        if (selectedMediaFile) {
-            if (savePublicationButton) {
-                savePublicationButton.innerHTML = `
-                    <i data-lucide="upload-cloud"></i>
-                    Subiendo archivo...
-                `;
-
-                renderIcons();
-            }
-
-            const uploadResponse =
-                await window.TecnoSulaApi
-                    .publicaciones
-                    .subirMultimedia(
-                        selectedMediaFile
-                    );
-
-            finalMediaUrl =
-                uploadResponse?.urlMultimedia ??
-                uploadResponse?.UrlMultimedia ??
-                null;
-
-            finalMediaType =
-                uploadResponse?.tipoMultimedia ??
-                uploadResponse?.TipoMultimedia ??
-                getMediaTypeFromFile(
-                    selectedMediaFile
-                );
-
-            if (!finalMediaUrl) {
-                throw new Error(
-                    "El servidor subió el archivo, pero no devolvió su dirección."
-                );
-            }
-
-            /*
-                Guardamos la URL recibida para evitar volver
-                a subir el mismo archivo si ocurre un error
-                al registrar la publicación.
-            */
-            currentMediaUrl =
-                finalMediaUrl;
-
-            currentMediaType =
-                finalMediaType;
-
-            selectedMediaFile =
-                null;
-        }
-
-        // =====================================================
-        // DATOS QUE SE ENVIARÁN A LA PUBLICACIÓN
-        // =====================================================
-
-        const publicationData = {
-            titulo:
-                title,
-
-            descripcion:
-                description,
-
-            tipoMultimedia:
-                finalMediaType,
-
-            urlMultimedia:
-                finalMediaUrl,
-
-            idCampana:
-                campaignId,
-
-            idsRedesSociales:
-                socialNetworkIds,
-
-            fechaProgramacion:
-                programmingDate,
-
-            estado:
-                status
-        };
-
-        if (savePublicationButton) {
-            savePublicationButton.innerHTML = `
-                <i data-lucide="loader-circle"></i>
-                Guardando publicación...
-            `;
-
-            renderIcons();
-        }
-
-        // =====================================================
-        // CREAR O ACTUALIZAR
-        // =====================================================
-
         let response;
 
         if (editingPublicationId) {
@@ -4580,84 +4214,72 @@ async function savePublication(event) {
                     );
         }
 
-      renderPublicationsLoading();
+       await loadPublicationsFromApi();
 
-await loadPublicationsFromApi();
-
-refreshModule();
-
-await new Promise(resolve => {
-    requestAnimationFrame(resolve);
-});
-
-        // =====================================================
-        // REGISTRAR NOTIFICACIÓN
-        // =====================================================
-
-        window.TecnoSulaNotifications
-            ?.registrarActividad({
-                title:
-                    wasEditing
-                        ? "Publicación actualizada"
-                        : (
-                            normalizeText(status) ===
-                            "programada"
-                                ? "Publicación programada"
-                                : "Publicación creada"
-                        ),
-
-                message:
-                    wasEditing
-                        ? `La publicación "${title}" fue actualizada correctamente.`
-                        : (
-                            normalizeText(status) ===
-                            "programada"
-                                ? `La publicación "${title}" fue programada para ${formatDate(
-                                    date
-                                )} a las ${formatTime(
-                                    time
-                                )}.`
-                                : `La publicación "${title}" fue creada como borrador.`
-                        ),
-
-                type:
-                    "success",
-
-                icon:
-                    wasEditing
-                        ? "file-pen-line"
-                        : (
-                            normalizeText(status) ===
-                            "programada"
-                                ? "calendar-check"
-                                : "circle-plus"
-                        ),
-
-                category:
-                    "Publicaciones",
-
-                categoryIcon:
-                    "send",
-
-                link:
-                    "publicaciones.html",
-
-                actionLabel:
-                    "Ver publicaciones"
-            });
-
-        closePublicationModal();
-
-        showToast(
+window.TecnoSulaNotifications
+    ?.registrarActividad({
+        title:
             wasEditing
                 ? "Publicación actualizada"
-                : "Publicación creada",
+                : (
+                    normalizeText(status) ===
+                    "programada"
+                        ? "Publicación programada"
+                        : "Publicación creada"
+                ),
+
+        message:
+            wasEditing
+                ? `La publicación "${title}" fue actualizada correctamente.`
+                : (
+                    normalizeText(status) ===
+                    "programada"
+                        ? `La publicación "${title}" fue programada para ${formatDate(
+                            date
+                        )} a las ${formatTime(
+                            time
+                        )}.`
+                        : `La publicación "${title}" fue creada como borrador.`
+                ),
+
+        type:
+            "success",
+
+        icon:
+            wasEditing
+                ? "file-pen-line"
+                : (
+                    normalizeText(status) ===
+                    "programada"
+                        ? "calendar-check"
+                        : "circle-plus"
+                ),
+
+        category:
+            "Publicaciones",
+
+        categoryIcon:
+            "send",
+
+        link:
+            "publicaciones.html",
+
+        actionLabel:
+            "Ver publicaciones"
+    });
+
+closePublicationModal();
+
+      showToast(
+    wasEditing
+        ? "Publicación actualizada"
+        : "Publicación creada",
 
             response?.mensaje ||
                 (
-                    wasEditing
-                        ? "Los cambios se guardaron correctamente."
-                        : "La publicación se registró correctamente."
+                   wasEditing
+    ? "Los cambios se guardaron correctamente."
+    : "La publicación se registró correctamente."
                 ),
 
             "success"
@@ -4671,13 +4293,6 @@ await new Promise(resolve => {
         showFormMessage(
             error.message ||
                 "No fue posible guardar la publicación.",
-            "error"
-        );
-
-        showToast(
-            "No se pudo guardar",
-            error.message ||
-                "Ocurrió un error al guardar la publicación.",
             "error"
         );
     } finally {
@@ -5660,20 +5275,6 @@ publicationTime?.addEventListener(
         "click",
         openMediaSelector
     );
-    archivoMultimedia?.addEventListener(
-    "change",
-    handleMediaFileChange
-);
-
-removeMediaButton?.addEventListener(
-    "click",
-    event => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        removeSelectedMedia();
-    }
-);
 
     publicationList?.addEventListener(
         "click",

@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using System.Collections.Generic;
-using Microsoft.Extensions.FileProviders;
+
 using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -133,26 +133,20 @@ builder.Services.AddScoped<IReporteService, ReporteService>();
 // ============================
 
 var app = builder.Build();
-app.UseStaticFiles();
-var uploadsPath = Path.Combine(
-    builder.Environment.ContentRootPath,
-    "Uploads"
-);
 
-if (!Directory.Exists(uploadsPath))
-{
-    Directory.CreateDirectory(uploadsPath);
-}
+// ============================
+// ARCHIVOS ESTÁTICOS
+// ============================
 
+// Permite acceder públicamente a los archivos de wwwroot.
+// Por ejemplo:
+// http://localhost:5208/uploads/publicaciones/archivo.jpg
 app.UseStaticFiles();
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(uploadsPath),
-    RequestPath = "/uploads"
-});
 
-
+// ============================
+// SWAGGER
+// ============================
 
 if (app.Environment.IsDevelopment())
 {
@@ -161,19 +155,23 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseHttpsRedirection();
+// ============================
+// MIDDLEWARE
+// ============================
 
+app.UseHttpsRedirection();
 
 app.UseCors("Frontend");
 
-
 app.UseAuthentication();
-
 
 app.UseAuthorization();
 
 
-app.MapControllers();
+// ============================
+// CONTROLADORES
+// ============================
 
+app.MapControllers();
 
 app.Run();

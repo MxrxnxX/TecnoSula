@@ -139,14 +139,13 @@ async function apiRequest(
     let response;
 
     try {
-      response = await fetch(
-    `${API_URL}${ruta}`,
-    {
-        ...options,
-        headers,
-        cache: "no-store"
-    }
-);
+        response = await fetch(
+            `${API_URL}${ruta}`,
+            {
+                ...options,
+                headers
+            }
+        );
     } catch (error) {
         console.error(
             "Error de conexión con la API:",
@@ -230,11 +229,8 @@ async function obtenerPublicaciones(
             fechaDesde:
                 filtros.fechaDesde,
 
-           fechaHasta:
-    filtros.fechaHasta,
-
-_t:
-    Date.now()
+            fechaHasta:
+                filtros.fechaHasta
         });
 
     return await apiRequest(
@@ -363,33 +359,7 @@ async function duplicarPublicacion(
         }
     );
 }
-// =====================================================
-// SUBIR IMAGEN O VIDEO
-// =====================================================
 
-async function subirMultimedia(archivo) {
-    if (!(archivo instanceof File)) {
-        throw new Error(
-            "Debes seleccionar una imagen o video válido."
-        );
-    }
-
-    const formData =
-        new FormData();
-
-    formData.append(
-        "archivo",
-        archivo
-    );
-
-    return await apiRequest(
-        "/Publicaciones/subir-multimedia",
-        {
-            method: "POST",
-            body: formData
-        }
-    );
-}
 
 // =====================================================
 // REDES SOCIALES
@@ -452,11 +422,8 @@ window.TecnoSulaApi = {
         reagendar:
             reagendarPublicacion,
 
-      duplicar:
-    duplicarPublicacion,
-
-subirMultimedia:
-    subirMultimedia
+        duplicar:
+            duplicarPublicacion
     },
 
     redesSociales: {

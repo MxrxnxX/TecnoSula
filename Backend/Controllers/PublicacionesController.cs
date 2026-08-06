@@ -1047,8 +1047,9 @@ public async Task<IActionResult> DuplicarPublicacion(
         }
     );
 }
+
 // =====================================================
-// SUBIR IMAGEN DE UNA PUBLICACIÓN
+// SUBIR IMAGEN O VIDEO DE UNA PUBLICACIÓN
 //
 // POST: api/Publicaciones/subir-multimedia
 // =====================================================
@@ -1056,24 +1057,14 @@ public async Task<IActionResult> DuplicarPublicacion(
 [HttpPost("subir-multimedia")]
 [Consumes("multipart/form-data")]
 public async Task<IActionResult> SubirMultimedia(
-    IFormFile archivo
+    [FromForm] IFormFile archivo
 )
 {
     if (archivo == null || archivo.Length == 0)
     {
         return BadRequest(new
         {
-            mensaje = "Debes seleccionar una imagen."
-        });
-    }
-
-    const long tamanoMaximo = 5 * 1024 * 1024;
-
-    if (archivo.Length > tamanoMaximo)
-    {
-        return BadRequest(new
-        {
-            mensaje = "La imagen no puede superar los 5 MB."
+            mensaje = "Debes seleccionar una imagen o video."
         });
     }
 
@@ -1081,7 +1072,7 @@ public async Task<IActionResult> SubirMultimedia(
         .GetExtension(archivo.FileName)
         .ToLowerInvariant();
 
-    string[] extensionesPermitidas =
+    string[] extensionesImagen =
     {
         ".jpg",
         ".jpeg",
@@ -1090,18 +1081,69 @@ public async Task<IActionResult> SubirMultimedia(
         ".gif"
     };
 
-    if (!extensionesPermitidas.Contains(extension))
+    string[] extensionesVideo =
+    {
+        ".mp4",
+        ".webm",
+        ".mov"
+    };
+
+    bool esImagen =
+        extensionesImagen.Contains(extension);
+
+    bool esVideo =
+        extensionesVideo.Contains(extension);
+
+    if (!esImagen && !esVideo)
     {
         return BadRequest(new
         {
-            mensaje = "El formato de la imagen no es válido."
+            mensaje =
+                "El formato del archivo no es válido. " +
+                "Se permiten imágenes JPG, JPEG, PNG, WEBP y GIF, " +
+                "o videos MP4, WEBM y MOV."
         });
     }
 
+    const long tamanoMaximoImagen =
+        10 * 1024 * 1024;
+
+    const long tamanoMaximoVideo =
+        50 * 1024 * 1024;
+
+    if (
+        esImagen &&
+        archivo.Length > tamanoMaximoImagen
+    )
+    {
+        return BadRequest(new
+        {
+            mensaje =
+                "La imagen no puede superar los 10 MB."
+        });
+    }
+
+    if (
+        esVideo &&
+        archivo.Length > tamanoMaximoVideo
+    )
+    {
+        return BadRequest(new
+        {
+            mensaje =
+                "El video no puede superar los 50 MB."
+        });
+    }
+
+    string tipoMultimedia =
+        esVideo ? "Video" : "Imagen";
+
     string carpetaUploads = Path.Combine(
         _environment.WebRootPath ??
-        Path.Combine(_environment.ContentRootPath, "wwwroot"),
-
+        Path.Combine(
+            _environment.ContentRootPath,
+            "wwwroot"
+        ),
         "uploads",
         "publicaciones"
     );
@@ -1116,12 +1158,15 @@ public async Task<IActionResult> SubirMultimedia(
         nombreArchivo
     );
 
-    await using FileStream stream = new(
-        rutaArchivo,
-        FileMode.Create
-    );
-
-    await archivo.CopyToAsync(stream);
+    await using (
+        FileStream stream = new(
+            rutaArchivo,
+            FileMode.Create
+        )
+    )
+    {
+        await archivo.CopyToAsync(stream);
+    }
 
     string urlRelativa =
         $"/uploads/publicaciones/{nombreArchivo}";
@@ -1131,9 +1176,13 @@ public async Task<IActionResult> SubirMultimedia(
 
     return Ok(new
     {
-        mensaje = "Imagen subida correctamente.",
-        urlMultimedia = urlCompleta,
-        tipoMultimedia = "Imagen"
+        mensaje =
+            $"{tipoMultimedia} subido correctamente.",
+
+        urlMultimedia =
+            urlCompleta,
+
+        tipoMultimedia
     });
 }
 
